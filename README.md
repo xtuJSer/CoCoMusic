@@ -1,4 +1,4 @@
-# cocomusic
+# CoCoMusic
 
 #### CoCoMusic是一个全平台资磁的Music player
 
