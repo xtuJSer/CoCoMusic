@@ -1,6 +1,6 @@
 # cocomusic
 
-> CoCoMusic
+#### CoCoMusic是一个全平台资磁的Music player
 
 #### Build Setup
 
@@ -22,6 +22,7 @@ npm test
 npm run lint
 
 ```
+> Tip : 本软件不用于商用，仅限研究和学习使用，如果本软件无意中侵犯了某些公司的版权，本喵将会删除该仓库
 
 ---
 
