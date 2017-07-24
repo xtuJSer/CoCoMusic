@@ -7,8 +7,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage')
+      name: 'singerList',
+      component: require('../components/SingerList')
+    },
+    {
+      path: '/singer/:id',
+      name: 'singer',
+      component: require('../components/Singer')
     },
     {
       path: '*',
