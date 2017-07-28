@@ -16,6 +16,11 @@ export default new Router({
       component: require('../components/Singer')
     },
     {
+      path: '/album/:id',
+      name: 'album',
+      component: require('../components/Album')
+    },
+    {
       path: '*',
       redirect: '/'
     }

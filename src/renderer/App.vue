@@ -23,7 +23,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import './assets/stylus/main.styl'
 
 #app
@@ -35,6 +35,7 @@ export default {
   opacity 0
 .fade-enter-active, .fade-leave-active
   transition: all .18s ease
+
 /* 定义滚动条宽度 */
 ::-webkit-scrollbar
   width 10px

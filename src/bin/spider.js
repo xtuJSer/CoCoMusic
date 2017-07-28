@@ -14,3 +14,11 @@ export let getSingerMusicList = function (singermid, begin) {
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?&singermid=${singermid}&order=listen&begin=${begin}&num=30`
   return baseRequest(url)
 }
+export let getSingerAlbumList = function (singermid, begin) {
+  let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_album.fcg?singermid=${singermid}&order=time&begin=${begin}&num=30`
+  return baseRequest(url)
+}
+export let getSingerAlbum = function (albumMID) {
+  let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?albummid=${albumMID}`
+  return baseRequest(url)
+}

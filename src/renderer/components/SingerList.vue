@@ -10,7 +10,7 @@
     </div>
     <div class="singer-img-list">
       <div class="singer-item" v-for="(item,index) in list" :key="item.Fsinger_mid">
-        <router-link :to="`/singer/${item.Fsinger_mid}`">
+        <router-link :to="`/singer/${item.Fsinger_mid}/`">
           <img class="badge" v-lazy="`https://y.gtimg.cn/music/photo_new/T001R150x150M000${item.Fsinger_mid}.jpg`" alt="">
           <p>{{item.Fsinger_name}}</p>
         </router-link>
@@ -60,8 +60,10 @@ export default {
       this.$store.dispatch('updateSingerList')
     }
   },
-  mounted () {
-    this.$store.dispatch('updateSingerList')
+  created () {
+    if (!this.list.length) {
+      this.$store.dispatch('updateSingerList')
+    }
   }
 }
 </script>
