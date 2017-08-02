@@ -22,3 +22,23 @@ export let getSingerAlbum = function (albumMID) {
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?albummid=${albumMID}`
   return baseRequest(url)
 }
+export let getKey = function (guid) {
+  let url = `https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=${guid}`
+  return baseRequest(url)
+}
+export let getLyric = function (songMid) {
+  let url = `https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid=${songMid}&g_tk=5381`
+  return baseRequest(url)
+}
+export let search = function (word, page) {
+  let url = `http://c.y.qq.com/soso/fcgi-bin/client_search_cp?t=0&aggr=1&lossless=1&cr=1&catZhida=1&p=${page}&n=20&w=${word}`
+  return baseRequest(encodeURI(url))
+}
+export let getMV = function (singerMid, begin) {
+  let url = `https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?platform=yqq&singermid=${singerMid}&order=listen&begin=${begin}&num=52&cid=205360581`
+  return baseRequest(encodeURI(url))
+}
+export let getMVInfo = function (vids) {
+  let url = `https://h5vv.video.qq.com/getinfo?otype=json&vids=${vids}&platform=11001&`
+  return baseRequest(encodeURI(url))
+}

@@ -4,7 +4,7 @@
       <img v-lazy="`https://y.gtimg.cn/music/photo_new/T001R300x300M000${singerMid}.jpg`" alt="">
       <div>
         <h4>{{singerName}}</h4>
-        <button class="btn btn-sm">收藏</button>
+        <button class="btn btn-sm" @click="favoriteSinger">{{favorite ? '取消关注' : '关注'}}</button>
       </div>
     </div>
     <div class="singer-tab">
@@ -26,12 +26,16 @@
     <transition name="fade">
       <f-album-list v-show="select === 'showAlbumList'" :list="albumList" @next="nextAlbumList"></f-album-list>
     </transition>
+    <transition name="fade">
+      <f-mv-list v-show="select === 'showMvList'" :list="MVList" @next="nextMVList"></f-mv-list>
+    </transition>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import fMusicList from './common/MusicList'
 import fAlbumList from './common/AlbumList'
+import fMvList from './common/MVList'
 
 export default {
   data () {
@@ -40,7 +44,7 @@ export default {
     }
   },
   components: {
-    fMusicList, fAlbumList
+    fMusicList, fAlbumList, fMvList
   },
   computed: {
     ...mapState({
@@ -48,22 +52,44 @@ export default {
       select: state => state.Singer.select,
       singerMid: state => state.Singer.singerMid,
       musicList: state => state.Singer.musicList,
-      albumList: state => state.Singer.albumList
-    })
+      albumList: state => state.Singer.albumList,
+      MVList: state => state.Singer.MVList
+    }),
+    favorite () {
+      return this.singerMid in this.$store.state.Favorite.singer
+    }
   },
   methods: {
+    favoriteSinger () {
+      let singer = {
+        singerName: this.singerName,
+        singerMid: this.singerMid
+      }
+      this.favorite ? this.$store.commit('delFavoriteSinger', singer) : this.$store.commit('addFavoriteSinger', singer)
+    },
     nextMusicList () {
       this.$store.dispatch('NextSingerMusicList')
     },
     nextAlbumList () {
       this.$store.dispatch('nextAlbumList')
+    },
+    nextMVList () {
+      this.$store.dispatch('nextMVList')
     }
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.commit('SingerInit', to.params.id)
+    this.nextMusicList()
+    this.nextAlbumList()
+    this.nextMVList()
+    next()
   },
   created () {
     this.$store.commit('SingerInit', this.$route.params.id)
     if (!this.musicList.list.length) {
       this.nextMusicList()
       this.nextAlbumList()
+      this.nextMVList()
     }
   }
 }

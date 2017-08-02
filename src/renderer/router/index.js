@@ -21,6 +21,36 @@ export default new Router({
       component: require('../components/Album')
     },
     {
+      path: '/playList',
+      name: 'playList',
+      component: require('../components/PlayList')
+    },
+    {
+      path: '/search/:keyWord',
+      name: 'search',
+      component: require('../components/Search')
+    },
+    {
+      path: '/FavoriteSinger',
+      name: 'FavoriteSinger',
+      component: require('../components/FavoriteSinger')
+    },
+    {
+      path: '/FavoriteSong',
+      name: 'FavoriteSong',
+      component: require('../components/FavoriteSong')
+    },
+    {
+      path: '/FavoriteAlbum',
+      name: 'FavoriteAlbum',
+      component: require('../components/FavoriteAlbum')
+    },
+    {
+      path: '/MV/:vid',
+      name: 'MV',
+      component: require('../components/MV')
+    },
+    {
       path: '*',
       redirect: '/'
     }

@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="form-group search">
-        <input class="form-input" placeholder=" Search" type="text"> </div>
+        <input class="form-input" v-model="search" @keyup.enter="$router.push(`/search/${search}`)" placeholder=" Search" type="text"> </div>
       <div class="setting">
         <button class="btn btn-link" @click="goTop">
           <i class="icon icon-arrow-up"></i>Top </button>
@@ -22,6 +22,11 @@
 </template>
 <script>
 export default {
+  data () {
+    return {
+      search: ''
+    }
+  },
   methods: {
     goTop () {
       window.scrollTo(0, 0)

@@ -23,33 +23,36 @@ export default {
 }
 </script>
 
+<style lang="stylus">
+::-webkit-scrollbar
+  width 10px
+  height 10px
+
+::-webkit-scrollbar-track
+  background #fff
+
+::-webkit-scrollbar-thumb 
+  -webkit-border-radius 5px
+  border-radius 5px
+  background #acb3c2
+
+::-webkit-scrollbar-corner
+  background-color #535353
+
+::-webkit-scrollbar-track
+  background 0 0
+</style>
+
 <style lang="stylus" scoped>
 @import './assets/stylus/main.styl'
 
 #app
   background-color #fff
 .content
-  margin 60px 10px 100px 220px
+  margin 60px 10px 80px 220px
 
 .fade-enter, .fade-leave-active
   opacity 0
 .fade-enter-active, .fade-leave-active
   transition: all .18s ease
-
-/* 定义滚动条宽度 */
-::-webkit-scrollbar
-  width 10px
-  height 10px
-/* 定义那个轨道的样式 */
-::-webkit-scrollbar-track
-  background #fff
-/* 定义滚动按钮的样式，就是那个bar */
-::-webkit-scrollbar-thumb 
-  -webkit-border-radius 5px
-  border-radius 5px
-  background #acb3c2
-::-webkit-scrollbar-corner
-  background-color #535353
-::-webkit-scrollbar-track
-  background 0 0
 </style>
