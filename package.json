@@ -1,6 +1,6 @@
 {
   "name": "cocomusic",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "feng <2995207228@qq.com>",
   "description": "CocoMusic",
   "license": "LGPL-3.0",
@@ -49,6 +49,7 @@
       ]
     },
     "mac": {
+      "target": "zip",
       "icon": "build/icons/icon.icns"
     },
     "win": {
