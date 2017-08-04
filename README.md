@@ -22,10 +22,13 @@ All platfrom is available
 
 # Install
 ## Linux
+### AppImage
 ``` bash
 chmod +x cocomusic-1.0.0-x86_64.AppImage
 ./cocomusic-1.0.0-x86_64.AppImage
 ``` 
+### tar.gz
+execute file cocomusic
 
 ## Windows
 just double click CocoMusic Setup 1.0.0.exe
