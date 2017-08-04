@@ -20,6 +20,9 @@ All platfrom is available
 ![](http://orblzfbb0.bkt.clouddn.com/FidnnYjeOV_YxfTo0okdsVF76fUY?imageslim)
 ![](http://orblzfbb0.bkt.clouddn.com/FotCtoBoELxws5o58qWN0dQbcQ_6?imageslim)
 
+# Download
+  [Download](http://123.207.109.138/#/article/598403683e4bc40848718dfe)
+
 # Install
 ## Linux
 ### AppImage
