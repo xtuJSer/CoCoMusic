@@ -15,12 +15,14 @@
       <div class="setting">
         <button class="btn btn-link" @click="goTop">
           <i class="icon icon-arrow-up"></i>Top </button>
-        <button class="btn btn-link">
+        <button class="btn btn-link" @click="open">
           <img src="../assets/img/github.svg" class="github" alt=""></button>
       </div>
     </div>
 </template>
 <script>
+import { remote } from 'electron'
+const shell = remote.shell
 export default {
   data () {
     return {
@@ -30,6 +32,9 @@ export default {
   methods: {
     goTop () {
       window.scrollTo(0, 0)
+    },
+    open (url) {
+      shell.openExternal('https://github.com/fengT-T/CoCoMusic')
     }
   }
 }

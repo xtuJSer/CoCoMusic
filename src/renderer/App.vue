@@ -46,6 +46,9 @@ export default {
 <style lang="stylus" scoped>
 @import './assets/stylus/main.styl'
 
+@font-face
+  font-family Orbitron
+  src url(assets/fonts/Orbitron-Regular.ttf)
 #app
   background-color #fff
 .content

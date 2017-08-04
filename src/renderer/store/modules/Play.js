@@ -22,6 +22,18 @@ function parseLyric (lrc) {
   return lrcObj
 }
 
+function searchTrans (transObj, key) {
+  for (let i = 0; i <= 0.5; i = i + 0.010) {
+    let lOffset = (key + i).toFixed(2)
+    let rOffset = (key - i).toFixed(2)
+    if (transObj[lOffset]) {
+      return transObj[lOffset]
+    } else if (transObj[rOffset]) {
+      return transObj[rOffset]
+    }
+  }
+  return '&nbsp;'
+}
 export default {
   state: {
     list: [],
@@ -81,7 +93,7 @@ export default {
           continue
         }
         if (trans) {
-          lyricObj[key] = lyricObj[key] + '<br/> ' + (transObj[key] ? transObj[key].trim() : '')
+          lyricObj[key] = lyricObj[key] + '<br/> ' + (transObj[key] ? transObj[key].trim() : searchTrans(transObj, +key))
         }
       }
       commit('setPlay', {lyric: lyricObj})

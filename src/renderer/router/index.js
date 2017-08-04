@@ -51,6 +51,11 @@ export default new Router({
       component: require('../components/MV')
     },
     {
+      path: '/Setting',
+      name: 'Setting',
+      component: require('../components/Setting')
+    },
+    {
       path: '*',
       redirect: '/'
     }

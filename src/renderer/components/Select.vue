@@ -26,7 +26,7 @@
       </li>
       <li class="nav-item">
         <img src="../assets/img/setting.svg" alt="">
-        <a href="#">设置</a>
+        <a href="#/Setting">设置</a>
       </li>
     </ul>
     <div class="play-music">

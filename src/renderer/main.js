@@ -11,8 +11,8 @@ import 'spectre.css/dist/spectre-exp.css'
 
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload, {
-  error: '/src/renderer/assets/img/error.png',
-  loading: '/src/renderer/assets/img/loading2.svg',
+  error: 'static/img/error.png',
+  loading: 'static/img/loading2.svg',
   attempt: 1
 })
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
