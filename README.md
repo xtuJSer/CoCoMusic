@@ -18,7 +18,7 @@ All platfrom is available
 # Screenshots
 ![](http://orblzfbb0.bkt.clouddn.com/FhCi1GgAxYj8BlmlXMr8B0_XvILL?imageslim)
 ![](http://orblzfbb0.bkt.clouddn.com/FidnnYjeOV_YxfTo0okdsVF76fUY?imageslim)
-![](http://orblzfbb0.bkt.clouddn.com/FotCtoBoELxws5o58qWN0dQbcQ_6)
+![](http://orblzfbb0.bkt.clouddn.com/FotCtoBoELxws5o58qWN0dQbcQ_6?imageslim)
 
 # Install
 ## Linux
