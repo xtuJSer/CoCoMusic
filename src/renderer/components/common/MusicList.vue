@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="music-item" v-for="(item,index) in list.list" :key="index" :class="{'isPlay': currentPlay.songMid === item.songMid}">
+    <div class="music-item" v-for="(item,index) in list.list" :key="index" :class="{'isPlay': currentPlayMusic.songMid === item.songMid}">
       <h6>
-        <img v-show="currentPlay.songMid === item.songMid" class="playing" src="../../assets/img/music3.svg" alt=""> &nbsp; {{index}}. &nbsp;
+        <img v-show="currentPlayMusic.songMid === item.songMid" class="playing" src="../../assets/img/music3.svg" alt=""> &nbsp; {{index}}. &nbsp;
         <router-link v-for="singer in item.singer" :key="singer.mid" v-show="showUser" :to="`/singer/${singer.mid}`">{{singer.name}}&nbsp; </router-link> {{item.songName}} </h6>
       <div class="action">
         <button class="btn btn-link" @click="play(index)">
@@ -63,7 +63,7 @@ export default {
   props: ['list', 'hideMoreBtn', 'hideAlbum', 'showUser'],
   computed: {
     ...mapGetters([
-      'currentPlay'
+      'currentPlayMusic'
     ]),
     ...mapState({
       musicServer: state => state.Play.musicServer,

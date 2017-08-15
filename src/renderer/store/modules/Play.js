@@ -48,17 +48,31 @@ export default {
   getters: {
     musicUrl (state) {
       if (!state.list[state.currentPlay]) {
-        return ''
+        return [false]
       }
       let mid = state.list[state.currentPlay].songMid
       return [`${state.musicServer}/M500${mid}.mp3?vkey=${state.key}&guid=${state.guid}&fromtag=30`,
         `${state.musicServer}/M800${mid}.mp3?vkey=${state.key}&guid=${state.guid}&fromtag=30`]
     },
-    currentPlay (state) {
+    currentPlayMusic (state) {
       if (!state.list[state.currentPlay]) {
-        return {albumMid: '', albumName: '', songName: '', songMid: '', singer: ''}
+        return {albumMid: '', albumName: '', songName: '---++---', songMid: '', singer: {}}
       }
       return state.list[state.currentPlay]
+    },
+    currentPlayMusicSingerSimpleName (state) {
+      if (!state.list[state.currentPlay]) {
+        return '=_='
+      }
+      return state.list[state.currentPlay].singer.reduce((sum, item) => {
+        return sum + ' ' + item.name.split('(')[0]
+      }, '')
+    },
+    currentPlayMusicSimpleName (state) {
+      if (!state.list[state.currentPlay]) {
+        return '---++---'
+      }
+      return state.list[state.currentPlay].songName.split('(')[0]
     }
   },
   mutations: {
@@ -75,10 +89,10 @@ export default {
       commit('setPlay', {key: keyData.key})
     },
     async getLyric ({state, commit, getters}) {
-      let data = await getLyric(getters.currentPlay.songMid)
+      let data = await getLyric(getters.currentPlayMusic.songMid)
       let lyricData = JSON.parse(data.slice(18, -1))
       let lyric = Buffer.from(lyricData.lyric, 'base64').toString()
-      let trans = lyricData.lyric ? Buffer.from(lyricData.trans, 'base64').toString() : ''
+      let trans = lyricData.trans ? Buffer.from(lyricData.trans, 'base64').toString() : ''
       let lyricObj = parseLyric(lyric)
       let transObj
       if (trans) {

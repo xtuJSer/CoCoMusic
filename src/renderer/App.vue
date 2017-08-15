@@ -13,12 +13,12 @@
 
 <script>
 import fNav from './components/Nav'
-import fFooter from './components/Footer'
 import fSelect from './components/Select'
+const fFooter = process.platform === 'linux' ? require('./components/FooterForLinux') : require('./components/Footer')
 export default {
   name: 'cocomusic',
   components: {
-    fNav, fFooter, fSelect
+    fNav, fSelect, fFooter
   }
 }
 </script>

@@ -48,6 +48,15 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
+import Mpris from 'mpris-service'
+
+const mpris = new Mpris({
+  name: 'CocoMusic',
+  identity: 'CocoMusic Music player',
+  supportedUriSchemes: ['file'],
+  supportedMimeTypes: ['audio/mpeg'],
+  supportedInterfaces: ['player']
+})
 
 export default {
   data () {
@@ -111,7 +120,20 @@ export default {
     }
   },
   watch: {
+    'isPlay' () {
+      mpris.playbackStatus = this.isPlay ? 'Playing' : 'Paused'
+    },
+    'raw.duration' () {
+      mpris.metadata['mpris:length'] = this.raw.duration * 1000
+    },
     'musicUrl' () {
+      mpris.metadata = {
+        'mpris:trackid': mpris.objectPath('track/0'),
+        'mpris:artUrl': `https://y.gtimg.cn/music/photo_new/T002R300x300M000${this.currentPlayMusic.albumMid}.jpg`,
+        'xesam:title': this.currentPlayMusicSimpleName,
+        'xesam:album': this.currentPlayMusic.albumName,
+        'xesam:artist': this.currentPlayMusicSingerSimpleName
+      }
       this.$store.dispatch('getLyric')
       this.$el.querySelector('.lyric').style.top = '0px'
       this.audio.load()
@@ -133,6 +155,19 @@ export default {
     this.audio.autoplay = true
     this.audio.loop = this.loop
     this.audio.volume = (this.volume / 100).toFixed(2)
+
+    mpris.on('play', e => {
+      this.audio.play()
+    })
+    mpris.on('pause', e => {
+      this.audio.pause()
+    })
+    mpris.on('next', e => {
+      this.play(1)
+    })
+    mpris.on('previous', e => {
+      this.play(-1)
+    })
 
     this.audio.addEventListener('play', e => {
       this.isPlay = true

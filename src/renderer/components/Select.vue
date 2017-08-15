@@ -36,13 +36,13 @@
       </a>
       <div class="music-info">
         <h6>{{currentPlayMusic.songName}}</h6>
-        <p>{{singer}}</p>
+        <p>{{currentPlayMusicSingerSimpleName}}</p>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   data () {
@@ -58,14 +58,9 @@ export default {
     ...mapState({
       showLyric: state => state.Play.showLyric
     }),
-    singer () {
-      if (!this.currentPlayMusic.singer) {
-        return '=_= '
-      }
-      return this.currentPlayMusic.singer.reduce((sum, item) => {
-        return sum + ' ' + item.name
-      }, '')
-    }
+    ...mapGetters([
+      'currentPlayMusicSingerSimpleName'
+    ])
   },
   created () {
     this.$store.dispatch('initFavorite')
