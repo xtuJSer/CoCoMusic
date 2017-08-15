@@ -162,6 +162,10 @@ export default {
     mpris.on('pause', e => {
       this.audio.pause()
     })
+    mpris.on('playpause', e => {
+      this.isPlay && this.audio.pause()
+      this.isPlay || this.audio.play()
+    })
     mpris.on('next', e => {
       this.play(1)
     })
