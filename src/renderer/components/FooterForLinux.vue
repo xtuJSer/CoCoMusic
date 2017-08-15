@@ -3,9 +3,9 @@
     <div class="play play-control-1">
       <a href="javascript:void(0);" @click="play(-1)">
         <img class="skip" src="../assets/img/previous.svg" alt=""> </a>
-      <a href="javascript:void(0);" v-show="!isPlay" @click="this.musicUrl && audio.play()">
+      <a href="javascript:void(0);" v-show="!isPlay" @click="musicUrl && audio.play()">
         <img class="play-pause" src="../assets/img/play3.svg" alt=""> </a>
-      <a href="javascript:void(0);" v-show="isPlay" @click="this.musicUrl &&audio.pause()">
+      <a href="javascript:void(0);" v-show="isPlay" @click="musicUrl && audio.pause()">
         <img src="../assets/img/pause.svg" class="play-pause" alt=""> </a>
       <a href="javascript:void(0);" @click="play(1)">
         <img class="skip" src="../assets/img/next.svg" alt=""> </a>
