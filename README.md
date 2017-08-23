@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://github.com/fengT-T/CoCoMusic/blob/master/build/icons/256x256.png?raw=true">
+  <img src="https://github.com/xtuJSer/CoCoMusic/blob/master/build/icons/256x256.png?raw=true">
   <br/>
   CocoMusic
 </h1>
