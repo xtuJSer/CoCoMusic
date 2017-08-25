@@ -4,7 +4,7 @@
   CocoMusic
 </h1>
 <h3 align="center">
-CocoMusic is a simple music palyer, build by electron and vue.
+CocoMusic is a simple music player, build by electron and vue.
 All platfrom is available
 </h3>
 <p align="center">
