@@ -22,6 +22,7 @@ All platfrom is available
 
 # Download
   [Download](http://xn--zq2aw6m.xyz/#/article/598403683e4bc40848718dfe)
+  [linux appimage](http://cocomusic-1252075019.cosgz.myqcloud.com/cocomusic-1.1.0-x86_64.AppImage)
 
 # Install
 ## Linux
