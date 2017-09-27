@@ -1,8 +1,8 @@
 {
   "name": "cocomusic",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "feng <2995207228@qq.com>",
-  "description": "CocoMusic",
+  "description": "a simple music player build by electron and vue",
   "license": "LGPL-3.0",
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -57,7 +57,8 @@
       "icon": "build/icons/icon.ico"
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "category": "Audio;AudioVideo"
     }
   },
   "dependencies": {
