@@ -1,0 +1,17 @@
+{
+  "name": "cocomusicv2.0",
+  "version": "2.0.0",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^1.7.6"
+  },
+  "scripts": {
+    "start": "cross-env NODE_ENV=development electron ."
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.5",
+    "devtron": "^1.4.0",
+    "electron-builder": "^19.37.2",
+    "electron-devtools-installer": "^2.2.0"
+  }
+}
