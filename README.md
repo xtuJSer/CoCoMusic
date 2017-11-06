@@ -1,3 +1,7 @@
-A new empty branch indicates that the project will be rewritten and look forward to a new and more beautiful CocoMusic.
+# CocoMusic V2.0 comming
+##  lightweight as usual
 
--- xtuJSer.feng 
+-- xtuJSer.feng
+
+## screenshot
+![http://mypic-10053031.cossh.myqcloud.com/DeepinScreenshot_select-area_20171106185118.png](http://mypic-10053031.cossh.myqcloud.com/DeepinScreenshot_select-area_20171106185118.png)

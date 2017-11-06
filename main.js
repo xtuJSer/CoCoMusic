@@ -1,25 +1,29 @@
-const { electron, BrowserWindow, app } = require('electron')
+const { BrowserWindow, app } = require('electron')
 const installExtension = require('electron-devtools-installer')
-const path = require('path')
-const url = require('url')
+
 const extensionList = [
   installExtension.REACT_DEVELOPER_TOOLS,
   installExtension.REDUX_DEVTOOLS
 ]
 
-let mainWindow,
-  loadingWindow,
-  loadUrl = process.env.NODE_ENV === 'development'
+let mainWindow
+let loadingWindow
+let loadUrl = process.env.NODE_ENV === 'development'
     ? 'http://localhost:3000/'
-    : `file://${__dirname}/app/build/index.html`
+    : `file://${__dirname}/build/index.html`
 
-function createMainWindows() {
+function createMainWindows () {
   mainWindow = new BrowserWindow({
     height: 670,
     useContentSize: true,
     width: 1020,
     // autoHideMenuBar: true,
-    show: false
+    titleBarStyle: 'hiddenInset',
+    show: false,
+    frame: false,
+    'web-preferences': {
+      'web-security': false
+    }
   })
   mainWindow.loadURL(loadUrl)
   mainWindow.on('closed', () => {
@@ -37,13 +41,13 @@ function createMainWindows() {
     extensionList.forEach((extension) => {
       installExtension.default(extension)
         .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log('An error occurred: ', err));
+        .catch((err) => console.log('An error occurred: ', err))
     })
   }
 }
 
-function creatLoading() {
-  loadingWindow = new BrowserWindow({ 
+function creatLoading () {
+  loadingWindow = new BrowserWindow({
     parent: mainWindow,
     show: false,
     width: 300,
@@ -51,8 +55,8 @@ function creatLoading() {
     autoHideMenuBar: true,
     frame: false
   })
-  loadingWindow.loadURL(`file://${__dirname}/static/loading.html`)
-  loadingWindow.on('closed', () => loadingWindow = null)
+  loadingWindow.loadURL(`file://loading.html`)
+  loadingWindow.on('closed', () => loadingWindow = null) // eslint-disable-line
   loadingWindow.webContents.on('did-finish-load', () => loadingWindow.show())
 }
 
