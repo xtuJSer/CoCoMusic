@@ -1,3 +1,9 @@
+[Desktop Entry]
+Icon=favorites
+
 [Dolphin]
-Timestamp=2018,1,31,21,34,25
+Timestamp=2018,1,31,21,39,41
 Version=4
+
+[Settings]
+HiddenFilesShown=true
