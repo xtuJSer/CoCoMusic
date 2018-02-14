@@ -8,7 +8,7 @@
 -- xtuJSer.feng
 
 ## screenshot
-![http://mypic-10053031.cossh.myqcloud.com/DeepinScreenshot_select-area_20171106185118.png](http://mypic-10053031.cossh.myqcloud.com/DeepinScreenshot_select-area_20171106185118.png)
+![http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180214_212202.png](http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180214_212202.png)
 
 #### Build Setup
 
