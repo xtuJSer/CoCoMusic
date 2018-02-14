@@ -52,7 +52,7 @@ export async function getSingerMusicList ({page, singerMid}) {
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?&singermid=${singerMid}&order=listen&begin=${page*30}&num=30`
   let {data: {list, total}} = (await baseRequest(url)).data
   return {
-    musicTotal: Math.floor(total / 30) + 1,
+    musicTotal: Math.floor(total / 30),
     musicList: list.map(({musicData: {songmid, songname, albumname, albummid, singer}}) => new Music(songname, songmid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid))))
   }
 }
@@ -95,5 +95,9 @@ export async function getSingerInfo ({singerMid}) {
 }
 export let getSingerAlbumList = async function ({singerMid, page}) {
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_album.fcg?singermid=${singerMid}&order=time&begin=${page * 30}&num=30`
-  return (await baseRequest(url)).data.data
+  let {list, total} = (await baseRequest(url)).data.data
+  return {
+    albumTotal: Math.floor(total / 30),
+    albumList: list ? list.map(({albumMID, albumName}) => new Album(albumName, albumMID)) : []
+  }
 }

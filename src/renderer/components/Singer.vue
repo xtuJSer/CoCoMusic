@@ -35,6 +35,7 @@ let initData = {
   desc: '',
   other: {}
 }
+
 export default {
   data () {
     return {
@@ -44,12 +45,12 @@ export default {
   },
   computed: {
     singer () {
+      if (!this.$route.params.id) return new Singer('Loading', '')
       return new Singer(this.$route.query.name, this.$route.params.id)
     },
     tabList () {
-      if (!this.$route.params.id) return
-      let id = this.$route.params.id
-      let name = this.$route.query.name
+      let id = this.singer.singerMid
+      let name = this.singer.singerName
       return [
         {name: 'SingerMusic', ZHName: '单曲', params: {id}, query: {name}},
         {name: 'SingerAlbum', ZHName: '专辑', params: {id}, query: {name}},
@@ -67,7 +68,7 @@ export default {
     async getTheSingerInfo () {
       this.showAllInfo = false
       this.$common.objectCopy(initData, this)
-      let {info, desc, other} = await getSingerInfo({singerMid: this.$route.params.id})
+      let {info, desc, other} = await getSingerInfo({singerMid: this.singer.singerMid})
       this.info = info
       this.desc = desc
       this.other = other
