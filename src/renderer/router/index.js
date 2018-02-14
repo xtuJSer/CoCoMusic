@@ -1,18 +1,65 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import SingerList from '@/components/SingerList.vue'
+import Singer from '@/components/Singer.vue'
+import SingerMusic from '@/components/SingerMusicList.vue'
+import SingerMv from '@/components/SingerMvList'
+import SingerAlbum from '@/components/SingerAlbumList'
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      path: '/singerList',
+      name: 'SingerList',
+      component: SingerList
+    },
+    {
+      path: '/setting',
+      name: 'Setting',
+      component: SingerList
+    },
+    {
+      path: '/singer/:id',
+      name: 'Singer',
+      component: Singer,
+      children: [
+        {
+          path: 'music',
+          name: 'SingerMusic',
+          component: SingerMusic
+        },
+        {
+          path: 'mv',
+          name: 'SingerMv',
+          component: SingerMv
+        },
+        {
+          path: 'album',
+          name: 'SingerAlbum',
+          component: SingerAlbum
+        }
+      ]
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: SingerList
+    },
+    {
+      path: '/favorite',
+      name: 'Favorite',
+      component: SingerList
+    },
+    {
+      path: '/songList',
+      name: 'SongList',
+      component: SingerList
     },
     {
       path: '*',
-      redirect: '/'
+      name: 'default',
+      component: SingerList
     }
   ]
 })

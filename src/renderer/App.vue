@@ -1,15 +1,30 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <f-header></f-header>
+    <div id="container">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'cocomusic'
+import fHeader from '@/components/Header'
+export default {
+  name: 'cocomusic',
+  components: {
+    fHeader
   }
+}
 </script>
 
 <style>
   /* CSS */
+#app {
+  user-select: none;
+}
+#container {
+   margin: 60px 10px 60px 10px;
+}
 </style>
