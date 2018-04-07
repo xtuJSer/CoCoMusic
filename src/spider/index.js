@@ -24,7 +24,7 @@
  * 终于知道为什么没人去搞 qqmusic 的 api 了，这智障 api 里面掺了屎，好辣瞎我们的狗眼，让我们不能爬
  */
 import request from 'axios'
-import {Singer, Album, Music} from './commonObject'
+import {Singer, Album, Music, Mv} from './commonObject'
 
 request.defaults.adapter = require('axios/lib/adapters/http')
 
@@ -32,7 +32,8 @@ const baseRequest = request.create({
   headers: {
     'Referer': 'http://y.qq.com/portal/player.html',
     'User-Agent': 'user-agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-  }
+  },
+  timeout: 5000
 })
 
 // page 从 1 开始
@@ -53,7 +54,7 @@ export async function getSingerMusicList ({page, singerMid}) {
   let {data: {list, total}} = (await baseRequest(url)).data
   return {
     musicTotal: Math.floor(total / 30),
-    musicList: list.map(({musicData: {songmid, songname, albumname, albummid, singer}}) => new Music(songname, songmid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid))))
+    musicList: list.map(({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer}}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid))))
   }
 }
 
@@ -100,4 +101,36 @@ export let getSingerAlbumList = async function ({singerMid, page}) {
     albumTotal: Math.floor(total / 30),
     albumList: list ? list.map(({albumMID, albumName}) => new Album(albumName, albumMID)) : []
   }
+}
+export async function getSingerMvList ({singerMid, page}) {
+  // cid  是啥？ 我也不知道，我也很绝望啊，https://y.gtimg.cn/music/portal/js/v4/singer_afadc5b.js?max_age=31536000 代码里面直接写死了的，我好慌
+  let url =  `https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?singermid=${singerMid}&order=listen&begin=${page * 35}&num=35&cid=205360581`
+  let {list, total} = (await baseRequest(url)).data.data
+  return {
+    mvTotal: Math.floor(total / 35),
+    mvList: list ? list.map(({title, pic, vid}) => new Mv(title, pic, vid)) : []
+  }
+}
+
+export async function getMvInfo ({mvId}) {
+  let url = `https://u.y.qq.com/cgi-bin/musicu.fcg?data=%7B%22getMvInfo%22%3A%7B%22module%22%3A%22MvService.MvInfoProServer%22%2C%22method%22%3A%22GetMvInfoList%22%2C%22param%22%3A%7B%22vidlist%22%3A%5B%22${mvId}%22%5D%7D%7D%7D`
+  let {name, vid, cover_pic, fileid} = (await baseRequest(url)).data.getMvInfo.data.mvlist[0]
+  return {
+    mv: new Mv(name, cover_pic, vid),
+    fileid
+  }
+}
+export async function getMUrl ({fileid}) {
+  let url = `https://u.y.qq.com/cgi-bin/musicu.fcg?data=%7B%22getMvUrl%22%3A%7B%22module%22%3A%22Mv.MvDownloadUrlServer%22%2C%22method%22%3A%22GetMvUrls%22%2C%22param%22%3A%7B%22fileid%22%3A%5B%22${fileid}%22%5D%2C%22filetype%22%3A%5B-1%5D%7D%7D%7D`
+  let {cn, url: [mvSourceUrl], vkey} = (await baseRequest(url)).data.getMvUrl.data.data[fileid][2]
+  return {
+    cn, mvSourceUrl, vkey
+  }
+}
+
+export async function getSongVkey({guid, songMid, songMediaMid}) {
+  // cid 是啥？ 我也不造啊 qq 那群人写死了
+  let url =  `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=C400${songMediaMid}.m4a&guid=${guid}`
+  let {vkey} = (await baseRequest(url)).data.data.items[0]
+  return {vkey}
 }

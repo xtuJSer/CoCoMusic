@@ -21,10 +21,11 @@ export default {
 
 <style>
   /* CSS */
+
 #app {
   user-select: none;
 }
 #container {
-   margin: 60px 10px 60px 10px;
+  margin: 65px 10px 60px 10px;
 }
 </style>

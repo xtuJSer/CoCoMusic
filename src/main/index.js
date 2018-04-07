@@ -28,9 +28,11 @@ function createWindow () {
     height: 610,
     useContentSize: true,
     width: 1020,
-    // autoHideMenuBar: true,
+    autoHideMenuBar: false,
     titleBarStyle: 'hidden',
-    show: false
+    show: false,
+    // frame: false,
+    resizable: false
   })
 
   mainWindow.loadURL(winURL)

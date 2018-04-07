@@ -5,6 +5,7 @@ import Singer from '@/components/Singer.vue'
 import SingerMusic from '@/components/SingerMusicList.vue'
 import SingerMv from '@/components/SingerMvList'
 import SingerAlbum from '@/components/SingerAlbumList'
+import MvPlayer from '@/components/MvPlayer'
 Vue.use(Router)
 
 export default new Router({
@@ -26,20 +27,22 @@ export default new Router({
       children: [
         {
           path: 'music',
-          name: 'SingerMusic',
           component: SingerMusic
         },
         {
           path: 'mv',
-          name: 'SingerMv',
           component: SingerMv
         },
         {
           path: 'album',
-          name: 'SingerAlbum',
           component: SingerAlbum
         }
       ]
+    },
+    {
+      path: '/mv/:mvId',
+      name: 'mvPlayer',
+      component: MvPlayer
     },
     {
       path: '/search',

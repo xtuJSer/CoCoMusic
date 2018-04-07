@@ -14,9 +14,14 @@ export function generateGetListMixins ({methodsName, loadingName, pageName, init
         let params = {}
         Object.keys(spiderMethodParams).forEach(e => (params[e] = this[spiderMethodParams[e]]))
         params.page = newPage
-        let data = await spiderMethod(params)
+        let data
+        try {
+          data = await spiderMethod(params)
+          this[pageName] = newPage
+        } catch (e) {
+          console.error(e)
+        }
         this[loadingName] = false
-        this[pageName] = newPage
         Object.keys(data).forEach(e => (e !== listDataName && (this[e] = data[e])))
         operation === 'append' && this[listDataName].push(...data[listDataName]) // 主要是为了不改变原来数组的引用所以采用 push 追加
         operation === 'overwrite' && (this[listDataName] = data[listDataName])

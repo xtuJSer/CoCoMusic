@@ -10,12 +10,14 @@
 import songList from './SongList'
 import {getSingerMusicList} from '../../spider/index.js'
 import {generateGetListMixins} from './common/getListMixins.js'
+import {generateRouterMixins} from './common/getRouterMixins.js'
 
 let initData = {
   musicLoading: false,
   musicPage: 0,
   musicList: [],
-  musicTotal: 1
+  musicTotal: 1,
+  singerMidSave: ''
 }
 let musicMixins = generateGetListMixins({
   methodsName: 'getTheSingerMusicList',
@@ -30,9 +32,16 @@ let musicMixins = generateGetListMixins({
   listDataName: 'musicList',
   operation: 'append'
 })
+let routerMixins = generateRouterMixins({
+  watchName: '$route.params.id',
+  sourceId: 'singerMidSave',
+  methodsName: 'getTheSingerMusicList',
+  methodsParams: [0],
+  initData
+})
 
 export default {
-  mixins: [musicMixins],
+  mixins: [musicMixins, routerMixins],
   components: {
     songList
   },
@@ -42,13 +51,6 @@ export default {
     },
     isMusicListEnd () {
       return this.musicTotal <= this.musicPage
-    }
-  },
-  watch: {
-    '$route.params.id' (value) {
-      if (!value) return
-      this.$common.objectCopy(initData, this)
-      this.getTheSingerMusicList(0)
     }
   },
   created () {

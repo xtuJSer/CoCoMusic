@@ -5,15 +5,9 @@
         <img v-for="route in navList" :slot="route.name" :key="route.name" :src="`src/renderer/assets/img/${route.name}.svg`" />
       </f-tab>
     </div>
-    <div class="middle">
-      <img src="../assets/img/previousmusic.svg" alt="">
-      <img class="album-cover" src="../assets/img/music.jpg" alt="">
-      <img src="../assets/img/nextmusic.svg" alt="">
-      <div class="music-info">
-        <p class="song-name">39みゅーじっく! (39music!) (マジカルミライ2016 テーマソング)</p>
-        <p class="singer-name">みきとP (MikitoP) / 初音ミク (初音未来)</p>
-      </div>
-    </div>
+
+    <f-player></f-player>
+
     <div class="right">
       <button class="btn btn-link btn-sm" @click="$router.go(-1)">
         <img src="../assets/img/Back.svg" alt="">
@@ -21,13 +15,22 @@
       <button class="btn btn-link btn-sm" @click="$router.go(1)">
         <img src="../assets/img/Forward.svg" alt="">
       </button>
-      <img src="../assets/img/Up.svg" alt="">
+      <button class="btn btn-link btn-sm" @click="goTop">
+        <img src="../assets/img/Up.svg" alt="">
+      </button>
+      <!-- <button class="btn btn-link btn-sm" @click="minimize">
+        <img src="../assets/img/minimize.svg" alt="">
+      </button> -->
     </div>
   </div>
 </template>
 
 <script>
 import fTab from '@/components/Tab'
+import fPlayer from './Player'
+
+const {getCurrentWindow} = require('electron').remote
+
 export default {
   data () {
     return {
@@ -35,22 +38,40 @@ export default {
     }
   },
   components: {
-    fTab
+    fTab, fPlayer
+  },
+  methods: {
+    log () {
+      console.log('shit')
+    },
+    goTop () {
+      window.scrollTo(0, 0)
+    },
+    minimize () {
+      getCurrentWindow().minimize()
+    }
   }
 }
 </script>
 
 <style scoped>
+
+.right button{
+  padding: 0px;
+}
+
 .header{
   padding: 0px 15px 5px 15px;
-  background: white;
+  background: rgba(255, 255, 255, 0.8);
   width: 100%;
   position: fixed;
   top: 0px;
   display: flex;
   justify-content:space-between;
   align-items: center;
+  z-index: 10;
 }
+
 .left{
   margin-right: 20px;
 }
@@ -60,36 +81,7 @@ img{
   margin-left: 8px;
 	margin-right: 8px;
 }
-.middle{
-  width: 60%;
-  display: flex;
-}
-.middle>.music-info{
-  width: 70%;
-  margin-left: 10px;
-}
-.middle>.music-info>p{
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
-  margin: 0px;
-}
-.middle>.music-info>p.song-name{
-  font-size: 17px;
-}
-.middle>.music-info>p.singer-name{
-  margin-top: 3px;
-  font-size: 12px;
-}
-.middle img:not(.album-cover){
-  margin-top: 13px;
-}
-.middle img.album-cover{
-  box-shadow: 4px 5px 7px 1px rgba(112,128,151,0.35);
-  border-radius: 16%;
-  width: 50px;
-  height: 50px;
-}
+
 .right img{
   width: 15px;
   height: 15px;

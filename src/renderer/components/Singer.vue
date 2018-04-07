@@ -29,18 +29,29 @@ import {Singer} from '../../spider/commonObject.js'
 import {getSingerInfo} from '../../spider/index.js'
 import fTab from '@/components/Tab'
 import singerAvatar from './SingerAvatar'
+import {generateRouterMixins} from './common/getRouterMixins.js'
 
 let initData = {
   info: {},
   desc: '',
-  other: {}
+  other: {},
+  showAllInfo: false,
+  singerMidSave: ''
 }
 
+let routerMixins = generateRouterMixins({
+  watchName: '$route.params.id',
+  sourceId: 'singerMidSave',
+  methodsName: 'getTheSingerInfo',
+  methodsParams: [],
+  initData
+})
+
 export default {
+  mixins: [routerMixins],
   data () {
     return {
-      ...JSON.parse(JSON.stringify(initData)),
-      showAllInfo: false
+      ...JSON.parse(JSON.stringify(initData))
     }
   },
   computed: {
@@ -52,16 +63,10 @@ export default {
       let id = this.singer.singerMid
       let name = this.singer.singerName
       return [
-        {name: 'SingerMusic', ZHName: '单曲', params: {id}, query: {name}},
-        {name: 'SingerAlbum', ZHName: '专辑', params: {id}, query: {name}},
-        {name: 'SingerMv', ZHName: 'MV', params: {id}, query: {name}}
+        {path: `/singer/${id}/music`, name: 'SingerMusic', ZHName: '单曲', params: {id}, query: {name}},
+        {path: `/singer/${id}/album`, name: 'SingerAlbum', ZHName: '专辑', params: {id}, query: {name}},
+        {path: `/singer/${id}/mv`, name: 'SingerMv', ZHName: 'MV', params: {id}, query: {name}}
       ]
-    }
-  },
-  watch: {
-    async '$route.params.id' (value) {
-      if (!value) return
-      await this.getTheSingerInfo()
     }
   },
   methods: {

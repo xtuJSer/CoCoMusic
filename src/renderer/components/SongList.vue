@@ -2,12 +2,12 @@
   <div class="song-list">
     
     <div class="song-item"
-      v-for="music in musicList"
+      v-for="(music,index) in musicList"
       :key="music.songMid">
 
       <div class="song-item-head">
-        <button class="play-control btn btn-link" >
-          <img src="../assets/img/play2.svg" alt="">
+        <button class="play-control btn btn-link" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
+          <img src="../assets/img/play2.svg" @click="play(index)" alt="">
         </button>
 
         <router-link
@@ -26,6 +26,8 @@
   </div>
 </template>
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
   props: {
     musicList: Array,
@@ -34,18 +36,27 @@ export default {
       default: false
     }
   },
-  data () {
-    return {
-    }
+  computed: {
+    ...mapGetters([
+      'currentPlay'
+    ])
   },
   filters: {
     deleteOtherName (fullName) {
       return fullName.split(' (')[0]
     }
+  },
+  methods: {
+    play (index) {
+      this.$store.commit('setPlayerState', {
+        playList: this.musicList
+      })
+      this.$store.dispatch('setPlay', index)
+    }
   }
 }
 </script>
-<style>
+<style scoped>
 .song-list {
   margin-top: 15px;
   margin-bottom: 20px;
@@ -55,11 +66,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.mark {
-  color: #5764c6;
-  text-shadow: 1px 1px 20px;
-}
-.song-item:hover{
+.song-item:hover, .is-play{
   color: #5764c6;
   text-shadow: 1px 1px 20px;
 }

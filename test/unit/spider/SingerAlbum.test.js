@@ -7,6 +7,6 @@ describe('歌手专辑列表', function () {
       singerMid: '004PT6gg3cLvxv',
       page: 0
     })
-    assert(data.list.length >= 19) 
+    assert(data.list.length >= 19)
   })
 })
