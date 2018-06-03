@@ -1,7 +1,7 @@
 <template>
   <div class="singer-avatar">
     <img v-if="showImage" @error.once="handleImageError" :src="`https://y.gtimg.cn/music/photo_new/T001R150x150M000${singer.singerMid}.jpg?max_age=2592000`" alt="">
-    <p>{{singer.singerName}}</p>
+    <p v-if="showName">{{singer.singerName}}</p>
   </div>
 </template>
 <script>
@@ -11,6 +11,10 @@ export default {
   props: {
     singer: Singer,
     showImage: {
+      type: Boolean,
+      default: true
+    },
+    showName: {
       type: Boolean,
       default: true
     }

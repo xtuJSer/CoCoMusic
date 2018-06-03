@@ -7,7 +7,7 @@ describe('歌手mv列表', function () {
       singerMid: '004PT6gg3cLvxv',
       page: 0
     })
-    console.log(data.mvList)
+    // console.log(data.mvList)
     assert.strictEqual(data.mvList.length >= 35, true)
   })
 })

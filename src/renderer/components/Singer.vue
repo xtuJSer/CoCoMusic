@@ -1,14 +1,11 @@
 <template>
   <div class="singer">
     <div class="singer-info">
-      <singer-avatar :singer="singer"></singer-avatar>
-      <div class="divider text-center" data-content="歌手信息"></div>
-      <p class="text-gray" v-for="(value, key) in info" :key='key' v-html="`${key} : ${value}`">
-      </p>
-      <p v-show="showAllInfo" class="text-gray" v-for="(value, key) in other" :key='key' v-html="`${key} : ${value}`">
-      </p>
-      <p v-show="showAllInfo" v-html="desc" class="text-gray"></p>
-      <button class="btn btn-link btn-sm" @click="showAllInfo = !showAllInfo">更多 / 关闭</button>
+      <singer-avatar :singer="singer" :showName='false'></singer-avatar>
+      <div class="singer-name">
+        <h4>{{singer.singerName}}</h4>
+        <button class="btn btn-sm">关注</button>
+      </div>
     </div>
     <div class="music-album-mv">
       <f-tab :list="tabList">
@@ -26,10 +23,8 @@
 </template>
 <script>
 import {Singer} from '../../spider/commonObject.js'
-import {getSingerInfo} from '../../spider/index.js'
 import fTab from '@/components/Tab'
 import singerAvatar from './SingerAvatar'
-import {generateRouterMixins} from './common/getRouterMixins.js'
 
 let initData = {
   info: {},
@@ -39,26 +34,14 @@ let initData = {
   singerMidSave: ''
 }
 
-let routerMixins = generateRouterMixins({
-  watchName: '$route.params.id',
-  sourceId: 'singerMidSave',
-  methodsName: 'getTheSingerInfo',
-  methodsParams: [],
-  initData
-})
-
 export default {
-  mixins: [routerMixins],
   data () {
     return {
-      ...JSON.parse(JSON.stringify(initData))
+      ...JSON.parse(JSON.stringify(initData)),
+      singer: new Singer(this.$route.query.name, this.$route.params.id)
     }
   },
   computed: {
-    singer () {
-      if (!this.$route.params.id) return new Singer('Loading', '')
-      return new Singer(this.$route.query.name, this.$route.params.id)
-    },
     tabList () {
       let id = this.singer.singerMid
       let name = this.singer.singerName
@@ -69,38 +52,39 @@ export default {
       ]
     }
   },
-  methods: {
-    async getTheSingerInfo () {
-      this.showAllInfo = false
-      this.$common.objectCopy(initData, this)
-      let {info, desc, other} = await getSingerInfo({singerMid: this.singer.singerMid})
-      this.info = info
-      this.desc = desc
-      this.other = other
+  watch: {
+    '$route.name' (routerName) {
+      if (['SingerMusic', 'SingerAlbum', 'SingerMv'].indexOf(routerName) !== -1) {
+        this.singer = new Singer(this.$route.query.name, this.$route.params.id)
+      }
     }
   },
   components: {
     singerAvatar, fTab
-  },
-  async created () {
-    this.getTheSingerInfo()
   }
 }
 </script>
 <style scoped>
-.music-album-mv{
-  width: 80%
+.information {
+  width: 40%;
+  overflow: hidden;
+  height: 150px;
 }
-.singer-info{
-  width: 20%
+.singer-name {
+  margin-right: 150px;
+}
+.singer-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.singer-avatar {
+  margin: 0px 50px 0px 45px;
 }
 .singer-info p{
   margin-right: 20px;
 }
-.singer {
-  display: flex;
-  justify-content: space-between;
-}
+
 singer-avatar p{
   margin-top: 100px;
 }

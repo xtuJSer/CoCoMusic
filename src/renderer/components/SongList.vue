@@ -62,7 +62,10 @@ export default {
   margin-bottom: 20px;
 }
 .song-item {
-  margin-top: 5px;
+  margin-top: 10px;
+  font-size: 15px;
+  margin-bottom: 15px;
+  padding-left: 10px;
   display: flex;
   align-items: center;
 }

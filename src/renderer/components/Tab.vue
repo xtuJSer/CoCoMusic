@@ -1,7 +1,7 @@
 <template>
   <ul class='tab tab-block'>
     <li class='tab-item' v-for="route in list" :key="route.name">
-      <router-link :to="route.path ? {path: route.path} : {name: route.name}"
+      <router-link :to="route"
         :class="{'active': $route.path === route.path || $route.name === route.name}">
         <slot :name="route.name"/>
       </router-link>

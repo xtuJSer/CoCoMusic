@@ -33,7 +33,7 @@ const baseRequest = request.create({
     'Referer': 'http://y.qq.com/portal/player.html',
     'User-Agent': 'user-agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
   },
-  timeout: 5000
+  timeout: 8000 // 这个时间不好把握，我只能说小霸王服务器该换了
 })
 
 // page 从 1 开始
@@ -133,4 +133,21 @@ export async function getSongVkey({guid, songMid, songMediaMid}) {
   let url =  `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=C400${songMediaMid}.m4a&guid=${guid}`
   let {vkey} = (await baseRequest(url)).data.data.items[0]
   return {vkey}
+}
+
+export async function getSearch ({keyword, page}) {
+  let url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?new_json=1&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=${page}&n=20&w=${encodeURIComponent(keyword)}&needNewCode=0`
+  let {zhida, song: {list, curnum, curpage}} = JSON.parse((await baseRequest(url)).data.slice(9, -1)).data
+  let direct
+  switch (zhida.type) {
+    case 1:
+      direct = new Singer(zhida.zhida_singer.singerName, zhida.zhida_singer.singerMID)
+      break;
+    case 2:
+      direct = new Album(zhida.zhida_album.albumName, zhida.zhida_album.albumMID)
+      break;
+  }
+  return {direct, totalPage: curnum,
+    songList: list.map(({name, mid, file: {media_mid}, singer, album}) => new Music(name, mid, media_mid, new Album(album.name, album.mid), singer.map(singerItem => new Singer(singerItem.name, singerItem.mid))))
+  }
 }

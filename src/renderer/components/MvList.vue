@@ -19,7 +19,7 @@ export default {
 }
 .mv-item {
   display: inline-block;
-  width: 135px;
+  width: 144px;
   margin: 5px 10px;
   text-align: center;
 }

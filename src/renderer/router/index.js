@@ -27,14 +27,17 @@ export default new Router({
       children: [
         {
           path: 'music',
+          name: 'SingerMusic',
           component: SingerMusic
         },
         {
           path: 'mv',
+          name: 'SingerMv',
           component: SingerMv
         },
         {
           path: 'album',
+          name: 'SingerAlbum',
           component: SingerAlbum
         }
       ]
