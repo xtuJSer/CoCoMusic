@@ -3,9 +3,9 @@ export function generateGetListMixins ({methodsName, loadingName, pageName, init
   return {
     data () {
       return {
-        ...initData,
         [loadingName]: false,
-        [pageName]: 0
+        [pageName]: 0,
+        ...initData
       }
     },
     methods: {

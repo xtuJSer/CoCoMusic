@@ -7,19 +7,28 @@
         <img v-show="!isPlay" @click="play" class="play" src="../assets/img/play.svg">
         <img v-show="isPlay" @click="pause" class="play" src="../assets/img/pause.svg">
       </div>
-
     </div>
+
     <img src="../assets/img/nextmusic.svg" alt="">
 
     <div class="music-info">
       <p class="song-name">{{currentPlay.songName}}</p>
-      <p class="singer-name">
+      <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee ${range}%, #eee)`}">
+      <div class="singer-name">
+        <p>
           <span v-for="singer in currentPlay.singerList" :key="singer.singerMid">
             <router-link :to="{path: `/singer/${singer.singerMid}/music?name=${singer.singerName}`}">
               {{singer.singerName}}
             </router-link>
+            &nbsp;
           </span>
-      </p>
+        </p>
+        <p class="music-volume">
+          {{playTimeString}} / {{playDurationString}}
+          <img src="../assets/img/volume.svg">
+          <input v-model="volume" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${volume}%, #5755d9 ${volume}%,#eee ${volume}%, #eee)`}">
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -27,14 +36,39 @@
 import {mapState, mapGetters} from 'vuex'
 
 export default {
+  data () {
+    return {
+    }
+  },
   computed: {
     ...mapState({
       player: state => state.Player.player,
-      isPlay: state => state.Player.isPlay
+      isPlay: state => state.Player.isPlay,
+      playTime: state => state.Player.playTime,
+      playDuration: state => state.Player.playDuration,
+      playVolume: state => state.Player.playVolume
     }),
     ...mapGetters([
-      'currentPlay'
-    ])
+      'currentPlay', 'playTimeString', 'playDurationString'
+    ]),
+    range: {
+      get () {
+        return Math.floor((this.playTime / this.playDuration) * 100)
+      },
+      set (rate) {
+        this.player.currentTime = Math.floor((rate / 100) * this.player.duration)
+      }
+    },
+    volume: {
+      get () {
+        return Math.floor(this.playVolume * 100)
+      },
+      set (value) {
+        this.$store.commit('setPlayVolume', +(value / 100).toFixed(2))
+      }
+    }
+  },
+  watch: {
   },
   methods: {
     play () {
@@ -52,6 +86,14 @@ export default {
 }
 </script>
 <style scoped>
+.slider {
+  border-radius: 5px;
+  margin: 5px 0px;
+  height: 3px;
+}
+.slider::-webkit-slider-runnable-track{
+  background: transparent;
+}
 
 .play-control:hover .album-cover{
   display: none;
@@ -72,7 +114,7 @@ export default {
   width: 70%;
   margin-left: 10px;
 }
-.player>.music-info>p{
+.player>.music-info p{
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
@@ -81,9 +123,23 @@ export default {
 .player>.music-info>p.song-name{
   font-size: 17px;
 }
-.player>.music-info>p.singer-name{
+.singer-name {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.singer-name img {
+  width: 15px;
+  height: 15px;
+  margin: 0px 5px 0px 10px!important;
+}
+.singer-name p{
   margin-top: 3px;
   font-size: 12px;
+}
+.music-volume {
+  display: flex;
+  align-items: center;
 }
 .player img:not(.album-cover){
   margin-top: 13px;

@@ -6,6 +6,7 @@ import SingerMusic from '@/components/SingerMusicList.vue'
 import SingerMv from '@/components/SingerMvList'
 import SingerAlbum from '@/components/SingerAlbumList'
 import MvPlayer from '@/components/MvPlayer'
+import Search from '@/components/Search'
 Vue.use(Router)
 
 export default new Router({
@@ -50,7 +51,7 @@ export default new Router({
     {
       path: '/search',
       name: 'Search',
-      component: SingerList
+      component: Search
     },
     {
       path: '/favorite',

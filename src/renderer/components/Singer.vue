@@ -59,6 +59,10 @@ export default {
       }
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    this.singer = new Singer(this.$route.query.name, this.$route.params.id)
+    next()
+  },
   components: {
     singerAvatar, fTab
   }

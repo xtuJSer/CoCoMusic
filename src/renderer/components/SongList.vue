@@ -11,11 +11,11 @@
         </button>
 
         <router-link
-          v-if="showSingerList"
-          :to="`/singer/${singer.singerMid}/music`"
-          v-for="singer in showSingerList.singerList"
+          v-show="showSingerList"
+          :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}"
+          v-for="singer in music.singerList"
           :key="singer.singerMid">
-          <p>{{singer.singerName | deleteOtherName}}</p>
+          <p>{{singer.singerName | deleteOtherName}} </p>
         </router-link>
 
         <p>{{music.songName}}</p>

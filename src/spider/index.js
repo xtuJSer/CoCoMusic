@@ -54,7 +54,7 @@ export async function getSingerMusicList ({page, singerMid}) {
   let {data: {list, total}} = (await baseRequest(url)).data
   return {
     musicTotal: Math.floor(total / 30),
-    musicList: list.map(({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer}}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid))))
+    musicList: list.map(({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer, type}}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid)), type))
   }
 }
 
@@ -128,16 +128,16 @@ export async function getMUrl ({fileid}) {
   }
 }
 
-export async function getSongVkey({guid, songMid, songMediaMid}) {
+export async function getSongVkey({fileName, guid, songMid}) {
   // cid 是啥？ 我也不造啊 qq 那群人写死了
-  let url =  `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=C400${songMediaMid}.m4a&guid=${guid}`
+  let url =  `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=${fileName}&guid=${guid}`
   let {vkey} = (await baseRequest(url)).data.data.items[0]
   return {vkey}
 }
-
+// 从 1 开始
 export async function getSearch ({keyword, page}) {
   let url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?new_json=1&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=${page}&n=20&w=${encodeURIComponent(keyword)}&needNewCode=0`
-  let {zhida, song: {list, curnum, curpage}} = JSON.parse((await baseRequest(url)).data.slice(9, -1)).data
+  let {zhida, song: {list, totalnum, curpage}} = JSON.parse((await baseRequest(url)).data.slice(9, -1)).data // zhida ？ 直达 api 里面有中文 
   let direct
   switch (zhida.type) {
     case 1:
@@ -147,7 +147,7 @@ export async function getSearch ({keyword, page}) {
       direct = new Album(zhida.zhida_album.albumName, zhida.zhida_album.albumMID)
       break;
   }
-  return {direct, totalPage: curnum,
-    songList: list.map(({name, mid, file: {media_mid}, singer, album}) => new Music(name, mid, media_mid, new Album(album.name, album.mid), singer.map(singerItem => new Singer(singerItem.name, singerItem.mid))))
+  return {direct, totalPage: Math.ceil(totalnum / 20),
+    songList: list.map(({name, mid, file: {media_mid}, singer, album, type}) => new Music(name, mid, media_mid, new Album(album.name, album.mid), singer.map(singerItem => new Singer(singerItem.name, singerItem.mid)), type))
   }
 }
