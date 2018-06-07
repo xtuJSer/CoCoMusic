@@ -11,6 +11,7 @@ function generateGuid () {
 const state = {
   playList: [],
   currentPlayIndex: 0,
+  playUrl: '',
   player: document.createElement('audio'),
   isPlay: false,
   playTime: 0,

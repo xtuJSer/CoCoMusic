@@ -1,6 +1,7 @@
 <template>
   <div class="player" v-show="currentPlay.songName">
-    <img src="../assets/img/previousmusic.svg" alt="">
+    <img src="../assets/img/previousmusic.svg" class="play" @click="previous" alt="">
+
     <div class="play-control">
       <img class="album-cover" :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${currentPlay.album.albumMid}.jpg?max_age=2592000`" alt="">
       <div class="play-pause" style="display: none">
@@ -9,7 +10,7 @@
       </div>
     </div>
 
-    <img src="../assets/img/nextmusic.svg" alt="">
+    <img src="../assets/img/nextmusic.svg" @click="next" class="play" alt="">
 
     <div class="music-info">
       <p class="song-name">{{currentPlay.songName}}</p>
@@ -27,6 +28,9 @@
           {{playTimeString}} / {{playDurationString}}
           <img src="../assets/img/volume.svg">
           <input v-model="volume" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${volume}%, #5755d9 ${volume}%,#eee ${volume}%, #eee)`}">
+          <img v-show="mode === 'cycle'" @click="changeMode" class="play-mode" src="../assets/img/cycle.svg" alt="">
+          <img v-show="mode === 'single'" @click="changeMode" class="play-mode" src="../assets/img/single.svg" alt="">
+          <img v-show="mode === 'random'" @click="changeMode" class="play-mode" src="../assets/img/random.svg" alt="">
         </p>
       </div>
     </div>
@@ -38,6 +42,7 @@ import {mapState, mapGetters} from 'vuex'
 export default {
   data () {
     return {
+      mode: 'cycle' // cycle single random
     }
   },
   computed: {
@@ -46,7 +51,9 @@ export default {
       isPlay: state => state.Player.isPlay,
       playTime: state => state.Player.playTime,
       playDuration: state => state.Player.playDuration,
-      playVolume: state => state.Player.playVolume
+      playVolume: state => state.Player.playVolume,
+      currentPlayIndex: state => state.Player.currentPlayIndex,
+      playListLength: state => state.Player.playList.length
     }),
     ...mapGetters([
       'currentPlay', 'playTimeString', 'playDurationString'
@@ -68,14 +75,26 @@ export default {
       }
     }
   },
-  watch: {
-  },
   methods: {
+    changeMode () {
+      const modeList = {
+        'cycle': 'single', 'single': 'random', 'random': 'cycle'
+      }
+      this.mode = modeList[this.mode]
+    },
     play () {
       this.player.play()
     },
     pause () {
       this.player.pause()
+    },
+    previous () {
+      this.$store.dispatch('setPlay', this.currentPlayIndex === 0 ? this.playListLength : this.currentPlayIndex - 1)
+      this.player.load()
+    },
+    next () {
+      this.$store.dispatch('setPlay', this.currentPlayIndex === this.playListLength ? 0 : this.currentPlayIndex + 1)
+      this.player.load()
     }
   },
   mounted () {
@@ -149,6 +168,14 @@ export default {
   border-radius: 16%;
   width: 50px;
   height: 50px;
+}
+img.play-mode{
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+}
+img.play {
+  cursor: pointer;
 }
 img{
   width: 23px;

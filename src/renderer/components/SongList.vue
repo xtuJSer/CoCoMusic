@@ -3,10 +3,12 @@
     
     <div class="song-item"
       v-for="(music,index) in musicList"
-      :key="music.songMid">
+      :key="music.songMid"
+      :id="`music${music.songMid}`">
 
-      <div class="song-item-head">
-        <button class="play-control btn btn-link" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
+      <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
+
+        <button class="play-control btn btn-link" v-show="currentPlay && music.songMid !== currentPlay.songMid">
           <img src="../assets/img/play2.svg" @click="play(index)" alt="">
         </button>
 
@@ -23,12 +25,20 @@
       <p class="song-album">{{music.album.albumName}}</p>
     </div>
 
+    <div class="music-location" v-show="isPlayList">
+      <button class="btn btn-link" @click="focusPlay">
+        <i class="icon icon-location"></i>
+      </button>
+    </div>
   </div>
 </template>
 <script>
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 
 export default {
+  data () {
+    return {}
+  },
   props: {
     musicList: Array,
     showSingerList: {
@@ -39,17 +49,35 @@ export default {
   computed: {
     ...mapGetters([
       'currentPlay'
-    ])
+    ]),
+    ...mapState({
+      playUrl: state => state.Player.playUrl
+    }),
+    isPlayList () {
+      return this.$route.path === this.playUrl
+    }
   },
   filters: {
     deleteOtherName (fullName) {
       return fullName.split(' (')[0]
     }
   },
+  watch: {
+    'musicList' (value) {
+      return this.isPlayList && this.$store.commit('setPlayerState', {
+        playList: [...this.musicList]
+      })
+    }
+  },
   methods: {
+    focusPlay () {
+      const id = `#music${this.currentPlay.songMid}`
+      document.querySelector(id).scrollIntoView(false)
+    },
     play (index) {
       this.$store.commit('setPlayerState', {
-        playList: this.musicList
+        playList: [...this.musicList],
+        playUrl: this.$route.path
       })
       this.$store.dispatch('setPlay', index)
     }
@@ -61,6 +89,15 @@ export default {
   margin-top: 15px;
   margin-bottom: 20px;
 }
+.music-location {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+}
+.music-location button{
+  background: transparent;
+}
+
 .song-item {
   margin-top: 10px;
   font-size: 15px;
@@ -69,6 +106,13 @@ export default {
   display: flex;
   align-items: center;
 }
+button.play-control {
+  display: none;
+}
+button.play-control>img{
+  width: 20px;
+}
+
 .song-item:hover, .is-play{
   color: #5764c6;
   text-shadow: 1px 1px 20px;
@@ -96,10 +140,5 @@ export default {
   margin-left: 50px;
   width: 30%;
 }
-button.play-control {
-  display: none;
-}
-button.play-control>img{
-  width: 20px;
-}
+
 </style>
