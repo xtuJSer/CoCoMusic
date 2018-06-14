@@ -7,6 +7,7 @@ import SingerMv from '@/components/SingerMvList'
 import SingerAlbum from '@/components/SingerAlbumList'
 import MvPlayer from '@/components/MvPlayer'
 import Search from '@/components/Search'
+import Lyric from '@/components/Lyric'
 Vue.use(Router)
 
 export default new Router({
@@ -67,6 +68,11 @@ export default new Router({
       path: '*',
       name: 'default',
       component: SingerList
+    },
+    {
+      path: '/lyric',
+      name: 'Lyric',
+      component: Lyric
     }
   ]
 })

@@ -26,6 +26,6 @@ export default {
   user-select: none;
 }
 #container {
-  margin: 65px 10px 60px 10px;
+  margin: 70px 10px 25px 10px;
 }
 </style>

@@ -30,3 +30,47 @@ export class Mv {
     this.mvId = mvId
   }
 }
+
+export class Lyric {
+  constructor (lyricString, transString) {
+    let lyric = this.parseLyric(Buffer.from(lyricString, 'base64').toString())
+    let trans = transString && this.parseLyric(Buffer.from(transString, 'base64').toString())
+    this.lyricList = trans ? this.searchTrans(lyric, trans) : lyric
+  }
+
+  parseLyric (lyricString) {
+    const timeReg = /\[\d*:\d*((\.|:)\d*)*\]/g
+    return lyricString.split('\n').map(lyric => {
+      let timeString = lyric.match(timeReg)
+      if (!timeString) {
+        return
+      }
+      timeString = timeString[0]
+      let min = Number(String(timeString.match(/\[\d*/i)).slice(1))
+      let sec = Number(String(timeString.match(/:\d*.\d*/i)).slice(1))
+      let time = min * 60 + sec
+      return {
+        time: +time.toFixed(2),
+        lyric: lyric.replace(timeReg, '')
+      }
+    }).filter(lyric => !!lyric && !!lyric.lyric)
+  }
+
+  searchTrans (lyric, trans) {
+    let transIndex = -1
+    function euqal (a, b) {
+      return Math.abs(a - b) <= 0.3
+    }
+    return lyric.map(ly => {
+      transIndex = transIndex + 1
+      while (!euqal(ly.time, trans[transIndex].time)) {
+        transIndex = transIndex + 1
+      }
+      return {
+        time: ly.time,
+        lyric: ly.lyric,
+        trans: trans[transIndex].lyric
+      }
+    })
+  }
+}

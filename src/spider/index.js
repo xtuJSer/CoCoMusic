@@ -24,7 +24,7 @@
  * 终于知道为什么没人去搞 qqmusic 的 api 了，这智障 api 里面掺了屎，好辣瞎我们的狗眼，让我们不能爬
  */
 import request from 'axios'
-import {Singer, Album, Music, Mv} from './commonObject'
+import {Singer, Album, Music, Mv, Lyric} from './commonObject'
 
 request.defaults.adapter = require('axios/lib/adapters/http')
 
@@ -32,8 +32,8 @@ const baseRequest = request.create({
   headers: {
     'Referer': 'http://y.qq.com/portal/player.html',
     'User-Agent': 'user-agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-  },
-  timeout: 8000 // 这个时间不好把握，我只能说小霸王服务器该换了
+  }
+  // timeout: 8000 // 这个时间不好把握，我只能说小霸王服务器该换了
 })
 
 // page 从 1 开始
@@ -150,4 +150,10 @@ export async function getSearch ({keyword, page}) {
   return {direct, totalPage: Math.ceil(totalnum / 20),
     songList: list.map(({name, mid, file: {media_mid}, singer, album, type}) => new Music(name, mid, media_mid, new Album(album.name, album.mid), singer.map(singerItem => new Singer(singerItem.name, singerItem.mid)), type))
   }
+}
+
+export async function getLyric (songMid) {
+  let url = `https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid=${songMid}&g_tk=5381`
+  let lyric = JSON.parse((await baseRequest(url)).data.slice(18, -1))
+  return new Lyric(lyric.lyric, lyric.trans)
 }

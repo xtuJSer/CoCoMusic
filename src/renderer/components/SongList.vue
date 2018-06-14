@@ -51,7 +51,8 @@ export default {
       'currentPlay'
     ]),
     ...mapState({
-      playUrl: state => state.Player.playUrl
+      playUrl: state => state.Player.playUrl,
+      mode: state => state.Player.mode
     }),
     isPlayList () {
       return this.$route.path === this.playUrl
@@ -72,7 +73,7 @@ export default {
   methods: {
     focusPlay () {
       const id = `#music${this.currentPlay.songMid}`
-      document.querySelector(id).scrollIntoView(false)
+      document.querySelector(id).scrollIntoView({block: 'center', behavior: 'smooth'})
     },
     play (index) {
       this.$store.commit('setPlayerState', {

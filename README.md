@@ -8,8 +8,9 @@
 -- xtuJSer.feng
 
 ## screenshot
-![http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180214_212202.png](http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180214_212202.png)
-
+![](http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180614_222207.png)
+![](http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180614_222305.png)
+![](http://mypic-10053031.cossh.myqcloud.com/Screenshot_20180614_222346.png)
 #### Build Setup
 
 ``` bash

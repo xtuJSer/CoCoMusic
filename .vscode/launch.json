@@ -9,8 +9,8 @@
       "type": "chrome",
       "request": "attach",
       "name": "Attach to Chrome",
-      "port": 9223,
-      // "url": "http://localhost:9080/*",
+      "port": 9222,
+      // "url": "http://localhost:9080/#/lyric",
       "webRoot": "${workspaceFolder}"
     },
   ]

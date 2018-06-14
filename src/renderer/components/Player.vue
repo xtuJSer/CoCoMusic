@@ -13,12 +13,14 @@
     <img src="../assets/img/nextmusic.svg" @click="next" class="play" alt="">
 
     <div class="music-info">
-      <p class="song-name">{{currentPlay.songName}}</p>
+      <router-link to="/lyric">
+        <p class="song-name">{{currentPlay.songName}}</p>
+      </router-link>
       <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee ${range}%, #eee)`}">
       <div class="singer-name">
         <p>
           <span v-for="singer in currentPlay.singerList" :key="singer.singerMid">
-            <router-link :to="{path: `/singer/${singer.singerMid}/music?name=${singer.singerName}`}">
+            <router-link :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}">
               {{singer.singerName}}
             </router-link>
             &nbsp;
@@ -38,11 +40,11 @@
 </template>
 <script>
 import {mapState, mapGetters} from 'vuex'
+import {random} from 'lodash'
 
 export default {
   data () {
     return {
-      mode: 'cycle' // cycle single random
     }
   },
   computed: {
@@ -53,6 +55,7 @@ export default {
       playDuration: state => state.Player.playDuration,
       playVolume: state => state.Player.playVolume,
       currentPlayIndex: state => state.Player.currentPlayIndex,
+      mode: state => state.Player.mode,
       playListLength: state => state.Player.playList.length
     }),
     ...mapGetters([
@@ -80,7 +83,7 @@ export default {
       const modeList = {
         'cycle': 'single', 'single': 'random', 'random': 'cycle'
       }
-      this.mode = modeList[this.mode]
+      this.$store.commit('setPlayMode', modeList[this.mode])
     },
     play () {
       this.player.play()
@@ -89,11 +92,17 @@ export default {
       this.player.pause()
     },
     previous () {
-      this.$store.dispatch('setPlay', this.currentPlayIndex === 0 ? this.playListLength : this.currentPlayIndex - 1)
+      let previous = this.mode === 'random'
+        ? random(this.playListLength)
+        : this.currentPlayIndex === 0 ? this.playListLength : this.currentPlayIndex - 1
+      this.$store.dispatch('setPlay', previous)
       this.player.load()
     },
     next () {
-      this.$store.dispatch('setPlay', this.currentPlayIndex === this.playListLength ? 0 : this.currentPlayIndex + 1)
+      let next = this.mode === 'random'
+        ? random(this.playListLength)
+        : this.currentPlayIndex === this.playListLength ? 0 : this.currentPlayIndex + 1
+      this.$store.dispatch('setPlay', next)
       this.player.load()
     }
   },

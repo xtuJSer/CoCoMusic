@@ -64,7 +64,7 @@ export default {
 <style scoped>
 .search-input {
   width: 40%;
-  margin: 0 auto;
+  margin: 0px auto;
 }
 
 </style>
