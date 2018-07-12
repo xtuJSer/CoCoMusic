@@ -53,8 +53,8 @@ export async function getSingerMusicList ({page, singerMid}) {
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?&singermid=${singerMid}&order=listen&begin=${page*30}&num=30`
   let {data: {list, total}} = (await baseRequest(url)).data
   return {
-    musicTotal: Math.floor(total / 30),
-    musicList: list.map(({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer, type}}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid)), type))
+    total: Math.floor(total / 30),
+    list: list.map(({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer, type}}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid)), type))
   }
 }
 
@@ -98,8 +98,8 @@ export let getSingerAlbumList = async function ({singerMid, page}) {
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_album.fcg?singermid=${singerMid}&order=time&begin=${page * 30}&num=30`
   let {list, total} = (await baseRequest(url)).data.data
   return {
-    albumTotal: Math.floor(total / 30),
-    albumList: list ? list.map(({albumMID, albumName}) => new Album(albumName, albumMID)) : []
+    total: Math.floor(total / 30),
+    list: list ? list.map(({albumMID, albumName}) => new Album(albumName, albumMID)) : []
   }
 }
 export async function getSingerMvList ({singerMid, page}) {
@@ -107,8 +107,8 @@ export async function getSingerMvList ({singerMid, page}) {
   let url =  `https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?singermid=${singerMid}&order=listen&begin=${page * 35}&num=35&cid=205360581`
   let {list, total} = (await baseRequest(url)).data.data
   return {
-    mvTotal: Math.floor(total / 35),
-    mvList: list ? list.map(({title, pic, vid}) => new Mv(title, pic, vid)) : []
+    total: Math.floor(total / 35),
+    list: list ? list.map(({title, pic, vid}) => new Mv(title, pic, vid)) : []
   }
 }
 
@@ -136,6 +136,7 @@ export async function getSongVkey({fileName, guid, songMid}) {
 }
 // 从 1 开始
 export async function getSearch ({keyword, page}) {
+  console.log(keyword,)
   let url = `https://c.y.qq.com/soso/fcgi-bin/client_search_cp?new_json=1&t=0&aggr=1&cr=1&catZhida=1&lossless=0&flag_qc=0&p=${page}&n=20&w=${encodeURIComponent(keyword)}&needNewCode=0`
   let {zhida, song: {list, totalnum, curpage}} = JSON.parse((await baseRequest(url)).data.slice(9, -1)).data // zhida ？ 直达 api 里面有中文 
   let direct
@@ -156,4 +157,13 @@ export async function getLyric (songMid) {
   let url = `https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg?songmid=${songMid}&g_tk=5381`
   let lyric = JSON.parse((await baseRequest(url)).data.slice(18, -1))
   return new Lyric(lyric.lyric, lyric.trans)
+}
+
+export async function getAlbum ({albumMid}) {
+  let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?albummid=${albumMid}&g_tk=5381&hostUin=0&notice=0&platform=yqq&needNewCode=0`
+  console.log(albumMid)
+  let {list} = (await baseRequest(url)).data.data
+  return {
+    musicList: list.map(({songname, songmid, strMediaMid, albumname, albummid, singer, type}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name, mid)), type))
+  }
 }

@@ -8,6 +8,7 @@ import SingerAlbum from '@/components/SingerAlbumList'
 import MvPlayer from '@/components/MvPlayer'
 import Search from '@/components/Search'
 import Lyric from '@/components/Lyric'
+import Album from '@/components/Album'
 Vue.use(Router)
 
 export default new Router({
@@ -23,7 +24,7 @@ export default new Router({
       component: SingerList
     },
     {
-      path: '/singer/:id',
+      path: '/singer/:singerMid',
       name: 'Singer',
       component: Singer,
       children: [
@@ -73,6 +74,11 @@ export default new Router({
       path: '/lyric',
       name: 'Lyric',
       component: Lyric
+    },
+    {
+      path: '/album/:id',
+      name: 'Album',
+      component: Album
     }
   ]
 })

@@ -42,7 +42,7 @@ export default {
   background-size: cover;
   background-position: 50%;
   filter: blur(36px);
-  opacity: 0.7;
+  opacity: 0.3;
   position: absolute;
   top: 0;
   left: 0;

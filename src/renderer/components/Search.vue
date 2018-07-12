@@ -13,40 +13,20 @@
 </template>
 <script>
 import {getSearch} from '../../spider/index.js'
-import {generateGetListMixins} from './common/getListMixins.js'
 import songList from './SongList'
 
-const initData = {
-  loading: false,
-  page: 1,
-  totalPage: 1,
-  direct: {},
-  songList: []
-}
-
-let searchMixins = generateGetListMixins({
-  methodsName: 'search',
-  loadingName: 'loading',
-  pageName: 'page',
-  initData: JSON.parse(JSON.stringify(initData)),
-  spiderMethod: getSearch,
-  spiderMethodParams: {
-    page: 'page',
-    keyword: 'keyword'
-  },
-  listDataName: 'songList',
-  operation: 'append'
-})
-
 export default {
-  mixins: [searchMixins],
   components: {
-    songList,
-    page: 1
+    songList
   },
   data () {
     return {
-      keyword: ''
+      keyword: '',
+      loading: false,
+      page: 1,
+      totalPage: 1,
+      direct: {},
+      songList: []
     }
   },
   computed: {
@@ -56,8 +36,32 @@ export default {
   },
   methods: {
     init () {
-      this.$common.objectCopy(initData, this)
+      this.$common.objectCopy({
+        loading: false,
+        page: 1,
+        totalPage: 1,
+        direct: {},
+        songList: []
+      }, this)
+    },
+    async search (newPage) {
+      this.loading = true
+      let data
+      try {
+        data = await getSearch({
+          page: newPage, keyword: this.keyword
+        })
+        this.page = newPage
+        this.loading = false
+        this.direct = data.direct
+        this.totalPage = data.totalPage
+        this.songList.push(...data.songList)
+      } catch (e) {
+        console.error(e)
+      }
     }
+  },
+  created () {
   }
 }
 </script>

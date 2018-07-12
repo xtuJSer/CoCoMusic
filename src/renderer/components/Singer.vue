@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       ...JSON.parse(JSON.stringify(initData)),
-      singer: new Singer(this.$route.query.name, this.$route.params.id)
+      singer: new Singer(this.$route.query.name, this.$route.params.singerMid)
     }
   },
   computed: {
@@ -55,12 +55,12 @@ export default {
   watch: {
     '$route.name' (routerName) {
       if (['SingerMusic', 'SingerAlbum', 'SingerMv'].indexOf(routerName) !== -1) {
-        this.singer = new Singer(this.$route.query.name, this.$route.params.id)
+        this.singer = new Singer(this.$route.query.name, this.$route.params.singerMid)
       }
     }
   },
   beforeRouteUpdate (to, from, next) {
-    this.singer = new Singer(to.query.name, to.params.id)
+    this.singer = new Singer(to.query.name, to.params.singerMid)
     next()
   },
   components: {

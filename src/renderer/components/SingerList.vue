@@ -48,28 +48,14 @@ import singerAvatar from './SingerAvatar'
 import { singertypeList, singerNameList } from './common/SingerList.js'
 import {getSingerList} from '../../spider'
 import fPagination from './Pagination'
-import {generateGetListMixins} from './common/getListMixins.js'
-
-let singerListMixin = generateGetListMixins({
-  methodsName: 'getTheSingeList',
-  loadingName: 'loading',
-  pageName: 'page',
-  initData: {
-    singerList: [],
-    totalPage: 0
-  },
-  spiderMethod: getSingerList,
-  spiderMethodParams: {
-    country: 'selectCountry',
-    name: 'selectName'
-  },
-  listDataName: 'singerList'
-})
 
 export default {
-  mixins: [singerListMixin],
   data () {
     return {
+      singerList: [],
+      totalPage: 0,
+      page: 0,
+      loading: false,
       singertypeList,
       singerNameList,
       selectCountry: 'all_all',
@@ -78,6 +64,24 @@ export default {
   },
   components: {
     singerAvatar, fPagination
+  },
+  methods: {
+    async getTheSingeList (newPage) {
+      this.loading = true
+      let data
+      try {
+        data = await getSingerList({
+          country: this.selectCountry,
+          name: this.selectName,
+          page: newPage
+        })
+        this.page = newPage
+      } catch (e) {
+        console.error(e)
+      }
+      this.loading = false
+      Object.assign(this, data)
+    }
   },
   created () {
     this.getTheSingeList(1)

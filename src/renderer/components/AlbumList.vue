@@ -1,8 +1,10 @@
 <template>
   <div class="singer-album">
     <div class="singer-item" v-for="album in albumList" :key="album.albumMid">
-      <img :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${album.albumMid}.jpg?max_age=2592000`" alt="">
-      <p>{{album.albumName}}</p>
+      <router-link :to="{name: 'Album', params: {id: album.albumMid}}">
+        <img :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${album.albumMid}.jpg?max_age=2592000`" alt="">
+        <p>{{album.albumName}}</p>
+      </router-link>
     </div>
   </div>
 </template>
