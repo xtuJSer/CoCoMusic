@@ -137,6 +137,7 @@ export default {
 .player{
   width: 60%;
   display: flex;
+  margin-top: 3px;
 }
 .player>.music-info{
   width: 70%;
