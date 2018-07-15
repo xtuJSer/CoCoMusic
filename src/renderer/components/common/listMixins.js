@@ -1,9 +1,3 @@
-const initData = {
-  loading: false,
-  page: 0,
-  total: 1,
-  singerMidSave: ''
-}
 export default {
   data () {
     return {
@@ -14,16 +8,12 @@ export default {
       singerMidSave: ''
     }
   },
-  watch: {
-    '$route.params.singerMid' (value) {
-      console.log(value)
-      if (!value) return
-      if (this.singerMidSave === value) return
-      Object.assign(this, initData)
-      this.list = []
-      this.getTheList(0)
-      this.singerMidSave = value
-    }
+  activated () {
+    this.init()
+  },
+  beforeRouteUpdate (to, from, next) {
+    next()
+    this.init()
   },
   computed: {
     singerMid () {
@@ -34,6 +24,12 @@ export default {
     }
   },
   methods: {
+    init () {
+      if (this.singerMidSave === this.singerMid) return
+      Object.assign(this, this.$options.data())
+      this.getTheList(0)
+      this.singerMidSave = this.singerMid
+    },
     async getTheList (newPage) {
       this.loading = true
       let data
@@ -49,9 +45,5 @@ export default {
       this.total = data.total
       this.list.push(...data.list)
     }
-  },
-  created () {
-    this.getTheList(0)
-    this.singerMidSave = this.singerMid
   }
 }

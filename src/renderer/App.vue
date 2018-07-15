@@ -15,6 +15,9 @@ export default {
   name: 'cocomusic',
   components: {
     fHeader
+  },
+  mounted () {
+    this.$store.dispatch('initFavorite')
   }
 }
 </script>

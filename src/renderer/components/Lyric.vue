@@ -27,11 +27,19 @@ export default {
       return !!this.lyricList[0].trans
     }
   },
-  watch: {
-    'lyricIndex' (value) {
-      let lyric = document.getElementById(`lyric-${value}`)
+  methods: {
+    scrollLyric (index) {
+      let lyric = document.getElementById(`lyric-${index}`)
       lyric && lyric.scrollIntoView({block: 'center', behavior: 'smooth'})
     }
+  },
+  watch: {
+    'lyricIndex' (index) {
+      this.scrollLyric(index)
+    }
+  },
+  activated () {
+    this.scrollLyric(this.lyricIndex)
   }
 }
 </script>

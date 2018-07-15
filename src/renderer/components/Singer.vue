@@ -4,7 +4,8 @@
       <singer-avatar :singer="singer" :showName='false'></singer-avatar>
       <div class="singer-name">
         <h4>{{singer.singerName}}</h4>
-        <button class="btn btn-sm">关注</button>
+        <button class="btn btn-sm" v-show="!isfocus" @click="favorite">关注</button>
+        <button class="btn btn-sm" v-show="isfocus" @click="deleteFavorite">取消关注</button>
       </div>
     </div>
     <div class="music-album-mv">
@@ -26,19 +27,15 @@ import {Singer} from '../../spider/commonObject.js'
 import fTab from '@/components/Tab'
 import singerAvatar from './SingerAvatar'
 
-let initData = {
-  info: {},
-  desc: '',
-  other: {},
-  showAllInfo: false,
-  singerMidSave: ''
-}
-
 export default {
   data () {
     return {
-      ...JSON.parse(JSON.stringify(initData)),
-      singer: new Singer(this.$route.query.name, this.$route.params.singerMid)
+      info: {},
+      desc: '',
+      other: {},
+      showAllInfo: false,
+      singerMidSave: '',
+      singer: new Singer('this.$route.query.name', this.$route.params.singerMid)
     }
   },
   computed: {
@@ -50,14 +47,29 @@ export default {
         {path: `/singer/${id}/album`, name: 'SingerAlbum', ZHName: '专辑', params: {id}, query: {name}},
         {path: `/singer/${id}/mv`, name: 'SingerMv', ZHName: 'MV', params: {id}, query: {name}}
       ]
+    },
+    isfocus () {
+      return this.$store.state.Favorite.singer.some(singer => {
+        return singer.singerMid === this.singer.singerMid
+      })
     }
   },
-  watch: {
-    '$route.name' (routerName) {
-      if (['SingerMusic', 'SingerAlbum', 'SingerMv'].indexOf(routerName) !== -1) {
-        this.singer = new Singer(this.$route.query.name, this.$route.params.singerMid)
-      }
+  methods: {
+    favorite () {
+      this.$store.dispatch('addFavorite', {
+        table: 'singer',
+        data: this.singer
+      })
+    },
+    deleteFavorite () {
+      this.$store.dispatch('deleteFavorite', {
+        table: 'singer',
+        id: this.singer.singerMid
+      })
     }
+  },
+  activated () {
+    this.singer = new Singer(this.$route.query.name, this.$route.params.singerMid)
   },
   beforeRouteUpdate (to, from, next) {
     this.singer = new Singer(to.query.name, to.params.singerMid)

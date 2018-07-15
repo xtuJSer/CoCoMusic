@@ -9,6 +9,7 @@ import MvPlayer from '@/components/MvPlayer'
 import Search from '@/components/Search'
 import Lyric from '@/components/Lyric'
 import Album from '@/components/Album'
+import Favorite from '@/components/Favorite'
 Vue.use(Router)
 
 export default new Router({
@@ -58,7 +59,7 @@ export default new Router({
     {
       path: '/favorite',
       name: 'Favorite',
-      component: SingerList
+      component: Favorite
     },
     {
       path: '/songList',
