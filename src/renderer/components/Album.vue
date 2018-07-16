@@ -1,10 +1,11 @@
 <template>
   <div class="album">
     <div class="album-header">
-      <img :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`" alt="">
+      <img :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${album.albumMid}.jpg?max_age=2592000`" alt="">
       <div class="album-name">
-        <h4>{{albumName}}</h4>
-        <button class="btn btn-sm">关注</button>
+        <h4>{{album.albumName}}</h4>
+        <button class="btn btn-sm" v-show="!isfocus" @click="favorite">收藏</button>
+        <button class="btn btn-sm" v-show="isfocus" @click="deleteFavorite">取消收藏</button>
       </div>
     </div>
     <div class="divider text-center"></div>
@@ -14,13 +15,18 @@
 </template>
 <script>
 import {getAlbum} from '../../spider/index.js'
+import {Album} from '../../spider/commonObject.js'
 import songList from './SongList'
+import generateFavorite from './common/Favorite.js'
+
+const favoriteMinix = generateFavorite('album')
 
 export default {
+  mixins: [favoriteMinix],
   data () {
     return {
       musicList: [],
-      albumName: 'Loading'
+      album: new Album('Loading', this.albumMid)
     }
   },
   components: {
@@ -33,12 +39,12 @@ export default {
   },
   methods: {
     async getTheAlbum () {
-      Object.assign(this, this.$options.data())
-      Object.assign(this, (await getAlbum({albumMid: this.albumMid})))
+      Object.assign(this, this.$options.data.call(this))
+      Object.assign(this, (await getAlbum(this.album)))
     }
   },
-  activated () {
-    this.getTheAlbum()
+  async activated () {
+    await this.getTheAlbum()
   }
 }
 </script>

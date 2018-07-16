@@ -26,8 +26,12 @@
 import {Singer} from '../../spider/commonObject.js'
 import fTab from '@/components/Tab'
 import singerAvatar from './SingerAvatar'
+import generateFavorite from './common/Favorite.js'
+
+const favoriteMinix = generateFavorite('singer')
 
 export default {
+  mixins: [favoriteMinix],
   data () {
     return {
       info: {},
@@ -35,7 +39,7 @@ export default {
       other: {},
       showAllInfo: false,
       singerMidSave: '',
-      singer: new Singer('this.$route.query.name', this.$route.params.singerMid)
+      singer: new Singer('loading', this.$route.params.singerMid)
     }
   },
   computed: {
@@ -47,25 +51,6 @@ export default {
         {path: `/singer/${id}/album`, name: 'SingerAlbum', ZHName: '专辑', params: {id}, query: {name}},
         {path: `/singer/${id}/mv`, name: 'SingerMv', ZHName: 'MV', params: {id}, query: {name}}
       ]
-    },
-    isfocus () {
-      return this.$store.state.Favorite.singer.some(singer => {
-        return singer.singerMid === this.singer.singerMid
-      })
-    }
-  },
-  methods: {
-    favorite () {
-      this.$store.dispatch('addFavorite', {
-        table: 'singer',
-        data: this.singer
-      })
-    },
-    deleteFavorite () {
-      this.$store.dispatch('deleteFavorite', {
-        table: 'singer',
-        id: this.singer.singerMid
-      })
     }
   },
   activated () {

@@ -163,6 +163,6 @@ export async function getAlbum ({albumMid}) {
   let {list, name} = (await baseRequest(url)).data.data
   return {
     musicList: list.map(({songname, songmid, strMediaMid, albumname, albummid, singer, type}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name, mid)), type)),
-    albumName: name
+    album: new Album(name, albumMid)
   }
 }
