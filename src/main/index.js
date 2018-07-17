@@ -1,7 +1,12 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
+<<<<<<< HEAD
 import flow from 'lodash/fp/flow'
+=======
+import path from 'path'
+
+>>>>>>> 3d2d431c63f0be082b8cf6f30744fd2d9cbfde90
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
