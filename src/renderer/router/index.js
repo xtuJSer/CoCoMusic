@@ -10,6 +10,10 @@ import Search from '@/components/Search'
 import Lyric from '@/components/Lyric'
 import Album from '@/components/Album'
 import Favorite from '@/components/Favorite'
+import FavoriteSinger from '@/components/FavoriteSinger'
+import FavoriteSong from '@/components/FavoriteSong'
+import FavoriteAlbum from '@/components/FavoriteAlbum'
+
 Vue.use(Router)
 
 export default new Router({
@@ -58,8 +62,24 @@ export default new Router({
     },
     {
       path: '/favorite',
-      name: 'Favorite',
-      component: Favorite
+      component: Favorite,
+      children: [
+        {
+          path: '',
+          component: FavoriteSong,
+          name: 'Favorite'
+        },
+        {
+          path: 'album',
+          component: FavoriteAlbum,
+          name: 'FavoriteAlbum'
+        },
+        {
+          path: 'singer',
+          component: FavoriteSinger,
+          name: 'FavoriteSinger'
+        }
+      ]
     },
     {
       path: '/songList',

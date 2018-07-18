@@ -1,11 +1,35 @@
 <template>
   <div class="favorite">
-    
+    <f-tab :list="tabList">
+      <div :slot="route.name"
+        :key="route.name"
+        v-for="route in tabList">
+        {{route.ZHName}}
+      </div>
+    </f-tab>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 <script>
-export default {
+import fTab from '@/components/Tab'
 
+export default {
+  data () {
+    return {
+      tabList: [
+        {name: 'Favorite', ZHName: '单曲'},
+        {name: 'FavoriteAlbum', ZHName: '专辑'},
+        {name: 'FavoriteSinger', ZHName: '歌手'}
+      ]
+    }
+  },
+  components: {
+    fTab
+  },
+  computed: {
+  }
 }
 </script>
 <style scoped>

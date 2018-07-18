@@ -1,5 +1,5 @@
 import Dexie from 'dexie'
-
+import {Singer, Album} from '../../spider/commonObject'
 const db = new Dexie('Music')
 
 db.version(1).stores({
@@ -11,8 +11,8 @@ db.version(1).stores({
 async function getFavorite () {
   return {
     song: await db.song.toArray(),
-    singer: await db.singer.toArray(),
-    album: await db.album.toArray()
+    singer: (await db.singer.toArray()).map(obj => new Singer(...Object.values(obj))),
+    album: (await db.album.toArray()).map(obj => new Album(...Object.values(obj)))
   }
 }
 

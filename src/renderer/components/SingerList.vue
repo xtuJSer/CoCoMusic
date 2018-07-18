@@ -31,7 +31,7 @@
       <singer-avatar
         :singer="singer"
         :showImage="page === 1 && index < 10">
-      </singer-avatar> 
+      </singer-avatar>
     </router-link>
 
 

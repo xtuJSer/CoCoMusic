@@ -14,8 +14,18 @@
 
     <div class="music-info">
       <router-link to="/lyric">
-        <p class="song-name">{{currentPlay.songName}}</p>
+        <p class="song-name">
+          {{currentPlay.songName}}
+        </p>
       </router-link>
+
+      <a v-show="!isfocus" @click="favorite">
+        <img class="favorite" src="../assets/img/Favorite.svg" alt="">
+      </a>
+      <a v-show="isfocus" @click="deleteFavorite">
+        <img class="favorite" src="../assets/img/hasFavorite.svg" alt="">
+      </a>
+
       <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee ${range}%, #eee)`}">
       <div class="singer-name">
         <p>
@@ -40,9 +50,13 @@
 </template>
 <script>
 import {mapState, mapGetters} from 'vuex'
+import generateFavorite from './common/Favorite.js'
 import {random} from 'lodash'
 
+const favoriteMinix = generateFavorite('song')
+
 export default {
+  mixins: [favoriteMinix],
   data () {
     return {
     }
@@ -61,6 +75,7 @@ export default {
     ...mapGetters([
       'currentPlay', 'playTimeString', 'playDurationString'
     ]),
+    ...mapGetters({song: 'currentPlay'}),
     range: {
       get () {
         return Math.floor((this.playTime / this.playDuration) * 100)
@@ -114,6 +129,14 @@ export default {
 }
 </script>
 <style scoped>
+a:hover,a:active,a:visited,a:focus {
+  outline: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+a:visited {
+  color: #302ecd;
+}
 .slider {
   border-radius: 5px;
   margin: 5px 0px;
@@ -149,8 +172,16 @@ export default {
   white-space: nowrap;
   margin: 0px;
 }
-.player>.music-info>p.song-name{
+.player>.music-info p.song-name{
+  display: inline-block;
   font-size: 17px;
+  width: 373px;
+}
+.player>.music-info img.favorite{
+  cursor: pointer;
+  margin: 0px 0px 0px 10px;
+  width: 20px;
+  height: 20px;
 }
 .singer-name {
   display: flex;
