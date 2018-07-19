@@ -4,8 +4,8 @@
       <singer-avatar :singer="singer" :showName='false'></singer-avatar>
       <div class="singer-name">
         <h4>{{singer.singerName}}</h4>
-        <button class="btn btn-sm" v-show="!isfocus" @click="favorite">关注</button>
-        <button class="btn btn-sm" v-show="isfocus" @click="deleteFavorite">取消关注</button>
+        <button class="btn btn-sm" v-show="!isfocus()" @click="favorite()">关注</button>
+        <button class="btn btn-sm" v-show="isfocus()" @click="deleteFavorite()">取消关注</button>
       </div>
     </div>
     <div class="music-album-mv">
@@ -17,7 +17,7 @@
         </div>
       </f-tab>
       <keep-alive>
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
       </keep-alive>
     </div>
   </div>

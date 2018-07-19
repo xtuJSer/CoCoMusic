@@ -3,7 +3,7 @@
     <f-header></f-header>
     <div id="container">
       <keep-alive>
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
       </keep-alive>
     </div>
   </div>

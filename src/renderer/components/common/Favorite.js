@@ -1,23 +1,21 @@
 export default function (table) {
   return {
     methods: {
-      favorite () {
+      favorite (data) {
         this.$store.dispatch('addFavorite', {
           table,
-          data: this[table]
+          data: data || this[table]
         })
       },
-      deleteFavorite () {
+      deleteFavorite (mid) {
         this.$store.dispatch('deleteFavorite', {
           table,
-          id: this[table][`${table}Mid`]
+          id: mid || this[table][`${table}Mid`]
         })
-      }
-    },
-    computed: {
-      isfocus () {
+      },
+      isfocus (mid) {
         return this.$store.state.Favorite[table].some(obj => {
-          return obj[`${table}Mid`] === this[table][`${table}Mid`]
+          return obj[`${table}Mid`] === (mid || this[table][`${table}Mid`])
         })
       }
     }

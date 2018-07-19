@@ -4,8 +4,8 @@
       <img :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${album.albumMid}.jpg?max_age=2592000`" alt="">
       <div class="album-name">
         <h4>{{album.albumName}}</h4>
-        <button class="btn btn-sm" v-show="!isfocus" @click="favorite">收藏</button>
-        <button class="btn btn-sm" v-show="isfocus" @click="deleteFavorite">取消收藏</button>
+        <button class="btn btn-sm" v-show="!isfocus()" @click="favorite()">收藏</button>
+        <button class="btn btn-sm" v-show="isfocus()" @click="deleteFavorite()">取消收藏</button>
       </div>
     </div>
     <div class="divider text-center"></div>

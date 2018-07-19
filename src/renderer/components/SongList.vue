@@ -8,10 +8,23 @@
 
       <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
 
+        <div class="music-favorite" :class="{'hide-music-favorite': !isfocus(music.songMid)}">
+          <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music)">
+            <img class="favorite" src="../assets/img/Favorite.svg" alt="">
+          </button>
+          <button class="btn btn-link"
+            v-show="isfocus(music.songMid)"
+            :disabled="currentPlay && music.songMid === currentPlay.songMid" 
+            @click="deleteFavorite(music.songMid)">
+            <img class="favorite" src="../assets/img/hasFavorite.svg" alt="">
+          </button>          
+        </div>
+
+
         <button class="play-control btn btn-link" v-show="currentPlay && music.songMid !== currentPlay.songMid">
           <img src="../assets/img/play2.svg" @click="play(index)" alt="">
         </button>
-
+        
         <router-link
           v-show="showSingerList"
           :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}"
@@ -34,8 +47,12 @@
 </template>
 <script>
 import {mapGetters, mapState} from 'vuex'
+import generateFavorite from './common/Favorite.js'
+
+const favoriteMinix = generateFavorite('song')
 
 export default {
+  mixins: [favoriteMinix],
   data () {
     return {}
   },
@@ -50,6 +67,7 @@ export default {
     ...mapGetters([
       'currentPlay'
     ]),
+    ...mapGetters({song: 'currentPlay'}),
     ...mapState({
       playUrl: state => state.Player.playUrl,
       mode: state => state.Player.mode
@@ -64,7 +82,10 @@ export default {
     }
   },
   watch: {
-    'musicList' (value) {
+    'this.musicList' (value) {
+      console.log(this.$route.path)
+      console.log(this.isPlayList)
+      console.log(this.playUrl)
       return this.isPlayList && this.$store.commit('setPlayerState', {
         playList: [...this.musicList]
       })
@@ -107,11 +128,18 @@ export default {
   display: flex;
   align-items: center;
 }
-button.play-control {
+button.play-control, .hide-music-favorite{
   display: none;
 }
 button.play-control>img{
   width: 20px;
+}
+.music-favorite img{
+  width: 20px;
+}
+
+.song-item:hover .music-favorite{
+  display: inline;
 }
 
 .song-item:hover, .is-play{

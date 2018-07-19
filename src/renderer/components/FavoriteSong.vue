@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     ...mapState({
-      list: state => orderBy(state.Favorite.song, ['singerList'], ['asc'])
+      list: state => orderBy(state.Favorite.song, ['singerList[0].singerName'], ['asc'])
     })
   }
 }
