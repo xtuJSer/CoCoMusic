@@ -73,7 +73,7 @@ export default {
       mode: state => state.Player.mode
     }),
     isPlayList () {
-      return this.$route.path === this.playUrl
+      return this.$route.fullPath === this.playUrl
     }
   },
   filters: {
@@ -83,10 +83,9 @@ export default {
   },
   watch: {
     'this.musicList' (value) {
-      console.log(this.$route.path)
-      console.log(this.isPlayList)
-      console.log(this.playUrl)
-      return this.isPlayList && this.$store.commit('setPlayerState', {
+      console.log('value', value)
+      console.log('this.musicList', this.musicList)
+      return this.$store.commit('setPlayerState', {
         playList: [...this.musicList]
       })
     }
@@ -99,7 +98,7 @@ export default {
     play (index) {
       this.$store.commit('setPlayerState', {
         playList: [...this.musicList],
-        playUrl: this.$route.path
+        playUrl: this.$route.fullPath
       })
       this.$store.dispatch('setPlay', index)
     }

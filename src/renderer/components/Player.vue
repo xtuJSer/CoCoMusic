@@ -19,12 +19,12 @@
         </p>
       </router-link>
 
-      <a class="indicate">
+      <router-link :to="playUrl" class="indicate">
         <img src="../assets/img/source.svg" alt="">
-      </a>
-      <a class="indicate">
+      </router-link>
+      <router-link :to="`/album/${currentPlay.album.albumMid}`" class="indicate">
         <img src="../assets/img/album.svg" alt="">
-      </a>
+      </router-link>
 
       <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee ${range}%, #eee)`}">
       <div class="singer-name">
@@ -66,7 +66,8 @@ export default {
       playVolume: state => state.Player.playVolume,
       currentPlayIndex: state => state.Player.currentPlayIndex,
       mode: state => state.Player.mode,
-      playListLength: state => state.Player.playList.length
+      playListLength: state => state.Player.playList.length,
+      playUrl: state => state.Player.playUrl
     }),
     ...mapGetters([
       'currentPlay', 'playTimeString', 'playDurationString'
