@@ -3,7 +3,7 @@
     <f-header></f-header>
     <div id="container">
       <keep-alive>
-        <router-view :key="$route.fullPath"></router-view>
+        <router-view></router-view>
       </keep-alive>
     </div>
   </div>
@@ -11,6 +11,7 @@
 
 <script>
 import fHeader from '@/components/Header'
+
 export default {
   name: 'cocomusic',
   components: {
@@ -23,8 +24,6 @@ export default {
 </script>
 
 <style>
-  /* CSS */
-
 #app {
   user-select: none;
 }

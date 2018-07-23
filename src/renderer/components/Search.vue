@@ -16,6 +16,7 @@ import {getSearch} from '../../spider/index.js'
 import songList from './SongList'
 
 export default {
+  name: 'search',
   components: {
     songList
   },
@@ -68,7 +69,9 @@ export default {
 <style scoped>
 .search-input {
   width: 40%;
-  margin: 0px auto;
+  margin: 0px auto 35px auto;
+  position: relative;
+  top: 20px;
 }
 
 </style>

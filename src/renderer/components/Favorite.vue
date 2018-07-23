@@ -16,6 +16,7 @@
 import fTab from '@/components/Tab'
 
 export default {
+  name: 'favorite',
   data () {
     return {
       tabList: [

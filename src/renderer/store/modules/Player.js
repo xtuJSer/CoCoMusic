@@ -28,12 +28,13 @@ const state = {
   playList: [],
   currentPlayIndex: 0,
   playUrl: '',
+  loading: false,
   player: document.createElement('audio'),
   isPlay: false,
   playTime: 0,
   playDuration: 0,
   lyricIndex: 0,
-  lyricList: null,
+  lyricList: [],
   mode: window.localStorage.mode !== undefined ? window.localStorage.mode : 'cycle',
   playVolume: window.localStorage.volume !== undefined ? +window.localStorage.volume : 1,
   guid: window.localStorage.guid !== undefined || generateGuid(),
@@ -93,6 +94,9 @@ const actions = {
     state.player.loop = (mode === 'single')
     player.addEventListener('play', () => { commit('setPlayerState', {isPlay: true}) })
     player.addEventListener('pause', () => { commit('setPlayerState', {isPlay: false}) })
+    player.addEventListener('loadstart', () => { commit('setPlayerState', {loading: true}) })
+    player.addEventListener('seeking', () => { commit('setPlayerState', {loading: true}) })
+    player.addEventListener('canplaythrough', () => { commit('setPlayerState', {loading: false}) })
     player.addEventListener('durationchange', () => commit('setPlayerState', {playDuration: player.duration}))
     player.addEventListener('ended', e => {
       let {mode, playList, currentPlayIndex} = state
@@ -107,7 +111,7 @@ const actions = {
       commit('setPlayerState', {
         playTime: player.currentTime
       })
-      if (!lyricList) {
+      if (!lyricList.length) {
         return
       }
       let next = nextLyric(player.currentTime, lyricIndex, lyricList)
@@ -118,21 +122,24 @@ const actions = {
   },
   async setPlay ({state, commit, getters}, index) {
     const {guid} = state
+    state.player.pause()
     commit('setPlayerState', {
-      currentPlayIndex: index
+      currentPlayIndex: index,
+      lyricList: [],
+      lyricIndex: 0
     })
     const song = state.playList[index]
     const {vkey} = await getSongVkey({
       guid, ...song
     })
     commit('setPlayerSrc', `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`)
+    state.player.load()
+    state.player.play()
     const {lyricList} = (await getLyric(getters.currentPlay.songMid))
     commit('setPlayerState', {
       lyricList,
       lyricIndex: 0
     })
-    state.player.load()
-    state.player.play()
   }
 }
 export default {

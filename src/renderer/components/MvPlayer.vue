@@ -7,6 +7,7 @@
 <script>
 import {getMvInfo, getMUrl} from '../../spider/index.js'
 export default {
+  name: 'mvPlayer',
   data () {
     return {
       fileid: '',
@@ -16,7 +17,7 @@ export default {
   },
   computed: {
     mvId () {
-      return this.$route.params.mvId
+      return this.$route.query.mvId
     }
   },
   beforeRouteUpdate (to, from, next) {

@@ -44,6 +44,7 @@ export default {
     }
   },
   async activated () {
+    if (this.albumMid === this.album.albumMid) return
     await this.getTheAlbum()
   }
 }

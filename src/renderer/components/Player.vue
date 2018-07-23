@@ -19,6 +19,8 @@
         </p>
       </router-link>
 
+      <div class="loading" v-show="loading"></div>
+      <div class="loading-instead" v-show="!loading"></div>
       <router-link :to="playUrl" class="indicate">
         <img src="../assets/img/source.svg" alt="">
       </router-link>
@@ -67,7 +69,8 @@ export default {
       currentPlayIndex: state => state.Player.currentPlayIndex,
       mode: state => state.Player.mode,
       playListLength: state => state.Player.playList.length,
-      playUrl: state => state.Player.playUrl
+      playUrl: state => state.Player.playUrl,
+      loading: state => state.Player.loading
     }),
     ...mapGetters([
       'currentPlay', 'playTimeString', 'playDurationString'
@@ -119,8 +122,6 @@ export default {
   },
   mounted () {
     this.$store.dispatch('initPlayer')
-    this.player.src = 'http://dl.stream.qqmusic.qq.com//M800001xF7q532DH2H.mp3?vkey=E8FB7A3A537784E1D758F8A3526B0D8E0398CAAD64A987F52D82F3D46C4747B28A71BDF437464D38F1391E387F95F266D7EACDD1131716EC&guid=761846748&fromtag=30'
-    this.player.load()
   }
 }
 </script>
@@ -132,6 +133,16 @@ a:hover,a:active,a:visited,a:focus {
 }
 a:visited {
   color: #302ecd;
+}
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.loading-instead {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
 }
 .slider {
   border-radius: 5px;
@@ -171,7 +182,7 @@ a:visited {
 .player>.music-info p.song-name{
   display: inline-block;
   font-size: 17px;
-  width: 350px;
+  width: 330px;
 }
 .player>.music-info .indicate{
   cursor: pointer;

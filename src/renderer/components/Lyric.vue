@@ -7,6 +7,8 @@
         <p :class="{'has-trans': hasTrans}" class="lyric">{{lyric.lyric}}</p>
         <p v-if="hasTrans" class="trans">{{lyric.trans}}</p>
       </div>
+
+      <p class="text-center" v-show="!lyricList.length">加载中。。。</p>
   </div>
 </div>
 
@@ -15,6 +17,7 @@
 import {mapState, mapGetters} from 'vuex'
 
 export default {
+  name: 'lyric',
   computed: {
     ...mapGetters([
       'currentPlay', 'currentLyric'

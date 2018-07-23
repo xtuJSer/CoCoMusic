@@ -13,6 +13,7 @@ import Favorite from '@/components/Favorite'
 import FavoriteSinger from '@/components/FavoriteSinger'
 import FavoriteSong from '@/components/FavoriteSong'
 import FavoriteAlbum from '@/components/FavoriteAlbum'
+import Setting from '@/components/Setting'
 
 Vue.use(Router)
 
@@ -26,7 +27,7 @@ export default new Router({
     {
       path: '/setting',
       name: 'Setting',
-      component: SingerList
+      component: Setting
     },
     {
       path: '/singer/:singerMid',
@@ -51,7 +52,7 @@ export default new Router({
       ]
     },
     {
-      path: '/mv/:mvId',
+      path: '/mv',
       name: 'mvPlayer',
       component: MvPlayer
     },

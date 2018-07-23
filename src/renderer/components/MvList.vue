@@ -1,6 +1,6 @@
 <template>
   <div class="mv-list">
-    <router-link :to="{name: 'mvPlayer', params: {mvId: mv.mvId}}" class="mv-item" v-for="mv in mvList" :key="mv.mvId">
+    <router-link :to="{name: 'mvPlayer', query: {mvId: mv.mvId}}" class="mv-item" v-for="mv in mvList" :key="mv.mvId">
       <img :src="mv.piv" alt="">
       <p>{{mv.mvName}}</p>
     </router-link>

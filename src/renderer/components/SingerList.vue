@@ -50,6 +50,7 @@ import {getSingerList} from '../../spider'
 import fPagination from './Pagination'
 
 export default {
+  name: 'singerList',
   data () {
     return {
       singerList: [],
