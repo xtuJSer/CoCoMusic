@@ -31,6 +31,20 @@ export class Mv {
   }
 }
 
+export class Category {
+  constructor (categoryName, categoryId) {
+    this.categoryName = categoryName
+    this.categoryId = categoryId
+  }
+}
+
+export class PlayList {
+  constructor (playListName, musicList) {
+    this.playListName = playListName
+    this.musicList = musicList
+  }
+}
+
 export class Lyric {
   constructor (lyricString, transString) {
     let lyric = this.parseLyric(Buffer.from(lyricString, 'base64').toString())

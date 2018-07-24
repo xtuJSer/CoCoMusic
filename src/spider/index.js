@@ -24,7 +24,7 @@
  * 终于知道为什么没人去搞 qqmusic 的 api 了，这智障 api 里面掺了屎，好辣瞎我们的狗眼，让我们不能爬
  */
 import request from 'axios'
-import {Singer, Album, Music, Mv, Lyric} from './commonObject'
+import {Singer, Album, Music, Mv, Lyric, Category} from './commonObject'
 
 request.defaults.adapter = require('axios/lib/adapters/http')
 
@@ -165,4 +165,10 @@ export async function getAlbum ({albumMid}) {
     musicList: list.map(({songname, songmid, strMediaMid, albumname, albummid, singer, type}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name, mid)), type)),
     album: new Album(name, albumMid)
   }
+}
+
+export async function getCategory () {
+  let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=5381&notice=0&platform=yqq&needNewCode=0'
+  let {categories} = JSON.parse((await baseRequest(url)).data.slice(18, -1)).data
+  return categories.map(({categoryGroupName, items}) => { return {categoryGroupName, categoryList: items.map(({categoryId, categoryName}) => new Category(categoryName, categoryId))} })
 }

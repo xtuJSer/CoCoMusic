@@ -5,7 +5,9 @@
       <i v-show="loading" class="form-icon loading"></i>
       <i v-show="!loading" class="form-icon icon icon-search"></i>
     </div>
+
     <song-list :showSingerList="true" :musicList="songList"></song-list>
+
     <button class="btn btn-block" v-show="!isEnd" :class="{'loading': loading}"
       @click="!isEnd && search(page + 1)">更多</button>
     <div class="divider text-center" data-content="没有了" v-show="isEnd" ></div>

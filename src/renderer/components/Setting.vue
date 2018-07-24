@@ -8,6 +8,7 @@
         <button class="btn" @click="checkUpdate" :class="{loading: loadingUpdate}">检查更新</button>
       </div>
       <div class="toast toast-primary" v-if="showVersion">
+        <button class="btn btn-clear float-right" @click="showVersion = false"></button>
         当前版本：{{CURRENT_VERSION}} &nbsp; 服务器版本：{{version}} &nbsp; 
         <a v-if="version > CURRENT_VERSION" @click="go('https://github.com/xtuJSer/CoCoMusic')" class="c-hand">下载更新</a>
         <span v-else>已经是最新版本</span>
@@ -53,6 +54,6 @@ export default {
 <style scoped>
 .setting {
   width: 500px;
-  margin: 80px auto;
+  margin: 100px auto;
 }
 </style>
