@@ -14,6 +14,7 @@ import FavoriteSinger from '@/components/FavoriteSinger'
 import FavoriteSong from '@/components/FavoriteSong'
 import FavoriteAlbum from '@/components/FavoriteAlbum'
 import Setting from '@/components/Setting'
+import PlayList from '@/components/PlayList'
 
 Vue.use(Router)
 
@@ -83,9 +84,9 @@ export default new Router({
       ]
     },
     {
-      path: '/songList',
-      name: 'SongList',
-      component: SingerList
+      path: '/PlayList',
+      name: 'PlayList',
+      component: PlayList
     },
     {
       path: '*',

@@ -39,9 +39,10 @@ export class Category {
 }
 
 export class PlayList {
-  constructor (playListName, musicList) {
+  constructor (playListName, playListId, imgUrl) {
     this.playListName = playListName
-    this.musicList = musicList
+    this.imgUrl = imgUrl
+    this.playListId = playListId
   }
 }
 

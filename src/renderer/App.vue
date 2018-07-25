@@ -17,7 +17,7 @@ export default {
   components: {
     fHeader
   },
-  mounted () {
+  created () {
     this.$store.dispatch('initFavorite')
   }
 }

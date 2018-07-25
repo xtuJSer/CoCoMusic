@@ -122,7 +122,15 @@ const actions = {
   },
   async setPlay ({state, commit, getters}, index) {
     const {guid} = state
+    /**
+     * 套路三联
+     * 有可能切歌的时候还在瞎几把加载占用网络，直接给他设为空字符串，chrome 还很配合，不报错也不加载空 url，
+     * 估计是早有准备，然而为什么不提供一个方法来停止加载呢 ? 一定是和深拷贝一样，明明实现这功能就是不提供 api
+    */
     state.player.pause()
+    commit('setPlayerSrc', ``)
+    state.player.load()
+
     commit('setPlayerState', {
       currentPlayIndex: index,
       lyricList: [],

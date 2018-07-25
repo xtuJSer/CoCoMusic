@@ -39,7 +39,7 @@ export default {
       this.getTheMvInfo()
     }
   },
-  async mounted () {
+  async created () {
     this.getTheMvInfo()
   }
 }

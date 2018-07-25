@@ -34,7 +34,7 @@ const {getCurrentWindow} = require('electron').remote
 export default {
   data () {
     return {
-      navList: [{name: 'Setting'}, {name: 'Favorite'}, {name: 'Search'}, {name: 'SingerList'}, {name: 'SongList'}]
+      navList: [{name: 'Setting'}, {name: 'Favorite'}, {name: 'Search'}, {name: 'SingerList'}, {name: 'PlayList'}]
     }
   },
   components: {

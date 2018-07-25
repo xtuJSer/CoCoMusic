@@ -120,7 +120,7 @@ export default {
       this.player.load()
     }
   },
-  mounted () {
+  created () {
     this.$store.dispatch('initPlayer')
   }
 }

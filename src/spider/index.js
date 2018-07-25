@@ -24,7 +24,7 @@
  * 终于知道为什么没人去搞 qqmusic 的 api 了，这智障 api 里面掺了屎，好辣瞎我们的狗眼，让我们不能爬
  */
 import request from 'axios'
-import {Singer, Album, Music, Mv, Lyric, Category} from './commonObject'
+import {Singer, Album, Music, Mv, Lyric, Category, PlayList} from './commonObject'
 
 request.defaults.adapter = require('axios/lib/adapters/http')
 
@@ -168,7 +168,13 @@ export async function getAlbum ({albumMid}) {
 }
 
 export async function getCategory () {
-  let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=5381&notice=0&platform=yqq&needNewCode=0'
+  let url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_tag_conf.fcg?g_tk=5381&notice=0&inCharset=utf8&outCharset=utf-8&platform=yqq&needNewCode=0'
   let {categories} = JSON.parse((await baseRequest(url)).data.slice(18, -1)).data
   return categories.map(({categoryGroupName, items}) => { return {categoryGroupName, categoryList: items.map(({categoryId, categoryName}) => new Category(categoryName, categoryId))} })
+}
+
+export async function getPlayList ({categoryId, page}) {
+  let url = `https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&g_tk=5381&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&categoryId=${categoryId}&sortId=5&sin=${(page - 1) * 30}&ein=${page * 30 - 1}`
+  let {list} = JSON.parse((await baseRequest(url)).data.slice(18, -1)).data
+  return list.map(({dissname, imgurl, dissid}) => new PlayList(dissname, dissid, imgurl))
 }
