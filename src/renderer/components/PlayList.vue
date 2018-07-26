@@ -5,7 +5,12 @@
         <a>{{categoryGroup.categoryGroupName}}</a>
         <ul class="nav">
           <li class="nav-item" :class="{active: currentCategory === category.categoryId}" v-for="category in categoryGroup.categoryList" :key="category.categoryId">
-            <a class="c-hand" @click="getThePlayList(category.categoryId)" v-html="category.categoryName">{{category.categoryName}}</a>
+            <div
+              v-show="currentCategory === category.categoryId && loading"
+              class="loading text-left"></div>
+            <a class="c-hand" v-show="!(currentCategory === category.categoryId && loading)"
+              @click="currentCategory = category.categoryId; getThePlayList(1)"
+              v-html="category.categoryName">{{category.categoryName}}</a>
           </li>
         </ul>
       </li>
@@ -17,34 +22,61 @@
           <p>{{playList.playListName}}</p>
         </router-link>
       </div>
+
+      <f-pagination
+        :loading="loading"
+        :current="page"
+        @goto="newPage => getThePlayList(newPage)"
+        :total="totalPage">
+      </f-pagination>
+
     </div>
   </div>
 </template>
 <script>
 import {getCategory, getPlayList} from '../../spider/index.js'
+import fPagination from './Pagination'
+
 export default {
   data () {
     return {
       categoryGroupList: [],
       list: [],
       page: 1,
-      currentCategory: ''
+      currentCategory: '',
+      loading: false,
+      totalPage: 0
     }
   },
+  components: {
+    fPagination
+  },
   methods: {
-    async getThePlayList (categoryId) {
-      this.currentCategory = categoryId
-      this.list = await getPlayList({
-        categoryId, page: this.page
-      })
+    async getThePlayList (page) {
+      this.loading = true
+      try {
+        Object.assign(this, (await getPlayList({
+          categoryId: this.currentCategory, page
+        })))
+        this.page = page
+      } catch (e) {
+        console.log(e)
+      }
+      this.loading = false
     }
   },
   async created () {
+    this.loading = true
     this.categoryGroupList = (await getCategory())
+    this.currentCategory = this.categoryGroupList[0].categoryList[0].categoryId
+    this.getThePlayList(1)
   }
 }
 </script>
 <style scoped>
+div.loading{
+  width: 70px;
+}
 .play-list {
   display: flex;
   justify-content: space-between;
@@ -54,7 +86,7 @@ export default {
   text-shadow: 1px 1px 20px;
 }
 .category {
-  height: 500px;
+  height: 530px;
   overflow: scroll;
   scroll-behavior: smooth;
   width: 180px;
@@ -67,7 +99,7 @@ export default {
 }
 .playList-list {
   width: 850px;
-  height: 500px;
+  height: 530px;
   scroll-behavior: smooth;
   overflow: scroll;
 }

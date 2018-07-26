@@ -37,6 +37,7 @@
 
     <f-pagination
       :current="page"
+      :loading="loading"
       @goto="newPage => getTheSingeList(newPage)"
       :total="totalPage">
     </f-pagination>

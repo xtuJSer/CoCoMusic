@@ -1,8 +1,8 @@
-# cocomusic
+# CoComusic
 
-> a simple music player.
+> a simple music player build by vue and electron.
 
-# CocoMusic V2.0 comming
+# CoComusic V2.0 comming
 ##  lightweight as usual
 
 -- xtuJSer.feng
