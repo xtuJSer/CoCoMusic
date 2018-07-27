@@ -126,11 +126,7 @@ export default {
 }
 </script>
 <style scoped>
-a:hover,a:active,a:visited,a:focus {
-  outline: none;
-  box-shadow: none;
-  text-decoration: none;
-}
+
 a:visited {
   color: #302ecd;
 }

@@ -35,7 +35,13 @@
 
         <p>{{music.songName}}</p>
       </div>
-      <p class="song-album">{{music.album.albumName}}</p>
+
+      <template v-if="music.album.albumMid">
+        <router-link class="song-album" :to="{name: 'Album', params: {id: music.album.albumMid}}">
+          <p>{{music.album.albumName}}</p>
+        </router-link>
+      </template>
+
     </div>
 
     <div class="music-location" v-show="isPlayList">
@@ -57,7 +63,10 @@ export default {
     return {}
   },
   props: {
-    musicList: Array,
+    musicList: {
+      type: Array,
+      default: []
+    },
     showSingerList: {
       type: Boolean,
       default: false
@@ -82,10 +91,8 @@ export default {
     }
   },
   watch: {
-    'this.musicList' (value) {
-      console.log('value', value)
-      console.log('this.musicList', this.musicList)
-      return this.$store.commit('setPlayerState', {
+    musicList (value) {
+      return this.isPlayList && this.$store.commit('setPlayerState', {
         playList: [...this.musicList]
       })
     }
@@ -165,8 +172,12 @@ button.play-control>img{
   max-width: 500px;
 }
 .song-album{
-  margin-left: 50px;
+  margin-left: 0px;
   width: 30%;
+  text-align: left;
 }
-
+.song-album p {
+  margin-left: 20px;
+  width: 100%;
+}
 </style>

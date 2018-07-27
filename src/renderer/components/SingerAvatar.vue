@@ -30,7 +30,7 @@ export default {
 <style>
 .singer-avatar{
   display: inline-block;
-  margin: 12px 20px;
+  margin: 12px 23px;
   text-align: center;
   width: 150px;
 }

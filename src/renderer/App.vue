@@ -24,6 +24,11 @@ export default {
 </script>
 
 <style>
+a:hover,a:active,a:visited,a:focus {
+  outline: none;
+  box-shadow: none;
+  text-decoration: none;
+}
 #app {
   user-select: none;
 }

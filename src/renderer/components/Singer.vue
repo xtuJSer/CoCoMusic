@@ -17,7 +17,7 @@
         </div>
       </f-tab>
       <keep-alive>
-        <router-view :key="$route.fullPath"></router-view>
+        <router-view class="singer-router" :key="$route.fullPath"></router-view>
       </keep-alive>
     </div>
   </div>
@@ -88,6 +88,9 @@ export default {
 
 singer-avatar p{
   margin-top: 100px;
+}
+.singer-router {
+  margin-bottom: 20px;
 }
 </style>
 

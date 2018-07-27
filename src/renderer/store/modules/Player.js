@@ -47,6 +47,12 @@ const mutations = {
       state[key] = payload[key]
     }
   },
+  updatePlayerTime (state, payload) {
+    state.playTime = payload
+  },
+  updateLyricIndex (state, payload) {
+    state.lyricIndex = payload
+  },
   setPlayerSrc (state, payload) {
     state.player.src = payload
   },
@@ -108,16 +114,12 @@ const actions = {
 
     player.addEventListener('timeupdate', throttle(() => {
       let {player, lyricIndex, lyricList} = state
-      commit('setPlayerState', {
-        playTime: player.currentTime
-      })
+      commit('updatePlayerTime', player.currentTime)
       if (!lyricList.length) {
         return
       }
       let next = nextLyric(player.currentTime, lyricIndex, lyricList)
-      next !== undefined && commit('setPlayerState', {
-        lyricIndex: next
-      })
+      next !== undefined && commit('updateLyricIndex', next)
     }, 800)) // 性能优化肯定要做啊，不做怎么好意思说自己轻量，基本优化到 1% 以下，不然和某易云音乐一样卡么。
   },
   async setPlay ({state, commit, getters}, index) {
