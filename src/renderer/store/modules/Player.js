@@ -1,6 +1,12 @@
 import {getSongVkey, getLyric} from '../../../spider/index'
 import {throttle, random} from 'lodash'
 
+const isLinux = process.platform === 'linux'
+let mpris
+if (isLinux) {
+  mpris = require('../../mpris')
+}
+
 function generateGuid () {
   const t = new Date().getUTCMilliseconds()
   const guid = Math.round(2147483647 * Math.random()) * t % 1e10
@@ -73,6 +79,8 @@ const getters = {
     let current = state.playList[state.currentPlayIndex]
     if (!current) {
       current = {songName: '', album: {}}
+    } else {
+      isLinux && mpris.setMprisProp(current)
     }
     return current
   },

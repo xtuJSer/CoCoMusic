@@ -15,6 +15,7 @@ import FavoriteSong from '@/components/FavoriteSong'
 import FavoriteAlbum from '@/components/FavoriteAlbum'
 import Setting from '@/components/Setting'
 import PlayList from '@/components/PlayList'
+import PlayListInfo from '@/components/PlayListInfo'
 
 Vue.use(Router)
 
@@ -24,6 +25,14 @@ export default new Router({
       path: '/singerList',
       name: 'SingerList',
       component: SingerList
+    },
+    {
+      path: '/playListInfo/:playListId',
+      name: 'playListInfo',
+      component: PlayListInfo,
+      props: (route) => ({
+        ...route.params, ...route.query
+      })
     },
     {
       path: '/setting',

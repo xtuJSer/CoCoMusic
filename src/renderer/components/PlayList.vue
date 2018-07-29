@@ -17,7 +17,7 @@
     </ul>
     <div class="playList-list">
       <div class="playList-item" v-for="playList in list" :key="playList.playListId">
-        <router-link to="">
+        <router-link :to="{name: 'playListInfo', params: {playListId: playList.playListId}, query: {imgUrl: playList.imgUrl}}">
           <img :src="playList.imgUrl" alt="">
           <p>{{playList.playListName}}</p>
         </router-link>
