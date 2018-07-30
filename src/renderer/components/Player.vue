@@ -51,8 +51,7 @@
   </div>
 </template>
 <script>
-import {mapState, mapGetters} from 'vuex'
-import {random} from 'lodash'
+import {mapState, mapGetters, mapActions} from 'vuex'
 
 export default {
   data () {
@@ -93,6 +92,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'previous', 'next'
+    ]),
     changeMode () {
       const modeList = {
         'cycle': 'single', 'single': 'random', 'random': 'cycle'
@@ -104,20 +106,6 @@ export default {
     },
     pause () {
       this.player.pause()
-    },
-    previous () {
-      let previous = this.mode === 'random'
-        ? random(this.playListLength)
-        : this.currentPlayIndex <= 0 ? this.playListLength : this.currentPlayIndex - 1
-      this.$store.dispatch('setPlay', previous)
-      this.player.load()
-    },
-    next () {
-      let next = this.mode === 'random'
-        ? random(this.playListLength)
-        : this.currentPlayIndex >= this.playListLength ? 0 : this.currentPlayIndex + 1
-      this.$store.dispatch('setPlay', next)
-      this.player.load()
     }
   },
   created () {

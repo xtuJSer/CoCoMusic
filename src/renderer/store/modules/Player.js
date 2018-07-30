@@ -1,11 +1,8 @@
 import {getSongVkey, getLyric} from '../../../spider/index'
 import {throttle, random} from 'lodash'
+import {setMprisProp, setPosition, mpris} from '../../mpris'
 
 const isLinux = process.platform === 'linux'
-let mpris
-if (isLinux) {
-  mpris = require('../../mpris')
-}
 
 function generateGuid () {
   const t = new Date().getUTCMilliseconds()
@@ -53,6 +50,10 @@ const mutations = {
       state[key] = payload[key]
     }
   },
+  setIsPlay (state, payload) {
+    state.isPlay = payload
+    isLinux && (mpris.playbackStatus = payload ? 'Playing' : 'Paused')
+  },
   updatePlayerTime (state, payload) {
     state.playTime = payload
   },
@@ -79,17 +80,16 @@ const getters = {
     let current = state.playList[state.currentPlayIndex]
     if (!current) {
       current = {songName: '', album: {}}
-    } else {
-      isLinux && mpris.setMprisProp(current)
     }
     return current
   },
   playTimeString: state => {
     let {playTime} = state
+    isLinux && playTime !== undefined && setPosition(playTime)
     return `${Math.floor(playTime / 60)}:${Math.floor(playTime % 60)}`
   },
-  playDurationString: state => {
-    let {playDuration} = state
+  playDurationString: ({playDuration}, {currentPlay}) => {
+    isLinux && currentPlay.songName && playDuration && setMprisProp(currentPlay, playDuration)
     return `${Math.floor(playDuration / 60)}:${Math.floor(playDuration % 60)}`
   },
   currentLyric: state => {
@@ -106,8 +106,8 @@ const actions = {
     let {player, playVolume, mode} = state
     player.volume = playVolume
     state.player.loop = (mode === 'single')
-    player.addEventListener('play', () => { commit('setPlayerState', {isPlay: true}) })
-    player.addEventListener('pause', () => { commit('setPlayerState', {isPlay: false}) })
+    player.addEventListener('play', () => { commit('setIsPlay', true) })
+    player.addEventListener('pause', () => { commit('setIsPlay', false) })
     player.addEventListener('loadstart', () => { commit('setPlayerState', {loading: true}) })
     player.addEventListener('seeking', () => { commit('setPlayerState', {loading: true}) })
     player.addEventListener('canplaythrough', () => { commit('setPlayerState', {loading: false}) })
@@ -129,6 +129,20 @@ const actions = {
       let next = nextLyric(player.currentTime, lyricIndex, lyricList)
       next !== undefined && commit('updateLyricIndex', next)
     }, 800)) // 性能优化肯定要做啊，不做怎么好意思说自己轻量，基本优化到 1% 以下，不然和某易云音乐一样卡么。
+  },
+  previous ({state, dispatch}) {
+    let playListLength = state.playList.length
+    let previous = state.mode === 'random'
+      ? random(playListLength)
+      : state.currentPlayIndex <= 0 ? playListLength - 1 : state.currentPlayIndex - 1
+    dispatch('setPlay', previous)
+  },
+  next ({state, dispatch}) {
+    let playListLength = state.playList.length
+    let next = state.mode === 'random'
+      ? random(playListLength)
+      : state.currentPlayIndex >= playListLength - 1 ? 0 : state.currentPlayIndex + 1
+    dispatch('setPlay', next)
   },
   async setPlay ({state, commit, getters}, index) {
     const {guid} = state
