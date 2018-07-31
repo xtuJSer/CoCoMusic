@@ -88,8 +88,8 @@ const getters = {
     isLinux && playTime !== undefined && setPosition(playTime)
     return `${Math.floor(playTime / 60)}:${Math.floor(playTime % 60)}`
   },
-  playDurationString: ({playDuration}, {currentPlay}) => {
-    isLinux && currentPlay.songName && playDuration && setMprisProp(currentPlay, playDuration)
+  playDurationString: ({playDuration, playVolume}, {currentPlay}) => {
+    isLinux && currentPlay.songName && playDuration && setMprisProp(currentPlay, playDuration, playVolume)
     return `${Math.floor(playDuration / 60)}:${Math.floor(playDuration % 60)}`
   },
   currentLyric: state => {

@@ -16,13 +16,16 @@ mpris.on('playpause', () => store.state.Player.isPlay ? store.state.Player.playe
 mpris.on('stop', () => store.state.Player.player.pause())
 mpris.on('pause', () => store.state.Player.player.pause())
 mpris.on('play', () => store.state.Player.player.play())
-mpris.on('position', () => store.dispatch('next'))
+mpris.on('position', ({position}) => { store.state.Player.player.currentTime = Math.floor(position / 1000000) })
+mpris.on('volume', (volume) => store.commit('setPlayVolume', +(volume.toFixed(2))))
+mpris.on('seek', ({position}) => { store.state.Player.player.currentTime = Math.floor((position) / 1000000) })
 
-const setMprisProp = function (music, duration) {
+const setMprisProp = function (music, duration, playVolume) {
+  mpris.volume = playVolume
   mpris.metadata = {
+    'mpris:artUrl': `http://y.gtimg.cn/music/photo_new/T002R300x300M000${music.album.albumMid}.jpg`,
     'mpris:length': Math.floor(duration * 1000000),
     'mpris:trackid': mpris.objectPath('track/0'),
-    'mpris:artUrl': `https://y.gtimg.cn/music/photo_new/T002R300x300M000${music.album.albumMid}.jpg`,
     'xesam:title': music.songName,
     'xesam:album': music.album.albumName,
     'xesam:artist': music.singerList.reduce((add, {singerName}) => `${add} ${singerName}`, '')
@@ -32,7 +35,7 @@ const setMprisProp = function (music, duration) {
   mpris.CanGoPrevious = true
   mpris.CanPlay = true
   mpris.CanPause = true
-  mpris.CanSeek = true
+  mpris.CanSeek = false
   mpris.CanControl = true
   mpris.rate = 1.0
 }
