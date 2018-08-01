@@ -7,6 +7,7 @@
           @click="selectCountry = code, getTheSingeList(1)" 
           v-for="(code, country) in singertypeList" 
           :key="code"
+          :disabled="code !== selectCountry && loading"
           :class="{'active': code === selectCountry, 'loading': code === selectCountry && loading}" >
           {{country}}
         </button>
@@ -18,6 +19,7 @@
           @click="selectName = code, getTheSingeList(1)"
           v-for="(code, name) in singerNameList"
           :key="code"
+          :disabled="code !== selectName && loading"
           :class="{'active': code === selectName, 'loading': code === selectName && loading}">
           {{name}}
         </button>
@@ -71,16 +73,12 @@ export default {
     async getTheSingeList (newPage) {
       this.loading = true
       let data
-      try {
-        data = await getSingerList({
-          country: this.selectCountry,
-          name: this.selectName,
-          page: newPage
-        })
-        this.page = newPage
-      } catch (e) {
-        console.error(e)
-      }
+      data = await getSingerList({
+        country: this.selectCountry,
+        name: this.selectName,
+        page: newPage
+      })
+      this.page = newPage
       this.loading = false
       Object.assign(this, data)
     }

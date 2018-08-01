@@ -22,7 +22,8 @@ export default {
       tabList: [
         {name: 'Favorite', ZHName: '单曲'},
         {name: 'FavoriteAlbum', ZHName: '专辑'},
-        {name: 'FavoriteSinger', ZHName: '歌手'}
+        {name: 'FavoriteSinger', ZHName: '歌手'},
+        {name: 'FavoritePlayList', ZHName: '歌单'}
       ]
     }
   },

@@ -2,7 +2,8 @@ import {getFavorite, addFavorite, deleteFavorite} from '../../db'
 const state = {
   song: [],
   singer: [],
-  album: []
+  album: [],
+  playList: []
 }
 const getters = {
 }

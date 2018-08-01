@@ -41,9 +41,6 @@ export default {
     fTab, fPlayer
   },
   methods: {
-    log () {
-      console.log('shit')
-    },
     goTop () {
       window.scrollTo(0, 0)
     },

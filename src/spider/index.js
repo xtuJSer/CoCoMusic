@@ -26,6 +26,22 @@
 import request from 'axios'
 import {Singer, Album, Music, Mv, Lyric, Category, PlayList} from './commonObject'
 
+const CancelToken = request.CancelToken
+
+const cancelMap = {
+  getSingerMusicList: null
+}
+/**
+ * fuck JavaScript. asynchronous is a shit.
+ * cancelable-promises JavaScript new grammar.
+ * @param {String} key
+ */
+function cancelRequest (key) {
+  cancelMap[key] && cancelMap[key].cancel()
+  cancelMap[key] = null
+  return (cancelMap[key] = CancelToken.source())
+}
+
 request.defaults.adapter = require('axios/lib/adapters/http')
 
 const baseRequest = request.create({
@@ -50,8 +66,9 @@ export async function getSingerList ({page, country, name}) {
 
 // page 从 0 开始
 export async function getSingerMusicList ({page, singerMid}) {
+  let source = cancelRequest('getSingerMusicList')
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?&singermid=${singerMid}&order=listen&begin=${page*30}&num=30`
-  let {data: {list, total}} = (await baseRequest(url)).data
+  let {data: {list, total}} = (await baseRequest(url, {cancelToken: source.token})).data
   return {
     total: Math.floor(total / 30),
     list: list.map(({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer, type}}) => new Music(songname, songmid, strMediaMid, new Album(albumname, albummid), singer.map(({mid, name}) => new Singer(name,mid)), type))
@@ -177,13 +194,13 @@ export async function getPlayList ({categoryId, page}) {
   let url = `https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&g_tk=5381&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&categoryId=${categoryId}&sortId=5&sin=${(page - 1) * 30}&ein=${page * 30 - 1}`
   let {list, sum} = JSON.parse((await baseRequest(url)).data.slice(18, -1)).data
   return {
-    list: list.map(({dissname, imgurl, dissid}) => new PlayList(dissname, dissid, imgurl)),
+    list: list.map(({dissname, imgurl, dissid}) => new PlayList(dissid, dissname, imgurl)),
     totalPage: Math.ceil(sum / 40)
   }
 }
 
-export async function getPlayListInfo ({playListId}) {
-  let url = `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid=${playListId}&g_tk=5381&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0`
+export async function getPlayListInfo (playListMid) {
+  let url = `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=0&disstid=${playListMid}&g_tk=5381&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0`
   let {cdlist: [{dissname, songlist}]} = JSON.parse((await baseRequest(url)).data.slice(13, -1))
   return {
     playListName: dissname,

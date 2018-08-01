@@ -13,6 +13,7 @@ import Favorite from '@/components/Favorite'
 import FavoriteSinger from '@/components/FavoriteSinger'
 import FavoriteSong from '@/components/FavoriteSong'
 import FavoriteAlbum from '@/components/FavoriteAlbum'
+import FavoritePlayList from '@/components/FavoritePlayList'
 import Setting from '@/components/Setting'
 import PlayList from '@/components/PlayList'
 import PlayListInfo from '@/components/PlayListInfo'
@@ -27,7 +28,7 @@ export default new Router({
       component: SingerList
     },
     {
-      path: '/playListInfo/:playListId',
+      path: '/playListInfo/:playListMid',
       name: 'playListInfo',
       component: PlayListInfo,
       props: (route) => ({
@@ -89,6 +90,11 @@ export default new Router({
           path: 'singer',
           component: FavoriteSinger,
           name: 'FavoriteSinger'
+        },
+        {
+          path: 'playList',
+          component: FavoritePlayList,
+          name: 'FavoritePlayList'
         }
       ]
     },

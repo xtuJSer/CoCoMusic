@@ -16,12 +16,7 @@
       </li>
     </ul>
     <div class="playList-list">
-      <div class="playList-item" v-for="playList in list" :key="playList.playListId">
-        <router-link :to="{name: 'playListInfo', params: {playListId: playList.playListId}, query: {imgUrl: playList.imgUrl}}">
-          <img :src="playList.imgUrl" alt="">
-          <p>{{playList.playListName}}</p>
-        </router-link>
-      </div>
+      <f-play-list :list="list"></f-play-list>
 
       <f-pagination
         :loading="loading"
@@ -36,6 +31,7 @@
 <script>
 import {getCategory, getPlayList} from '../../spider/index.js'
 import fPagination from './Pagination'
+import fPlayList from './PlayListList'
 
 export default {
   data () {
@@ -49,19 +45,18 @@ export default {
     }
   },
   components: {
-    fPagination
+    fPagination, fPlayList
   },
   methods: {
     async getThePlayList (page) {
       this.loading = true
-      try {
-        Object.assign(this, (await getPlayList({
-          categoryId: this.currentCategory, page
-        })))
-        this.page = page
-      } catch (e) {
-        console.log(e)
-      }
+      /**
+       *  Let it crash. You don't need to program defensively.
+       **/
+      Object.assign(this, await getPlayList({
+        categoryId: this.currentCategory, page
+      }))
+      this.page = page
       this.loading = false
     }
   },
@@ -102,27 +97,6 @@ div.loading{
   height: 530px;
   scroll-behavior: smooth;
   overflow: scroll;
-}
-.playList-item {
-  width: 150px;
-  display: inline-block;
-  margin: 10px 7px 7px 7px;
-}
-.playList-item img {
-  width: 150px;
-  height: 150px;
-  box-shadow: 4px 4px 16px 4px rgba(112,128,151,0.35);
-  border-radius: 7%;
-}
-.playList-item p {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-  height: 48px;
-  -webkit-box-orient: vertical;
-  margin-bottom: 15px;
-  text-align: center;
 }
 a:hover,a:active,a:visited,a:focus {
   outline: none;

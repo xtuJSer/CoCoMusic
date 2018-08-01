@@ -1,11 +1,11 @@
 <template>
   <div>
     <div class="playList-info-head">
-      <img :src="imgUrl" alt="">
+      <img :src="playList.imgUrl" alt="">
       <div class="playList-info-name">
-        <h4>{{playListName}}</h4>
-        <button class="btn btn-sm">收藏</button>
-        <!-- <button class="btn btn-sm" v-show="isfocus()" @click="deleteFavorite()">取消收藏</button> -->
+        <h4>{{playList.playListName}}</h4>
+          <button class="btn btn-sm" v-show="!isfocus()" @click="favorite()">关注</button>
+          <button class="btn btn-sm" v-show="isfocus()" @click="deleteFavorite()">取消关注</button>
       </div>
     </div>
     <div class="divider text-center"></div>
@@ -15,29 +15,33 @@
 </template>
 <script>
 import {getPlayListInfo} from '../../spider/index.js'
+import {PlayList} from '../../spider/commonObject.js'
 import songList from './SongList'
+import generateFavorite from './common/Favorite.js'
 
+const favoriteMinix = generateFavorite('playList')
 export default {
-  props: ['playListId', 'imgUrl'],
+  mixins: [favoriteMinix],
+  props: ['playListMid', 'imgUrl'],
   components: {
     songList
   },
   data () {
     return {
       list: [],
-      playListName: 'Loading',
-      id: ''
+      playList: new PlayList('', 'Loading', this.imgUrl)
     }
   },
   methods: {
     async getThePlayListInfo () {
       Object.assign(this, this.$options.data.call(this))
-      Object.assign(this, (await getPlayListInfo(this)))
-      this.id = this.playListId
+      let {playListName, list} = (await getPlayListInfo(this.playListMid))
+      this.playList = new PlayList(this.playListMid, playListName, this.imgUrl)
+      this.list = list
     }
   },
   async activated () {
-    if (this.id === this.playListId) return
+    if (this.playList.playListMid === this.playListMid) return
     await this.getThePlayListInfo()
   }
 }

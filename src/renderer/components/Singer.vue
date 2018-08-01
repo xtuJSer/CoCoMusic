@@ -17,7 +17,7 @@
         </div>
       </f-tab>
       <keep-alive>
-        <router-view class="singer-router" :key="$route.fullPath"></router-view>
+        <router-view class="singer-router"></router-view>
       </keep-alive>
     </div>
   </div>

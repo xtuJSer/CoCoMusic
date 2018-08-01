@@ -20,9 +20,6 @@ export default {
       return this.$route.query.mvId
     }
   },
-  beforeRouteUpdate (to, from, next) {
-    console.log('shit')
-  },
   methods: {
     async getTheMvInfo () {
       let {fileid, mv} = await getMvInfo({mvId: this.mvId})

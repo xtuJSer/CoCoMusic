@@ -39,10 +39,10 @@ export class Category {
 }
 
 export class PlayList {
-  constructor (playListName, playListId, imgUrl) {
+  constructor (playListMid, playListName, imgUrl) {
     this.playListName = playListName
     this.imgUrl = imgUrl
-    this.playListId = playListId
+    this.playListMid = playListMid
   }
 }
 

@@ -33,14 +33,10 @@ export default {
     async getTheList (newPage) {
       this.loading = true
       let data
-      try {
-        data = await this.getList({
-          page: newPage, singerMid: this.singerMid
-        })
-        this.page = newPage
-      } catch (e) {
-        console.error(e)
-      }
+      data = await this.getList({
+        page: newPage, singerMid: this.singerMid
+      })
+      this.page = newPage
       this.loading = false
       this.total = data.total
       this.list.push(...data.list)
