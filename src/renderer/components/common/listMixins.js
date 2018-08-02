@@ -32,14 +32,20 @@ export default {
     },
     async getTheList (newPage) {
       this.loading = true
-      let data
-      data = await this.getList({
-        page: newPage, singerMid: this.singerMid
-      })
-      this.page = newPage
+      try {
+        let data = await this.getList({
+          page: newPage, singerMid: this.singerMid
+        })
+        this.page = newPage
+        this.total = data.total
+        this.list.push(...data.list)
+      } catch (error) {
+        if (error.message === 'cancel') {
+          throw error
+        }
+        console.error(error)
+      }
       this.loading = false
-      this.total = data.total
-      this.list.push(...data.list)
     }
   }
 }

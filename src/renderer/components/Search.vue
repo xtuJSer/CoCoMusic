@@ -49,15 +49,14 @@ export default {
     },
     async search (newPage) {
       this.loading = true
-      let data
-      data = await getSearch({
+      let data = await getSearch({
         page: newPage, keyword: this.keyword
       })
       this.page = newPage
-      this.loading = false
       this.direct = data.direct
       this.totalPage = data.totalPage
       this.songList.push(...data.songList)
+      this.loading = false
     }
   },
   created () {

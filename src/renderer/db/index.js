@@ -14,7 +14,9 @@ async function getFavorite () {
     song: await db.song.toArray(),
     singer: (await db.singer.toArray()).map(obj => new Singer(...Object.values(obj))),
     album: (await db.album.toArray()).map(obj => new Album(...Object.values(obj))),
-    playList: (await db.playList.toArray()).map(obj => new PlayList(...Object.values(obj)))
+    playList: (await db.playList.toArray()).map(obj => new PlayList(
+      obj.playListMid, obj.playListName, obj.imgUrl
+    ))
   }
 }
 

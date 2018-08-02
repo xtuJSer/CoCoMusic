@@ -51,7 +51,11 @@ export default {
     async getThePlayList (page) {
       this.loading = true
       /**
-       *  Let it crash. You don't need to program defensively.
+       *  我的代码没有bug
+       *  js报错不影响页面功能
+       *  IE6根本没人用
+       *
+       *  被开除了
        **/
       Object.assign(this, await getPlayList({
         categoryId: this.currentCategory, page

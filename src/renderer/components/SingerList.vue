@@ -72,15 +72,14 @@ export default {
   methods: {
     async getTheSingeList (newPage) {
       this.loading = true
-      let data
-      data = await getSingerList({
+      let data = await getSingerList({
         country: this.selectCountry,
         name: this.selectName,
         page: newPage
       })
       this.page = newPage
-      this.loading = false
       Object.assign(this, data)
+      this.loading = false
     }
   },
   created () {
