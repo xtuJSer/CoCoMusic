@@ -39,7 +39,8 @@ const state = {
   lyricIndex: 0,
   lyricList: [],
   mode: window.localStorage.mode !== undefined ? window.localStorage.mode : 'cycle',
-  playVolume: window.localStorage.volume !== undefined ? +window.localStorage.volume : 1,
+  playVolume: window.localStorage.volume !== undefined && +window.localStorage.volume < 1 && +window.localStorage.volume > 0
+    ? +window.localStorage.volume : 1,
   guid: window.localStorage.guid !== undefined || generateGuid(),
   loop: window.localStorage.loop !== undefined ? !!window.localStorage.loop : true
 }

@@ -2,7 +2,7 @@
   <div class="header">
     <div class="left">
       <f-tab :list="navList">
-        <img v-for="route in navList" :slot="route.name" :key="route.name" :src="`src/renderer/assets/img/${route.name}.svg`" />
+        <img v-for="route in navList" :slot="route.name" :key="route.name" :src="`static/img/${route.name}.svg`" />
       </f-tab>
     </div>
 
@@ -18,9 +18,6 @@
       <button class="btn btn-link btn-sm" @click="goTop">
         <img src="../assets/img/Up.svg" alt="">
       </button>
-      <!-- <button class="btn btn-link btn-sm" @click="minimize">
-        <img src="../assets/img/minimize.svg" alt="">
-      </button> -->
     </div>
   </div>
 </template>

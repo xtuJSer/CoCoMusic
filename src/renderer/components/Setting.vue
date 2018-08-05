@@ -14,11 +14,19 @@
         <span v-else>已经是最新版本</span>
       </div>
     </div>
+    <div class="form-group">
+      <div class="col-3 col-sm-12">
+        <h6 class="form-label">调试</h6>
+      </div>
+      <div class="col-9 col-sm-12 text-right">
+        <button class="btn" @click="openDev">打开 / 关闭 调试窗口</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import http from 'axios'
-const {shell} = require('electron').remote
+const {shell, getCurrentWebContents} = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.cosgz.myqcloud.com/package.json'
 const CURRENT_VERSION = '2.0.0'
 
@@ -47,6 +55,9 @@ export default {
     },
     go (url) {
       shell.openExternal(url)
+    },
+    openDev () {
+      getCurrentWebContents().toggleDevTools()
     }
   }
 }

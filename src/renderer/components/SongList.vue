@@ -91,7 +91,7 @@ export default {
     }
   },
   watch: {
-    musicList (value) {
+    'this.musicList' (value) {
       return this.isPlayList && this.$store.commit('setPlayerState', {
         playList: [...this.musicList]
       })

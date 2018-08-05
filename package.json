@@ -23,8 +23,8 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "cocomusic",
-    "appId": "org.simulatedgreg.electron-vue",
+    "productName": "CocoMusic",
+    "appId": "xyz.xn--zq2aw6m.cocomusic",
     "directories": {
       "output": "build"
     },
@@ -55,7 +55,7 @@
     },
     "linux": {
       "icon": "build/icons",
-      "category": "Audio;AudioVideo"
+      "category": "AudioVideo;Player;Music;"
     }
   },
   "dependencies": {

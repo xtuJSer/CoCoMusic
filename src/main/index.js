@@ -32,7 +32,8 @@ function createWindow () {
     titleBarStyle: 'hidden',
     show: false,
     // frame: false,
-    resizable: false
+    resizable: false,
+    icon: '../../build/icons/256x256.png'
   })
 
   mainWindow.loadURL(winURL)
@@ -54,11 +55,24 @@ function creatLoading () {
     width: 400,
     height: 230,
     autoHideMenuBar: true,
-    frame: false
+    frame: false,
+    icon: '../../build/icons/256x256.png'
   })
   loadingWindow.loadURL(loadURL)
   loadingWindow.on('closed', () => loadingWindow = null) // eslint-disable-line
   // loadingWindow.webContents.on('did-finish-load', () => loadingWindow.show())
+}
+
+const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
+  // Someone tried to run a second instance, we should focus our window.
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+  }
+})
+
+if (isSecondInstance) {
+  app.quit()
 }
 
 app.on('ready', flow([createWindow, creatLoading]))
