@@ -7,9 +7,11 @@
         {{route.ZHName}}
       </div>
     </f-tab>
-    <keep-alive>
-      <router-view :key="$route.fullPath"></router-view>
-    </keep-alive>
+    <transition name="fade" mode="out-in">
+      <keep-alive>
+        <router-view :key="$route.fullPath"></router-view>
+      </keep-alive>      
+    </transition>
   </div>
 </template>
 <script>

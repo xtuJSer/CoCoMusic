@@ -16,9 +16,11 @@
           {{route.ZHName}}
         </div>
       </f-tab>
-      <keep-alive>
-        <router-view class="singer-router"></router-view>
-      </keep-alive>
+      <transition name="fade" mode="out-in">
+        <keep-alive>
+          <router-view class="singer-router"></router-view>
+        </keep-alive>        
+      </transition>
     </div>
   </div>
 </template>

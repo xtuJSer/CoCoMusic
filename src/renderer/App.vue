@@ -2,9 +2,11 @@
   <div id="app">
     <f-header></f-header>
     <div id="container">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <transition name="fade" mode="out-in">
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
+      </transition>
     </div>
   </div>
 </template>
@@ -34,5 +36,16 @@ a:hover,a:active,a:visited,a:focus {
 }
 #container {
   margin: 70px 10px 0px 10px;
+}
+.fade-enter-active {
+  transition: all .2s cubic-bezier(.6,.15,.3,.8);
+}
+.fade-enter, .fade-leave-to {
+  transform: translateX(3px);
+  transform: translateY(1px);
+  opacity: 0
+}
+.fade-leave-active {
+  transform: all .3s ease;
 }
 </style>
