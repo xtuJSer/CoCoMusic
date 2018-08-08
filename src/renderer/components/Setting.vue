@@ -1,6 +1,13 @@
 <template>
   <div class="form-horizontal setting">
+    <div class="divider text-center" data-content="Update"></div>
     <div class="form-group">
+      <div class="col-3 col-sm-12">
+        <h6 class="form-label">当前版本</h6>
+      </div>
+      <div class="col-9 col-sm-12 text-right">
+        <p>{{CURRENT_VERSION}}</p>
+      </div>
       <div class="col-3 col-sm-12">
         <h6 class="form-label">检查更新</h6>
       </div>
@@ -9,17 +16,27 @@
       </div>
       <div class="toast toast-primary" v-if="showVersion">
         <button class="btn btn-clear float-right" @click="showVersion = false"></button>
-        当前版本：{{CURRENT_VERSION}} &nbsp; 服务器版本：{{version}} &nbsp; 
+        当前版本：{{CURRENT_VERSION}} &nbsp; 最新版本：{{version}} &nbsp; 
         <a v-if="version > CURRENT_VERSION" @click="go('https://github.com/xtuJSer/CoCoMusic')" class="c-hand">下载更新</a>
         <span v-else>已经是最新版本</span>
       </div>
     </div>
+    <div class="divider text-center" data-content="Debug"></div>
     <div class="form-group">
       <div class="col-3 col-sm-12">
         <h6 class="form-label">调试</h6>
       </div>
       <div class="col-9 col-sm-12 text-right">
         <button class="btn" @click="openDev">打开 / 关闭 调试窗口</button>
+      </div>
+    </div>
+    <div class="divider text-center" data-content="About"></div>
+    <div class="form-group">
+      <div class="col-3 col-sm-12">
+        <h6 class="form-label">代码仓库</h6>
+      </div>
+      <div class="col-9 col-sm-12 text-right">
+        <button class="btn" @click="go('https://github.com/xtuJSer/CoCoMusic')">Github</button>
       </div>
     </div>
   </div>

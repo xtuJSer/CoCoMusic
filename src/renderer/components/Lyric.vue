@@ -52,8 +52,7 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50%;
-  filter: blur(36px);
-  opacity: 0.3;
+  filter: blur(60px);
   position: absolute;
   top: 0;
   left: 0;
@@ -69,7 +68,7 @@ export default {
   display: block;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.55);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .lyric-contain {
   z-index: 10;

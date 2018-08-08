@@ -43,7 +43,7 @@ a:hover,a:active,a:visited,a:focus {
 .fade-enter, .fade-leave-to {
   transform: translateX(3px);
   transform: translateY(1px);
-  opacity: 0
+  opacity: 0;
 }
 .fade-leave-active {
   transform: all .3s ease;
