@@ -1,4 +1,4 @@
-import {getSongVkey, getLyric} from '../../../spider/index'
+import {getSongVkey, getLyric, getKey} from '../../../spider/index'
 import {throttle, random} from 'lodash'
 import {setMprisProp, setPosition, mpris} from '../../mpris'
 
@@ -33,6 +33,9 @@ const state = {
   playUrl: '',
   loading: false,
   player: document.createElement('audio'),
+  source: document.createElement('source'),
+  sourceBac1: document.createElement('source'),
+  sourceBac2: document.createElement('source'),
   isPlay: false,
   playTime: 0,
   playDuration: 0,
@@ -41,8 +44,9 @@ const state = {
   mode: window.localStorage.mode !== undefined ? window.localStorage.mode : 'cycle',
   playVolume: window.localStorage.volume !== undefined && +window.localStorage.volume < 1 && +window.localStorage.volume > 0
     ? +window.localStorage.volume : 1,
-  guid: window.localStorage.guid !== undefined || generateGuid(),
-  loop: window.localStorage.loop !== undefined ? !!window.localStorage.loop : true
+  guid: generateGuid(), // 每次重新生成，免得被跟踪
+  loop: window.localStorage.loop !== undefined ? !!window.localStorage.loop : true,
+  vkey: ''
 }
 
 const mutations = {
@@ -62,7 +66,9 @@ const mutations = {
     state.lyricIndex = payload
   },
   setPlayerSrc (state, payload) {
-    state.player.src = payload
+    state.source.src = payload[0]
+    state.sourceBac1.src = payload[1]
+    state.sourceBac2.src = payload[2]
   },
   setPlayMode (state, payload) {
     window.localStorage.mode = payload
@@ -73,6 +79,9 @@ const mutations = {
     window.localStorage.volume = payload
     state.playVolume = payload
     state.player.volume = payload
+  },
+  setVkey (state, payload) {
+    state.vkey = payload
   }
 }
 
@@ -103,7 +112,11 @@ const getters = {
 }
 
 const actions = {
-  initPlayer ({state, commit, dispatch}) {
+  async initPlayer ({state, commit, dispatch}) {
+    state.player.appendChild(state.source)
+    state.player.appendChild(state.sourceBac1)
+    state.player.appendChild(state.sourceBac2)
+
     let {player, playVolume, mode} = state
     player.volume = playVolume
     state.player.loop = (mode === 'single')
@@ -113,7 +126,7 @@ const actions = {
     player.addEventListener('seeking', () => { commit('setPlayerState', {loading: true}) })
     player.addEventListener('canplaythrough', () => { commit('setPlayerState', {loading: false}) })
     player.addEventListener('durationchange', () => commit('setPlayerState', {playDuration: player.duration}))
-    player.addEventListener('ended', e => {
+    player.addEventListener('ended', _ => {
       let {mode, playList, currentPlayIndex} = state
       let next = mode === 'random'
         ? random(playList.length)
@@ -130,6 +143,8 @@ const actions = {
       let next = nextLyric(player.currentTime, lyricIndex, lyricList)
       next !== undefined && commit('updateLyricIndex', next)
     }, 800)) // 性能优化肯定要做啊，不做怎么好意思说自己轻量，基本优化到 1% 以下，不然和某易云音乐一样卡么。
+
+    commit('setVkey', await getKey(state.guid))
   },
   previous ({state, dispatch}) {
     let playListLength = state.playList.length
@@ -147,13 +162,9 @@ const actions = {
   },
   async setPlay ({state, commit, getters}, index) {
     const {guid} = state
-    /**
-     * 套路三联
-     * 有可能切歌的时候还在瞎几把加载占用网络，直接给他设为空字符串，chrome 还很配合，不报错也不加载空 url，
-     * 估计是早有准备，然而为什么不提供一个方法来停止加载呢 ? 一定是和深拷贝一样，明明实现这功能就是不提供 api
-    */
+
     state.player.pause()
-    commit('setPlayerSrc', ``)
+    commit('setPlayerSrc', ['', '', ''])
     state.player.load()
 
     commit('setPlayerState', {
@@ -165,7 +176,13 @@ const actions = {
     const {vkey} = await getSongVkey({
       guid, ...song
     })
-    commit('setPlayerSrc', `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`)
+
+    commit('setPlayerSrc', [
+      `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`,
+      `http://dl.stream.qqmusic.qq.com/M500${getters.currentPlay.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`,
+      `http://dl.stream.qqmusic.qq.com/M800${getters.currentPlay.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`
+    ])
+
     state.player.load()
     state.player.play()
     const {lyricList} = (await getLyric(getters.currentPlay.songMid))

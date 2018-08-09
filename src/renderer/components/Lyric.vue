@@ -68,7 +68,7 @@ export default {
   display: block;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.6);
 }
 .lyric-contain {
   z-index: 10;

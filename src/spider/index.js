@@ -116,7 +116,7 @@ export async function getSingerInfo ({singerMid}) {
     })
   })
 }
-export let getSingerAlbumList = async function ({singerMid, page}) {
+export async function getSingerAlbumList ({singerMid, page}) {
   let source = cancelRequest('getSingerAlbumList')
   let url = `https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_album.fcg?singermid=${singerMid}&order=time&begin=${page * 30}&num=30`
   let {list, total} = (await baseRequest(url, {cancelToken: source.token})).data.data
@@ -151,7 +151,11 @@ export async function getMUrl ({fileid}) {
     cn, mvSourceUrl, vkey
   }
 }
-
+export async function getKey (guid) {
+  let url = `https://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=${guid}`
+  let {key} = JSON.parse((await baseRequest(url)).data.slice(13, -2))
+  return key
+}
 export async function getSongVkey({fileName, guid, songMid}) {
   // cid 是啥？ 我也不造啊 qq 那群人写死了
   let url =  `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=${fileName}&guid=${guid}`
