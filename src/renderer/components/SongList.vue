@@ -97,7 +97,8 @@ export default {
     },
     musicListFilter () {
       return this.musicList.filter(music => {
-        const reg = new RegExp(`${this.musicFilter}`)
+        this.musicFilter === 'miku' && (this.musicFilter = `初音`)
+        let reg = new RegExp(`${this.musicFilter}`)
         const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
         return reg.test(music.songName) || reg.test(singerName) || reg.test(music.album.albumName)
       })
