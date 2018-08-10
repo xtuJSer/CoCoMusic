@@ -1,51 +1,59 @@
 <template>
   <div class="song-list">
-    
-    <div class="song-item"
-      v-for="(music,index) in musicList"
-      :key="music.songMid"
-      :id="`music${music.songMid}`">
+    <transition-group name="list">
+      <div class="song-item"
+        v-for="(music,index) in musicListFilter"
+        :key="music.songMid"
+        :id="`music${music.songMid}`">
 
-      <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
+        <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
 
-        <div class="music-favorite" :class="{'hide-music-favorite': !isfocus(music.songMid)}">
-          <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music)">
-            <img class="favorite" src="../assets/img/Favorite.svg" alt="">
+          <div class="music-favorite" :class="{'hide-music-favorite': !isfocus(music.songMid)}">
+            <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music)">
+              <img class="favorite" src="../assets/img/Favorite.svg" alt="">
+            </button>
+            <button class="btn btn-link"
+              v-show="isfocus(music.songMid)"
+              :disabled="currentPlay && music.songMid === currentPlay.songMid" 
+              @click="deleteFavorite(music.songMid)">
+              <img class="favorite" src="../assets/img/hasFavorite.svg" alt="">
+            </button>          
+          </div>
+
+
+          <button class="play-control btn btn-link" v-show="currentPlay && music.songMid !== currentPlay.songMid">
+            <img src="../assets/img/play2.svg" @click="play(index)" alt="">
           </button>
-          <button class="btn btn-link"
-            v-show="isfocus(music.songMid)"
-            :disabled="currentPlay && music.songMid === currentPlay.songMid" 
-            @click="deleteFavorite(music.songMid)">
-            <img class="favorite" src="../assets/img/hasFavorite.svg" alt="">
-          </button>          
+          
+          <router-link
+            v-show="showSingerList"
+            :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}"
+            v-for="singer in music.singerList"
+            :key="singer.singerMid">
+            <p>{{singer.singerName | deleteOtherName}} </p>
+          </router-link>
+
+          <p>{{music.songName}}</p>
         </div>
 
+        <template v-if="music.album.albumMid">
+          <router-link class="song-album" :to="{name: 'Album', params: {id: music.album.albumMid}}">
+            <p>{{music.album.albumName}}</p>
+          </router-link>
+        </template>
 
-        <button class="play-control btn btn-link" v-show="currentPlay && music.songMid !== currentPlay.songMid">
-          <img src="../assets/img/play2.svg" @click="play(index)" alt="">
-        </button>
-        
-        <router-link
-          v-show="showSingerList"
-          :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}"
-          v-for="singer in music.singerList"
-          :key="singer.singerMid">
-          <p>{{singer.singerName | deleteOtherName}} </p>
-        </router-link>
-
-        <p>{{music.songName}}</p>
       </div>
+    </transition-group>
 
-      <template v-if="music.album.albumMid">
-        <router-link class="song-album" :to="{name: 'Album', params: {id: music.album.albumMid}}">
-          <p>{{music.album.albumName}}</p>
-        </router-link>
-      </template>
 
-    </div>
-
-    <div class="music-location" v-show="isPlayList">
-      <button class="btn btn-link" @click="focusPlay">
+    <div class="music-location">
+      <transition name="right-show" mode="out-in">
+        <input class="form-input input-sm" v-model="musicFilter" v-show="showSearch" type="text" placeholder="过滤">
+      </transition>
+      <button class="btn btn-link" @click="clickSearch">
+        <i class="icon icon-search"></i>
+      </button>
+      <button class="btn btn-link" v-show="isPlayList" @click="focusPlay">
         <i class="icon icon-location"></i>
       </button>
     </div>
@@ -60,7 +68,10 @@ const favoriteMinix = generateFavorite('song')
 export default {
   mixins: [favoriteMinix],
   data () {
-    return {}
+    return {
+      showSearch: false,
+      musicFilter: ''
+    }
   },
   props: {
     musicList: {
@@ -83,6 +94,13 @@ export default {
     }),
     isPlayList () {
       return this.$route.fullPath === this.playUrl
+    },
+    musicListFilter () {
+      return this.musicList.filter(music => {
+        const reg = new RegExp(`${this.musicFilter}`)
+        const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
+        return reg.test(music.songName) || reg.test(singerName) || reg.test(music.album.albumName)
+      })
     }
   },
   filters: {
@@ -108,21 +126,51 @@ export default {
         playUrl: this.$route.fullPath
       })
       this.$store.dispatch('setPlay', index)
+    },
+    clickSearch () {
+      this.showSearch = !this.showSearch
+      !this.showSearch && (this.musicFilter = '')
     }
   }
 }
 </script>
 <style scoped>
+.listenter, .list-leave-to {
+  transform: translateY(-30px);
+  opacity: 0;
+}
+.list-leave-active, .list-enter-active{
+  transition: all .3s cubic-bezier(.6,.15,.3,.8);
+}
+.right-show-enter, .right-show-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
+}
+.right-show-enter-active {
+  transition: all .2s cubic-bezier(.6,.15,.3,.8);
+}
+.right-show-leave-active {
+  transform: all .3s ease;
+}
 .song-list {
   margin-top: 15px;
   margin-bottom: 20px;
 }
+.music-location input {
+  display: inline-block;
+  width: 150px;
+  top: 3px;
+}
 .music-location {
+  text-align: right;
   position: fixed;
   bottom: 50px;
   right: 50px;
+  width: 250px;
 }
 .music-location button{
+  outline: none;
+  box-shadow: none;
   background: transparent;
 }
 

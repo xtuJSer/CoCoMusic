@@ -33,9 +33,9 @@ const state = {
   playUrl: '',
   loading: false,
   player: document.createElement('audio'),
-  source: document.createElement('source'),
-  sourceBac1: document.createElement('source'),
-  sourceBac2: document.createElement('source'),
+  source: document.createElement('source'), // 主要播放资源
+  sourceBac1: document.createElement('source'), // 备份播放1
+  sourceBac2: document.createElement('source'), // 备份播放2
   isPlay: false,
   playTime: 0,
   playDuration: 0,
@@ -113,9 +113,7 @@ const getters = {
 
 const actions = {
   async initPlayer ({state, commit, dispatch}) {
-    state.player.appendChild(state.source)
-    state.player.appendChild(state.sourceBac1)
-    state.player.appendChild(state.sourceBac2)
+    state.player.append(state.source, state.sourceBac1, state.sourceBac2)
 
     let {player, playVolume, mode} = state
     player.volume = playVolume
