@@ -27,9 +27,12 @@ export default {
 
 <style>
 a:hover,a:active,a:visited,a:focus {
-  outline: none;
-  box-shadow: none;
-  text-decoration: none;
+  outline: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+.tab {
+  border-bottom: none !important;
 }
 #app {
   user-select: none;

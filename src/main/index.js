@@ -25,7 +25,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 610,
+    height: 630, // 尤其是 有着1T 显存的 gt630 战术核显卡，只要一发就能摧毁一个航母战斗群。
     useContentSize: true,
     width: 1020,
     autoHideMenuBar: false,

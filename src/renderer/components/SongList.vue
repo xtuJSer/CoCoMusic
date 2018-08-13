@@ -45,7 +45,6 @@
       </div>
     </transition-group>
 
-
     <div class="music-location">
       <transition name="right-show" mode="out-in">
         <input class="form-input input-sm" v-model="musicFilter" v-show="showSearch" type="text" placeholder="过滤">
@@ -97,7 +96,7 @@ export default {
     },
     musicListFilter () {
       return this.musicList.filter(music => {
-        this.musicFilter === 'miku' && (this.musicFilter = `初音`)
+        this.musicFilter === 'miku' && (this.musicFilter = `miku|初音`)
         let reg = new RegExp(`${this.musicFilter}`)
         const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
         return reg.test(music.songName) || reg.test(singerName) || reg.test(music.album.albumName)

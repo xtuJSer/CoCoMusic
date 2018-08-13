@@ -8,6 +8,9 @@
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
+    "build:linux": "node .electron-vue/build.js && electron-builder -l dir deb AppImage pacman",
+    "build:mac": "node .electron-vue/build.js && electron-builder -m",
+    "build:win": "node .electron-vue/build.js && electron-builder -w",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
     "dev": "node .electron-vue/dev-runner.js",
@@ -55,7 +58,14 @@
     },
     "linux": {
       "icon": "build/icons",
-      "category": "AudioVideo;Player;Music;"
+      "category": "AudioVideo;Audio;Player;Music;"
+    },
+    "pacman": {
+      "depends": ["gconf", "libnotify", "nss", "libxss", "libappindicator-gtk3", "libxtst"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "dependencies": {

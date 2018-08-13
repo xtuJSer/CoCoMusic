@@ -1,29 +1,49 @@
 <template>
   <div class="singer-list">
     <div class="singer-type-list">
-      <div class="singer-country">
 
+      <div class="singer-type-item">
         <button class="btn btn-link"
-          @click="selectCountry = code, getTheSingeList(1)" 
-          v-for="(code, country) in singertypeList" 
-          :key="code"
-          :disabled="code !== selectCountry && loading"
-          :class="{'active': code === selectCountry, 'loading': code === selectCountry && loading}" >
-          {{country}}
+          @click="selectTag.index = tag.id, getTheSingeList(1)" 
+          v-for="tag in tagList.index" 
+          :key="tag.id"
+          :disabled="tag.id !== selectTag.index && loading"
+          :class="{'active': tag.id === selectTag.index, 'loading': tag.id === selectTag.index && loading}" >
+          {{tag.name}}
         </button>
-
       </div>
-      <div class="singer-firstname">
 
+      <div class="singer-type-item d-inline-block">
         <button class="btn btn-link"
-          @click="selectName = code, getTheSingeList(1)"
-          v-for="(code, name) in singerNameList"
-          :key="code"
-          :disabled="code !== selectName && loading"
-          :class="{'active': code === selectName, 'loading': code === selectName && loading}">
-          {{name}}
+          @click="selectTag.area = tag.id, getTheSingeList(1)"
+          v-for="tag in tagList.area"
+          :key="tag.id"
+          :disabled="tag.id !== selectTag.area && loading"
+          :class="{'active': tag.id === selectTag.area, 'loading': tag.id === selectTag.area && loading}">
+          {{tag.name}}
         </button>
+      </div>
 
+      <div class="singer-type-item d-inline-block">
+        <button class="btn btn-link"
+          @click="selectTag.sex = tag.id, getTheSingeList(1)"
+          v-for="tag in tagList.sex"
+          :key="tag.id"
+          :disabled="tag.id !== selectTag.sex && loading"
+          :class="{'active': tag.id === selectTag.sex, 'loading': tag.id === selectTag.sex && loading}">
+          {{tag.name}}
+        </button>
+      </div>
+
+      <div class="singer-type-item">
+        <button class="btn btn-link"
+          @click="selectTag.genre = tag.id, getTheSingeList(1)"
+          v-for="tag in tagList.genre"
+          :key="tag.id"
+          :disabled="tag.id !== selectTag.genre && loading"
+          :class="{'active': tag.id === selectTag.genre, 'loading': tag.id === selectTag.genre && loading}">
+          {{tag.name}}
+        </button>
       </div>
     </div>
 
@@ -48,8 +68,8 @@
 </template>
 <script>
 import singerAvatar from './SingerAvatar'
-import { singertypeList, singerNameList } from './common/SingerList.js'
-import {getSingerList} from '../../spider'
+import {tag} from './common/SingerList.js'
+import {getNewSingerList} from '../../spider'
 import fPagination from './Pagination'
 
 export default {
@@ -60,10 +80,10 @@ export default {
       totalPage: 0,
       page: 0,
       loading: false,
-      singertypeList,
-      singerNameList,
-      selectCountry: 'all_all',
-      selectName: 'all'
+      tagList: tag,
+      selectTag: {
+        area: -100, sex: -100, genre: -100, index: -100
+      }
     }
   },
   components: {
@@ -72,9 +92,8 @@ export default {
   methods: {
     async getTheSingeList (newPage) {
       this.loading = true
-      let data = await getSingerList({
-        country: this.selectCountry,
-        name: this.selectName,
+      let data = await getNewSingerList({
+        ...this.selectTag,
         page: newPage
       })
       this.page = newPage
@@ -97,10 +116,10 @@ export default {
   border-radius: 10%;
   box-shadow: 4px 5px 7px 1px rgba(112,128,151,0.35);
 }
-.singer-type-list>.singer-country{
+.singer-type-list:first-child{
   margin-bottom: 3px;
 }
-.singer-type-list>.singer-firstname{
+.singer-type-list>.singer-type-item{
   margin-bottom: 5px;
 }
 .singer-type-list button{

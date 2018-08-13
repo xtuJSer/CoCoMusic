@@ -10,7 +10,7 @@
 
     <button class="btn btn-block" v-show="!isEnd" :class="{'loading': loading}"
       @click="!isEnd && search(page + 1)">更多</button>
-    <div class="divider text-center" data-content="没有了" v-show="isEnd" ></div>
+    <div class="divider text-center" data-content="没有了" v-show="isEnd && songList.length" ></div>
   </div>
 </template>
 <script>
@@ -70,5 +70,7 @@ export default {
   position: relative;
   top: 20px;
 }
-
+.btn-block {
+  margin-bottom: 30px;
+}
 </style>

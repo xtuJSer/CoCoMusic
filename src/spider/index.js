@@ -34,7 +34,8 @@ const cancelMap = {
   getSingerAlbumList: null,
   getSingerMvList: null,
   getAlbum: null,
-  getPlayListInfo: null
+  getPlayListInfo: null,
+  getPlayList: null
 }
 /**
  * c++ 天下第一，客户端，嵌入式，服务器都能做，老子这辈子就学他了。
@@ -68,7 +69,17 @@ export async function getSingerList ({page, country, name}) {
   }
   /* eslint-disable */
 }
-
+// 新列表 page >= 1
+export async function getNewSingerList ({page, area, sex, genre, index}) {
+  let url = `https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&data=${encodeURIComponent(`{"comm":{"ct":24,"cv":10000},"singerList":{"module":"Music.SingerListServer","method":"get_singer_list","param":{"area":${area},"sex":${sex},"genre":${genre},"index":${index},"sin":${(page - 1) * 80},"cur_page":${page}}}}`)}`
+  /* eslint-disable */
+  let {data: {singerlist, total}} = (await baseRequest(url)).data.singerList
+  return {
+    totalPage: Math.floor(total / 80), 
+    singerList: singerlist.map(({singer_name, singer_mid}) => new Singer(singer_name, singer_mid))
+  }
+  /* eslint-disable */
+}
 // page 从 0 开始
 export async function getSingerMusicList ({page, singerMid}) {
   let source = cancelRequest('getSingerMusicList')
@@ -203,8 +214,9 @@ export async function getCategory () {
 }
 
 export async function getPlayList ({categoryId, page}) {
+  let source = cancelRequest('getPlayList')
   let url = `https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg?picmid=1&g_tk=5381&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&categoryId=${categoryId}&sortId=5&sin=${(page - 1) * 30}&ein=${page * 30 - 1}`
-  let {list, sum} = JSON.parse((await baseRequest(url)).data.slice(18, -1)).data
+  let {list, sum} = JSON.parse((await baseRequest(url, {cancelToken: source.token})).data.slice(18, -1)).data
   return {
     list: list.map(({dissname, imgurl, dissid}) => new PlayList(dissid, dissname, imgurl)),
     totalPage: Math.ceil(sum / 40)

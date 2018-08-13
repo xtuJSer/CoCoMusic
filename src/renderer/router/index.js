@@ -104,6 +104,11 @@ export default new Router({
       component: PlayList
     },
     {
+      path: '/',
+      name: 'default',
+      component: SingerList
+    },
+    {
       path: '*',
       name: 'default',
       component: SingerList
