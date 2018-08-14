@@ -131,7 +131,14 @@ const actions = {
         : (playList.length - 1) === currentPlayIndex ? 0 : currentPlayIndex + 1
       dispatch('setPlay', next)
     })
-
+    state.sourceBac2.addEventListener('error', ({path: [{src}, {currentSrc}]}) => {
+      if (currentSrc === '' || src === 'http://localhost:9080/') {
+        return
+      }
+      window.alert('资源请求错误, 可能是没有版权的歌曲，无法播放！')
+      console.log('资源请求错误：' + src)
+      dispatch('next')
+    })
     player.addEventListener('timeupdate', throttle(() => {
       let {player, lyricIndex, lyricList} = state
       commit('updatePlayerTime', player.currentTime)
