@@ -48,7 +48,7 @@
 
     <div class="music-location">
       <transition name="right-show" mode="out-in">
-        <input class="form-input input-sm" v-model="musicFilter" v-show="showSearch" type="text" placeholder="过滤">
+        <input class="form-input input-sm" v-model="musicFilter" @keyup.enter="quickSearch" v-show="showSearch" type="text" placeholder="过滤">
       </transition>
       <button class="btn btn-link" @click="clickSearch">
         <i class="icon icon-search"></i>
@@ -97,7 +97,6 @@ export default {
     },
     musicListFilter () {
       return this.musicList.map(music => {
-        this.musicFilter === 'miku' && (this.musicFilter = `miku|初音`)
         let reg = new RegExp(`${this.musicFilter.toLowerCase()}`)
         const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
         return reg.test([music.songName, singerName, music.album.albumName].join(' ').toLowerCase())
@@ -131,6 +130,9 @@ export default {
     clickSearch () {
       this.showSearch = !this.showSearch
       !this.showSearch && (this.musicFilter = '')
+    },
+    quickSearch () {
+      this.musicFilter === 'miku' && (this.musicFilter = `miku|初音`)
     }
   }
 }
