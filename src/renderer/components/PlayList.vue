@@ -1,20 +1,30 @@
 <template>
   <div class="play-list">
-    <ul class="nav category">
-      <li class="nav-item" v-for="categoryGroup in categoryGroupList" :key="categoryGroup.categoryGroupName">
-        <a>{{categoryGroup.categoryGroupName}}</a>
-        <ul class="nav">
-          <li class="nav-item" :class="{active: currentCategory === category.categoryId}" v-for="category in categoryGroup.categoryList" :key="category.categoryId">
+    <div class="category">
+      <div class="accordion" v-for="categoryGroup in categoryGroupList" :key="categoryGroup.categoryGroupName">
+        <input type="radio" :id="`accordion-${categoryGroup.categoryGroupName}`" name="accordion-radio" hidden>
+        <label :for="`accordion-${categoryGroup.categoryGroupName}`" class="accordion-header c-hand">
+          <i class="icon icon-arrow-right mr-1"></i>
+          {{categoryGroup.categoryGroupName}}
+        </label>
+        <div class="accordion-body">
+          <div class="category-list" 
+            :class="{active: currentCategory === category.categoryId}"
+            v-for="category in categoryGroup.categoryList"
+            :key="category.categoryId">
             <div
               v-show="currentCategory === category.categoryId && loading"
-              class="loading text-left"></div>
-            <a class="c-hand" v-show="!(currentCategory === category.categoryId && loading)"
+              class="loading"></div>
+            <a class="c-hand"
+              v-show="!(currentCategory === category.categoryId && loading)"
               @click="currentCategory = category.categoryId; getThePlayList(1)"
-              v-html="category.categoryName">{{category.categoryName}}</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
+              v-html="category.categoryName">
+              {{category.categoryName}}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="playList-list">
       <f-play-list :list="list"></f-play-list>
 
@@ -76,31 +86,36 @@ export default {
 div.loading{
   width: 70px;
 }
-.play-list {
-  display: flex;
-  justify-content: space-between;
+.loading::after {
+  left: 25%;
 }
 .active a {
   color: #5764c6!important;
   text-shadow: 1px 1px 20px;
 }
 .category {
-  height: 530px;
+  height: 550px;
   overflow: scroll;
   scroll-behavior: smooth;
-  width: 180px;
+  width: 130px;
+  position: fixed;
 }
 .category::-webkit-scrollbar {
   display: none;
+}
+.category-list{
+  transition: all .2s cubic-bezier(.6,.15,.3,.8);
+  margin: 10px 0px 10px 35px;
 }
 .playList-list::-webkit-scrollbar {
   display: none;
 }
 .playList-list {
   width: 850px;
-  height: 530px;
+  float: right;
+  /* height: 530px;
   scroll-behavior: smooth;
-  overflow: scroll;
+  overflow: scroll; */
 }
 a:hover,a:active,a:visited,a:focus {
   outline: none;

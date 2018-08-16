@@ -2,9 +2,10 @@
   <div class="song-list">
     <transition-group name="list">
       <div class="song-item"
-        v-for="(music,index) in musicListFilter"
+        v-for="(music,index) in musicList"
         :key="music.songMid"
-        :id="`music${music.songMid}`">
+        :id="`music${music.songMid}`"
+        v-show="musicListFilter[index]">
 
         <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
 
@@ -95,11 +96,11 @@ export default {
       return this.$route.fullPath === this.playUrl
     },
     musicListFilter () {
-      return this.musicList.filter(music => {
+      return this.musicList.map(music => {
         this.musicFilter === 'miku' && (this.musicFilter = `miku|初音`)
-        let reg = new RegExp(`${this.musicFilter}`)
+        let reg = new RegExp(`${this.musicFilter.toLowerCase()}`)
         const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
-        return reg.test(music.songName) || reg.test(singerName) || reg.test(music.album.albumName)
+        return reg.test([music.songName, singerName, music.album.albumName].join(' ').toLowerCase())
       })
     }
   },

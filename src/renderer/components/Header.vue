@@ -56,7 +56,7 @@ export default {
 
 .header{
   padding: 0px 15px 0px 15px;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.9);
   width: 100%;
   position: fixed;
   top: 0px;
