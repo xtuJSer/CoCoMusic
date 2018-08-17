@@ -132,7 +132,7 @@ const actions = {
       dispatch('setPlay', next)
     })
     state.sourceBac2.addEventListener('error', ({path: [{src}, {currentSrc}]}) => {
-      if (currentSrc === '' || src === 'http://localhost:9080/') {
+      if (currentSrc === '' || !/dl.stream.qqmusic.qq.com/.test(src)) {
         return
       }
       window.alert('资源请求错误, 可能是没有版权的歌曲，无法播放！')
