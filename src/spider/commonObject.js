@@ -55,7 +55,7 @@ export class Lyric {
 
   parseLyric (lyricString) {
     const timeReg = /\[\d*:\d*((\.|:)\d*)*\]/g
-    return lyricString.split('\n').map(lyric => {
+    return lyricString.replace(/&apos;/g, '\'').split('\n').map(lyric => {
       let timeString = lyric.match(timeReg)
       if (!timeString) {
         return

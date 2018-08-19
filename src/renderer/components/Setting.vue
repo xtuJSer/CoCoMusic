@@ -44,8 +44,8 @@
 <script>
 import http from 'axios'
 const {shell, getCurrentWebContents} = require('electron').remote
-const packjsonUrl = 'http://cocomusic-1252075019.cosgz.myqcloud.com/package.json'
-const CURRENT_VERSION = '2.0.0'
+const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
+const CURRENT_VERSION = '2.0.1'
 
 export default {
   data () {

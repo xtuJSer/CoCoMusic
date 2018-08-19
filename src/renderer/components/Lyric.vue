@@ -73,7 +73,7 @@ export default {
 .lyric-contain {
   z-index: 10;
   overflow-y: scroll;
-  height: 515px;
+  height: 560px;
 }
 .trans {
   margin-top: 0px;
