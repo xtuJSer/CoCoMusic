@@ -1,6 +1,8 @@
 import store from '../store'
 const isLinux = process.platform === 'linux'
-const Mpris = isLinux ? global.require('mpris-service') : () => {}
+const Mpris = isLinux ? global.require('mpris-service') : () => ({
+  on () {}
+})
 
 let mpris = new Mpris({
   name: 'CoCoMusic2',
