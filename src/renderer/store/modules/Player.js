@@ -1,7 +1,10 @@
 import {getSongVkey, getLyric, getKey} from '../../../spider/index'
 import {throttle, random} from 'lodash'
 import {setMprisProp, setPosition, mpris} from '../../mpris'
-
+const {dialog, app} = require('electron').remote
+const fs = require('fs')
+const http = require('http')
+const path = require('path')
 const isLinux = process.platform === 'linux'
 
 function generateGuid () {
@@ -41,11 +44,19 @@ const state = {
   playDuration: 0,
   lyricIndex: 0,
   lyricList: [],
-  mode: window.localStorage.mode !== undefined ? window.localStorage.mode : 'cycle',
-  playVolume: window.localStorage.volume !== undefined && +window.localStorage.volume < 1 && +window.localStorage.volume > 0
-    ? +window.localStorage.volume : 1,
+  mode: window.localStorage.mode !== undefined
+    ? window.localStorage.mode
+    : 'cycle',
+  playVolume:
+    (window.localStorage.volume !== undefined &&
+        +window.localStorage.volume < 1 &&
+          +window.localStorage.volume > 0)
+      ? +window.localStorage.volume
+      : 1,
   guid: generateGuid(), // 每次重新生成，免得被跟踪
-  loop: window.localStorage.loop !== undefined ? !!window.localStorage.loop : true,
+  loop: window.localStorage.loop !== undefined
+    ? !!window.localStorage.loop
+    : true,
   vkey: ''
 }
 
@@ -95,11 +106,16 @@ const getters = {
   },
   playTimeString: state => {
     let {playTime} = state
-    isLinux && playTime !== undefined && setPosition(playTime)
+    isLinux &&
+      playTime !== undefined &&
+        setPosition(playTime)
     return `${Math.floor(playTime / 60)}:${Math.floor(playTime % 60)}`
   },
   playDurationString: ({playDuration, playVolume}, {currentPlay}) => {
-    isLinux && currentPlay.songName && playDuration && setMprisProp(currentPlay, playDuration, playVolume)
+    isLinux &&
+      currentPlay.songName &&
+        playDuration &&
+          setMprisProp(currentPlay, playDuration, playVolume)
     return `${Math.floor(playDuration / 60)}:${Math.floor(playDuration % 60)}`
   },
   currentLyric: state => {
@@ -112,12 +128,17 @@ const getters = {
 }
 
 const actions = {
-  async initPlayer ({state, commit, dispatch}) {
+  /**
+   * 初始化事件监听
+   * @param {Object} state
+   */
+  async initPlayer ({state, commit, dispatch, getters}) {
     state.player.append(state.source, state.sourceBac1, state.sourceBac2)
 
     let {player, playVolume, mode} = state
     player.volume = playVolume
     state.player.loop = (mode === 'single')
+    // 播放状态同步
     player.addEventListener('play', () => { commit('setIsPlay', true) })
     player.addEventListener('pause', () => { commit('setIsPlay', false) })
     player.addEventListener('loadstart', () => { commit('setPlayerState', {loading: true}) })
@@ -131,14 +152,22 @@ const actions = {
         : (playList.length - 1) === currentPlayIndex ? 0 : currentPlayIndex + 1
       dispatch('setPlay', next)
     })
+    // 错误处理
     state.sourceBac2.addEventListener('error', ({path: [{src}, {currentSrc}]}) => {
+      commit('setPlayerState', {loading: false})
       if (currentSrc === '' || !/dl.stream.qqmusic.qq.com/.test(src)) {
         return
       }
-      window.alert('资源请求错误, 可能是没有版权的歌曲，无法播放！')
+      let {songName, album: {albumMid}} = getters.currentPlay
+      /* eslint-disable no-new */
+      new window.Notification(`${songName} 播放错误`, {
+        body: '资源请求错误, 可能是没有版权的歌曲，无法播放！',
+        icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
+      })
       console.log('资源请求错误：' + src)
       dispatch('next')
     })
+
     player.addEventListener('timeupdate', throttle(() => {
       let {player, lyricIndex, lyricList} = state
       commit('updatePlayerTime', player.currentTime)
@@ -151,6 +180,10 @@ const actions = {
 
     commit('setVkey', await getKey(state.guid))
   },
+  /**
+   * 上一首
+   * @param {Object} store
+   */
   previous ({state, dispatch}) {
     let playListLength = state.playList.length
     let previous = state.mode === 'random'
@@ -158,6 +191,10 @@ const actions = {
       : state.currentPlayIndex <= 0 ? playListLength - 1 : state.currentPlayIndex - 1
     dispatch('setPlay', previous)
   },
+  /**
+   * 下一首
+   * @param {Object} state
+   */
   next ({state, dispatch}) {
     let playListLength = state.playList.length
     let next = state.mode === 'random'
@@ -165,6 +202,11 @@ const actions = {
       : state.currentPlayIndex >= playListLength - 1 ? 0 : state.currentPlayIndex + 1
     dispatch('setPlay', next)
   },
+  /**
+   * 切换播放歌曲
+   * @param {Object} store
+   * @param {Number} index 歌曲索引
+   */
   async setPlay ({state, commit, getters}, index) {
     const {guid} = state
 
@@ -194,6 +236,40 @@ const actions = {
     commit('setPlayerState', {
       lyricList,
       lyricIndex: 0
+    })
+  },
+  /**
+   * 下载啊
+   * @param {Object} store
+   */
+  download ({state, getters}) {
+    let {currentSrc} = state.player
+    let {songName, album: {albumMid}, singerList} = getters.currentPlay
+    dialog.showSaveDialog({
+      title: '保存',
+      defaultPath: path.join(app.getPath('music'),
+        `${songName} - ${singerList.map(({singerName}) => singerName).join(',')}.m4a`)
+    }, (filename) => {
+      if (!filename) {
+        return
+      }
+      const request = http.request(currentSrc, (response) => {
+        response.pipe(fs.createWriteStream(filename))
+      })
+      request.on('error', _ => new window.Notification(`${songName} 下载错误`, {
+        body: '请在资源可以正常播放的时候下载！',
+        icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
+      }))
+      request.on('response', res => {
+        res.on('end', _ => new window.Notification(`${songName} 下载完成`, {
+          body: `${songName} 下载完成!`,
+          icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
+        }))
+      })
+      request.end()
+      new window.Notification(`${songName} 下载开始`, {
+        icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
+      })
     })
   }
 }

@@ -33,7 +33,7 @@ export default {
   methods: {
     scrollLyric (index) {
       let lyric = document.getElementById(`lyric-${index}`)
-      lyric && lyric.scrollIntoView({block: 'center', behavior: 'smooth'})
+      lyric && lyric.scrollIntoView({block: 'center'})
     }
   },
   watch: {

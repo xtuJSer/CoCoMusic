@@ -48,7 +48,7 @@
 
     <div class="music-location">
       <transition name="right-show" mode="out-in">
-        <input class="form-input input-sm" v-model="musicFilter" @keyup.enter="quickSearch" v-show="showSearch" type="text" placeholder="过滤">
+        <input class="form-input input-sm" v-model.lazy.trim="musicFilter" @keyup.enter="quickSearch" v-show="showSearch" type="text" placeholder="过滤">
       </transition>
       <button class="btn btn-link" @click="clickSearch">
         <i class="icon icon-search"></i>
@@ -96,11 +96,13 @@ export default {
       return this.$route.fullPath === this.playUrl
     },
     musicListFilter () {
-      return this.musicList.map(music => {
-        let reg = new RegExp(`${this.musicFilter.toLowerCase()}`)
-        const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
-        return reg.test([music.songName, singerName, music.album.albumName].join(' ').toLowerCase())
-      })
+      return this.musicFilter.startsWith('call:')
+        ? this.musicList
+        : this.musicList.map(music => {
+          let reg = new RegExp(`${this.musicFilter.toLowerCase()}`)
+          const singerName = music.singerList.reduce((acc, singer) => acc + singer.singerName, '')
+          return reg.test([music.songName, singerName, music.album.albumName].join(' ').toLowerCase())
+        })
     }
   },
   filters: {
@@ -133,6 +135,20 @@ export default {
     },
     quickSearch () {
       this.musicFilter === 'miku' && (this.musicFilter = `miku|初音`)
+      this.musicFilter.startsWith('call:') && this.command()
+    },
+    command () {
+      const command = this.musicFilter.match(/^(call:)(\w+)$/)[2]
+      const {dispatch} = this.$store
+      let opera = ({
+        'download' () {
+          dispatch('download')
+        },
+        'D' () {
+          dispatch('download')
+        }
+      })[command]
+      opera && opera()
     }
   }
 }

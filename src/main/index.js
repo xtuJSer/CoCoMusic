@@ -31,7 +31,6 @@ function createWindow () {
     autoHideMenuBar: false,
     titleBarStyle: 'hidden',
     show: false,
-    // frame: false,
     resizable: false,
     icon: '../../build/icons/256x256.png'
   })
