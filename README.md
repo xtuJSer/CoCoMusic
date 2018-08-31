@@ -6,7 +6,7 @@
 <h3 align="center">a simple music player Built by vue and electron.</h3>
 <p align="center">
 <img src="https://img.shields.io/badge/build-passing-green.svg">
-<img src="https://img.shields.io/badge/release-v2.0.1-brightgreen.svg">
+<img src="https://img.shields.io/badge/release-v2.0.2-brightgreen.svg">
 <img src="https://img.shields.io/badge/license-LGPL-red.svg">
 <br/>
 <img src="http://orblzfbb0.bkt.clouddn.com/Ful4txdNVi1_457r9K8vpbLgZKVn?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim">
