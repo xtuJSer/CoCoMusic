@@ -67,11 +67,9 @@ export default {
        *
        *  被开除了
        **/
-      console.time('getPlayList')
       Object.assign(this, await getPlayList({
         categoryId: this.currentCategory, page
       }))
-      console.timeEnd('getPlayList')
       this.page = page
       this.loading = false
     }
