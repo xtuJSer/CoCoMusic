@@ -3,7 +3,7 @@
   <br/>
   CoCoMusic
 </h1>
-<h3 align="center">a simple music player Built by vue and electron.</h3>
+<h3 align="center">Vue + Electron + <img src="http://mypic-10053031.cossh.myqcloud.com/-75720e06afe95850.jpg">  =  <img width="50" height="50" src="http://mypic-10053031.cossh.myqcloud.com/256x256.png"> </h3>
 <p align="center">
 <img src="https://img.shields.io/badge/build-passing-green.svg">
 <img src="https://img.shields.io/badge/release-v2.0.2-brightgreen.svg">
@@ -21,16 +21,16 @@
 ## Linux
 ### AppImage
 ``` bash
-chmod +x cocomusic-2.0.1-x86_64.AppImage
-./cocomusic-2.0.1-x86_64.AppImage
+chmod +x cocomusic-2.0.2-x86_64.AppImage
+./cocomusic-2.0.2-x86_64.AppImage
 ``` 
 ### deb
 ```bash
-sudo dpkg -i cocomusic_2.0.1_amd64.deb
+sudo dpkg -i cocomusic_2.0.2_amd64.deb
 ```
 ### pacman
 ```bash
-sudo pacman -U cocomusic-2.0.1.pacman
+sudo pacman -U cocomusic-2.0.2.pacman
 ```
 
 # Build Setup
