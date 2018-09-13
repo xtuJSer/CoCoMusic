@@ -80,7 +80,8 @@
     "xml2js": "^0.4.19"
   },
   "optionalDependencies": {
-    "mpris-service": "^1.1.3"
+    "mpris-service": "^1.1.3",
+    "dbus": "^0.2.11"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
