@@ -62,7 +62,14 @@
       "category": "AudioVideo;Audio;Player;Music;"
     },
     "pacman": {
-      "depends": ["gconf", "libnotify", "nss", "libxss", "libappindicator-gtk3", "libxtst"]
+      "depends": [
+        "gconf",
+        "libnotify",
+        "nss",
+        "libxss",
+        "libappindicator-gtk3",
+        "libxtst"
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -73,7 +80,7 @@
     "axios": "^0.18.0",
     "dexie": "^2.0.4",
     "spectre.css": "^0.5.3",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
@@ -101,17 +108,17 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.5",
-    "electron-builder": "^20.22.0",
+    "electron": "^2.0.10",
+    "electron-builder": "^20.28.4",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
-    "electron-rebuild": "^1.8.1",
+    "electron-rebuild": "^1.8.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^3.1.1",
-    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
@@ -136,11 +143,11 @@
     "url-loader": "^0.6.2",
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^14.2.2",
-    "vue-style-loader": "^4.1.1",
-    "vue-template-compiler": "^2.5.16",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.5.17",
     "webpack": "^3.11.0",
-    "webpack-dev-server": "^2.11.2",
-    "webpack-hot-middleware": "^2.22.3",
-    "webpack-merge": "^4.1.3"
+    "webpack-dev-server": "^2.11.3",
+    "webpack-hot-middleware": "^2.24.2",
+    "webpack-merge": "^4.1.4"
   }
 }
