@@ -39,7 +39,10 @@ sudo pacman -U cocomusic-2.0.2.pacman
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:9080
+# rebuild native module
+./node_modules/.bin/electron-rebuild
+
+# develop
 npm run dev
 
 # build electron application for production
