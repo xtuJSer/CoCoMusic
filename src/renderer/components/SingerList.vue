@@ -68,8 +68,8 @@
 </template>
 <script>
 import singerAvatar from './SingerAvatar'
-import {tag} from './common/SingerList.js'
-import {getNewSingerList} from '../../spider'
+import { tag } from './common/SingerList.js'
+import { getNewSingerList } from '../../spider'
 import fPagination from './Pagination'
 
 export default {

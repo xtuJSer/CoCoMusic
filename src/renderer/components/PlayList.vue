@@ -39,7 +39,7 @@
   </div>
 </template>
 <script>
-import {getCategory, getPlayList} from '../../spider/index.js'
+import { getCategory, getPlayList } from '../../spider/index.js'
 import fPagination from './Pagination'
 import fPlayList from './PlayListList'
 

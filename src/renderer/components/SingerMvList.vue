@@ -9,7 +9,7 @@
 </template>
 <script>
 import fMvList from './MvList'
-import {getSingerMvList} from '../../spider/index.js'
+import { getSingerMvList } from '../../spider/index.js'
 import listMixins from './common/listMixins.js'
 
 export default {

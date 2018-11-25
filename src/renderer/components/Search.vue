@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import {getSearch} from '../../spider/index.js'
+import { getSearch } from '../../spider/index.js'
 import songList from './SongList'
 
 export default {

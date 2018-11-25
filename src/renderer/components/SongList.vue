@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import {mapGetters, mapState} from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import generateFavorite from './common/Favorite.js'
 
 const favoriteMinix = generateFavorite('song')
@@ -87,7 +87,7 @@ export default {
     ...mapGetters([
       'currentPlay'
     ]),
-    ...mapGetters({song: 'currentPlay'}),
+    ...mapGetters({ song: 'currentPlay' }),
     ...mapState({
       playUrl: state => state.Player.playUrl,
       mode: state => state.Player.mode
@@ -120,7 +120,7 @@ export default {
   methods: {
     focusPlay () {
       const id = `#music${this.currentPlay.songMid}`
-      document.querySelector(id).scrollIntoView({block: 'center', behavior: 'smooth'})
+      document.querySelector(id).scrollIntoView({ block: 'center', behavior: 'smooth' })
     },
     play (index) {
       this.$store.commit('setPlayerState', {
@@ -139,7 +139,7 @@ export default {
     },
     command () {
       const command = this.musicFilter.match(/^(call:)(\w+)$/)[2]
-      const {dispatch} = this.$store
+      const { dispatch } = this.$store
       let opera = ({
         'download' () {
           dispatch('download')

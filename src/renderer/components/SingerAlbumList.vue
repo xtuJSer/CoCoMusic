@@ -9,7 +9,7 @@
 <script>
 import fAlbumList from './AlbumList'
 import listMixins from './common/listMixins.js'
-import {getSingerAlbumList} from '../../spider/index.js'
+import { getSingerAlbumList } from '../../spider/index.js'
 
 export default {
   mixins: [listMixins],

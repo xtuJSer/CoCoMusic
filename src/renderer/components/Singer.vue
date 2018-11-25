@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import {Singer} from '../../spider/commonObject.js'
+import { Singer } from '../../spider/commonObject.js'
 import fTab from '@/components/Tab'
 import singerAvatar from './SingerAvatar'
 import generateFavorite from './common/Favorite.js'
@@ -49,9 +49,9 @@ export default {
       let id = this.singer.singerMid
       let name = this.singer.singerName
       return [
-        {path: `/singer/${id}/music`, name: 'SingerMusic', ZHName: '单曲', params: {id}, query: {name}},
-        {path: `/singer/${id}/album`, name: 'SingerAlbum', ZHName: '专辑', params: {id}, query: {name}},
-        {path: `/singer/${id}/mv`, name: 'SingerMv', ZHName: 'MV', params: {id}, query: {name}}
+        { path: `/singer/${id}/music`, name: 'SingerMusic', ZHName: '单曲', params: { id }, query: { name } },
+        { path: `/singer/${id}/album`, name: 'SingerAlbum', ZHName: '专辑', params: { id }, query: { name } },
+        { path: `/singer/${id}/mv`, name: 'SingerMv', ZHName: 'MV', params: { id }, query: { name } }
       ]
     }
   },

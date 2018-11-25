@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import {Singer} from '../../spider/commonObject.js'
+import { Singer } from '../../spider/commonObject.js'
 
 export default {
   props: {
@@ -20,7 +20,7 @@ export default {
     }
   },
   methods: {
-    handleImageError ({target}) {
+    handleImageError ({ target }) {
       // 智障 QQ 音乐，没歌手图片直接返回 404 这么牛逼你怎么不上天
       target.src = 'https://y.gtimg.cn/mediastyle/global/img/singer_300.png?max_age=31536000'
     }

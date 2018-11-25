@@ -43,7 +43,7 @@
 </template>
 <script>
 import http from 'axios'
-const {shell, getCurrentWebContents} = require('electron').remote
+const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
 const CURRENT_VERSION = '2.0.2'
 
@@ -60,7 +60,7 @@ export default {
     async checkUpdate () {
       this.loadingUpdate = true
       try {
-        const {version} = (await http.get(packjsonUrl)).data
+        const { version } = (await http.get(packjsonUrl)).data
         this.version = version
         this.showVersion = true
       } catch (e) {

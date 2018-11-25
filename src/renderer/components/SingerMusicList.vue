@@ -8,7 +8,7 @@
 </template>
 <script>
 import songList from './SongList'
-import {getSingerMusicList} from '../../spider/index.js'
+import { getSingerMusicList } from '../../spider/index.js'
 import listMixins from './common/listMixins.js'
 
 export default {

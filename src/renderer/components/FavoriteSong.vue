@@ -5,8 +5,8 @@
 </template>
 <script>
 import songList from './SongList'
-import {mapState} from 'vuex'
-import {orderBy} from 'lodash'
+import { mapState } from 'vuex'
+import { orderBy } from 'lodash'
 export default {
   components: {
     songList

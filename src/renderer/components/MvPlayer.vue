@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import {getMvInfo, getMUrl} from '../../spider/index.js'
+import { getMvInfo, getMUrl } from '../../spider/index.js'
 export default {
   name: 'mvPlayer',
   data () {
@@ -22,8 +22,8 @@ export default {
   },
   methods: {
     async getTheMvInfo () {
-      let {fileid, mv} = await getMvInfo({mvId: this.mvId})
-      let {cn, mvSourceUrl, vkey} = await getMUrl({fileid})
+      let { fileid, mv } = await getMvInfo({ mvId: this.mvId })
+      let { cn, mvSourceUrl, vkey } = await getMUrl({ fileid })
       this.url = `${mvSourceUrl}${cn}?vkey=${vkey}`
       this.mv = mv
     }

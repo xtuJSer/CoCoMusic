@@ -14,8 +14,8 @@
   </div>
 </template>
 <script>
-import {getPlayListInfo} from '../../spider/index.js'
-import {PlayList} from '../../spider/commonObject.js'
+import { getPlayListInfo } from '../../spider/index.js'
+import { PlayList } from '../../spider/commonObject.js'
 import songList from './SongList'
 import generateFavorite from './common/Favorite.js'
 
@@ -35,7 +35,7 @@ export default {
   methods: {
     async getThePlayListInfo () {
       Object.assign(this, this.$options.data.call(this))
-      let {playListName, list} = (await getPlayListInfo(this.playListMid))
+      let { playListName, list } = (await getPlayListInfo(this.playListMid))
       this.playList = new PlayList(this.playListMid, playListName, this.imgUrl)
       this.list = list
     }
