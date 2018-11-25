@@ -1,5 +1,5 @@
 const assert = require('assert')
-const {getSingerMusicList} = require('../../../src/spider/index')
+const { getSingerMusicList } = require('../../../src/spider/index')
 
 describe('歌手音乐列表', function () {
   it('SingerMusicList', async function () {

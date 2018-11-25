@@ -29,7 +29,6 @@ function createWindow () {
     useContentSize: true,
     width: 1030,
     autoHideMenuBar: false,
-    titleBarStyle: 'hidden',
     show: false,
     resizable: false,
     icon: '../../build/icons/256x256.png'

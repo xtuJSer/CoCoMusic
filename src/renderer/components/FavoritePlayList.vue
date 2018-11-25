@@ -5,7 +5,7 @@
 </template>
 <script>
 import fPlayList from './PlayListList'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {

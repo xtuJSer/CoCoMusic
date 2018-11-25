@@ -26,12 +26,12 @@
 import fTab from '@/components/Tab'
 import fPlayer from './Player'
 
-const {getCurrentWindow} = require('electron').remote
+const { getCurrentWindow } = require('electron').remote
 
 export default {
   data () {
     return {
-      navList: [{name: 'Setting'}, {name: 'Favorite'}, {name: 'Search'}, {name: 'SingerList'}, {name: 'PlayList'}]
+      navList: [{ name: 'Setting' }, { name: 'Favorite' }, { name: 'Search' }, { name: 'SingerList' }, { name: 'PlayList' }]
     }
   },
   components: {

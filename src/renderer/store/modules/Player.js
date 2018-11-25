@@ -1,7 +1,7 @@
-import {getSongVkey, getLyric, getKey} from '../../../spider/index'
-import {throttle, random} from 'lodash'
-import {setMprisProp, setPosition, mpris} from '../../mpris'
-const {dialog, app} = require('electron').remote
+import { getSongVkey, getLyric, getKey } from '../../../spider/index'
+import { throttle, random } from 'lodash'
+import { setMprisProp, setPosition, mpris } from '../../mpris'
+const { dialog, app } = require('electron').remote
 const fs = require('fs')
 const http = require('http')
 const path = require('path')
@@ -100,18 +100,18 @@ const getters = {
   currentPlay: state => {
     let current = state.playList[state.currentPlayIndex]
     if (!current) {
-      current = {songName: '', album: {}}
+      current = { songName: '', album: {} }
     }
     return current
   },
   playTimeString: state => {
-    let {playTime} = state
+    let { playTime } = state
     isLinux &&
       playTime !== undefined &&
         setPosition(playTime)
     return `${Math.floor(playTime / 60)}:${Math.floor(playTime % 60)}`
   },
-  playDurationString: ({playDuration, playVolume}, {currentPlay}) => {
+  playDurationString: ({ playDuration, playVolume }, { currentPlay }) => {
     isLinux &&
       currentPlay.songName &&
         playDuration &&
@@ -119,7 +119,7 @@ const getters = {
     return `${Math.floor(playDuration / 60)}:${Math.floor(playDuration % 60)}`
   },
   currentLyric: state => {
-    let {lyricIndex, lyricList} = state
+    let { lyricIndex, lyricList } = state
     if (!lyricList) {
       return
     }
@@ -132,33 +132,33 @@ const actions = {
    * 初始化事件监听
    * @param {Object} state
    */
-  async initPlayer ({state, commit, dispatch, getters}) {
+  async initPlayer ({ state, commit, dispatch, getters }) {
     state.player.append(state.source, state.sourceBac1, state.sourceBac2)
 
-    let {player, playVolume, mode} = state
+    let { player, playVolume, mode } = state
     player.volume = playVolume
     state.player.loop = (mode === 'single')
     // 播放状态同步
     player.addEventListener('play', () => { commit('setIsPlay', true) })
     player.addEventListener('pause', () => { commit('setIsPlay', false) })
-    player.addEventListener('loadstart', () => { commit('setPlayerState', {loading: true}) })
-    player.addEventListener('seeking', () => { commit('setPlayerState', {loading: true}) })
-    player.addEventListener('canplaythrough', () => { commit('setPlayerState', {loading: false}) })
-    player.addEventListener('durationchange', () => commit('setPlayerState', {playDuration: player.duration}))
+    player.addEventListener('loadstart', () => { commit('setPlayerState', { loading: true }) })
+    player.addEventListener('seeking', () => { commit('setPlayerState', { loading: true }) })
+    player.addEventListener('canplaythrough', () => { commit('setPlayerState', { loading: false }) })
+    player.addEventListener('durationchange', () => commit('setPlayerState', { playDuration: player.duration }))
     player.addEventListener('ended', _ => {
-      let {mode, playList, currentPlayIndex} = state
+      let { mode, playList, currentPlayIndex } = state
       let next = mode === 'random'
         ? random(playList.length)
         : (playList.length - 1) === currentPlayIndex ? 0 : currentPlayIndex + 1
       dispatch('setPlay', next)
     })
     // 错误处理
-    state.sourceBac2.addEventListener('error', ({path: [{src}, {currentSrc}]}) => {
-      commit('setPlayerState', {loading: false})
+    state.sourceBac2.addEventListener('error', ({ path: [{ src }, { currentSrc }] }) => {
+      commit('setPlayerState', { loading: false })
       if (currentSrc === '' || !/dl.stream.qqmusic.qq.com/.test(src)) {
         return
       }
-      let {songName, album: {albumMid}} = getters.currentPlay
+      let { songName, album: { albumMid } } = getters.currentPlay
       /* eslint-disable no-new */
       new window.Notification(`${songName} 播放错误`, {
         body: '资源请求错误, 可能是没有版权的歌曲，无法播放！',
@@ -169,7 +169,7 @@ const actions = {
     })
 
     player.addEventListener('timeupdate', throttle(() => {
-      let {player, lyricIndex, lyricList} = state
+      let { player, lyricIndex, lyricList } = state
       commit('updatePlayerTime', player.currentTime)
       if (!lyricList.length) {
         return
@@ -184,7 +184,7 @@ const actions = {
    * 上一首
    * @param {Object} store
    */
-  previous ({state, dispatch}) {
+  previous ({ state, dispatch }) {
     let playListLength = state.playList.length
     let previous = state.mode === 'random'
       ? random(playListLength)
@@ -195,7 +195,7 @@ const actions = {
    * 下一首
    * @param {Object} state
    */
-  next ({state, dispatch}) {
+  next ({ state, dispatch }) {
     let playListLength = state.playList.length
     let next = state.mode === 'random'
       ? random(playListLength)
@@ -207,8 +207,8 @@ const actions = {
    * @param {Object} store
    * @param {Number} index 歌曲索引
    */
-  async setPlay ({state, commit, getters}, index) {
-    const {guid} = state
+  async setPlay ({ state, commit, getters }, index) {
+    const { guid } = state
 
     state.player.pause()
     commit('setPlayerSrc', ['', '', ''])
@@ -220,7 +220,7 @@ const actions = {
       lyricIndex: 0
     })
     const song = state.playList[index]
-    const {vkey} = await getSongVkey({
+    const { vkey } = await getSongVkey({
       guid, ...song
     })
 
@@ -232,7 +232,7 @@ const actions = {
 
     state.player.load()
     state.player.play()
-    const {lyricList} = (await getLyric(getters.currentPlay.songMid))
+    const { lyricList } = (await getLyric(getters.currentPlay.songMid))
     commit('setPlayerState', {
       lyricList,
       lyricIndex: 0
@@ -242,13 +242,13 @@ const actions = {
    * 下载啊
    * @param {Object} store
    */
-  download ({state, getters}) {
-    let {currentSrc} = state.player
-    let {songName, album: {albumMid}, singerList} = getters.currentPlay
+  download ({ state, getters }) {
+    let { currentSrc } = state.player
+    let { songName, album: { albumMid }, singerList } = getters.currentPlay
     dialog.showSaveDialog({
       title: '保存',
       defaultPath: path.join(app.getPath('music'),
-        `${songName} - ${singerList.map(({singerName}) => singerName).join(',')}.m4a`)
+        `${songName} - ${singerList.map(({ singerName }) => singerName).join(',')}.m4a`)
     }, (filename) => {
       if (!filename) {
         return

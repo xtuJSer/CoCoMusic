@@ -5,7 +5,7 @@
 </template>
 <script>
 import fAlbumList from './AlbumList'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   components: {

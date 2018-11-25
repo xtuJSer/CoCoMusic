@@ -14,8 +14,8 @@
   </div>
 </template>
 <script>
-import {getAlbum} from '../../spider/index.js'
-import {Album} from '../../spider/commonObject.js'
+import { getAlbum } from '../../spider/index.js'
+import { Album } from '../../spider/commonObject.js'
 import songList from './SongList'
 import generateFavorite from './common/Favorite.js'
 

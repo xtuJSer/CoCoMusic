@@ -116,7 +116,8 @@ export default new Router({
     {
       path: '/lyric',
       name: 'Lyric',
-      component: Lyric
+      component: Lyric,
+      meta: { fullScreen: true }
     },
     {
       path: '/album/:id',

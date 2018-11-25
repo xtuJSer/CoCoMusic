@@ -1,4 +1,4 @@
-import {getFavorite, addFavorite, deleteFavorite} from '../../db'
+import { getFavorite, addFavorite, deleteFavorite } from '../../db'
 const state = {
   song: [],
   singer: [],
@@ -8,14 +8,14 @@ const state = {
 const getters = {
 }
 const actions = {
-  async initFavorite ({commit}) {
+  async initFavorite ({ commit }) {
     commit('setFavorite', await getFavorite())
   },
-  async addFavorite ({commit}, payload) {
+  async addFavorite ({ commit }, payload) {
     addFavorite(payload)
     commit('addFavorite', payload)
   },
-  async deleteFavorite ({commit}, payload) {
+  async deleteFavorite ({ commit }, payload) {
     deleteFavorite(payload)
     commit('deleteFavorite', payload)
   }
@@ -24,10 +24,10 @@ const mutations = {
   setFavorite (state, payload) {
     Object.assign(state, payload)
   },
-  addFavorite (state, {table, data}) {
+  addFavorite (state, { table, data }) {
     state[table].push(data)
   },
-  deleteFavorite (state, {table, id}) {
+  deleteFavorite (state, { table, id }) {
     state[table] = state[table].filter(ele => {
       return ele[`${table}Mid`] !== id
     })

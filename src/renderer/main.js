@@ -10,7 +10,7 @@ import 'spectre.css/dist/spectre.css'
 import 'spectre.css/dist/spectre-icons.css'
 import 'spectre.css/dist/spectre-exp.css'
 
-import {common} from './common'
+import { common } from './common'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios

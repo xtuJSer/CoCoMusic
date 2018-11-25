@@ -18,9 +18,9 @@ mpris.on('playpause', () => store.state.Player.isPlay ? store.state.Player.playe
 mpris.on('stop', () => store.state.Player.player.pause())
 mpris.on('pause', () => store.state.Player.player.pause())
 mpris.on('play', () => store.state.Player.player.play())
-mpris.on('position', ({position}) => { store.state.Player.player.currentTime = Math.floor(position / 1000000) })
+mpris.on('position', ({ position }) => { store.state.Player.player.currentTime = Math.floor(position / 1000000) })
 mpris.on('volume', (volume) => store.commit('setPlayVolume', +(volume.toFixed(2))))
-mpris.on('seek', ({position}) => { store.state.Player.player.currentTime = Math.floor((position) / 1000000) })
+mpris.on('seek', ({ position }) => { store.state.Player.player.currentTime = Math.floor((position) / 1000000) })
 
 const setMprisProp = function (music, duration, playVolume) {
   mpris.volume = playVolume
@@ -30,7 +30,7 @@ const setMprisProp = function (music, duration, playVolume) {
     'mpris:trackid': mpris.objectPath('track/0'),
     'xesam:title': music.songName,
     'xesam:album': music.album.albumName,
-    'xesam:artist': music.singerList.reduce((add, {singerName}) => `${add} ${singerName}`, '')
+    'xesam:artist': music.singerList.reduce((add, { singerName }) => `${add} ${singerName}`, '')
   }
   mpris.playbackStatus = 'Playing'
   mpris.CanGoNext = true

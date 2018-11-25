@@ -25,7 +25,7 @@
  * 后天又改回来，我们人多不怕，气不死也要累死你
  */
 import request from 'axios'
-import {Singer, Album, Music, Mv, Lyric, Category, PlayList} from './commonObject'
+import { Singer, Album, Music, Mv, Lyric, Category, PlayList } from './commonObject'
 
 const CancelToken = request.CancelToken
 
@@ -47,8 +47,11 @@ function cancelRequest (key) {
   cancelMap[key] = null
   return (cancelMap[key] = CancelToken.source())
 }
-
-request.defaults.adapter = require('axios/lib/adapters/http')
+/**
+ * fuck webpack, Ruined my day
+ * 真的是日乐购了,我特么草拟吗.
+ */
+request.defaults.adapter = global.require('axios/lib/adapters/http')
 
 const baseRequest = request.create({
   headers: {
@@ -59,7 +62,7 @@ const baseRequest = request.create({
 })
 
 // page 从 1 开始
-export async function getSingerList ({page, country, name}) {
+export async function getSingerList ({ page, country, name }) {
   let url = `https://c.y.qq.com/v8/fcg-bin/v8.fcg?channel=singer&page=list&key=${country}_${name}&pagesize=100&pagenum=${page}&format=jsonp`
   /* eslint-disable */
   let {data: {list, total_page}} = (await baseRequest(url)).data 

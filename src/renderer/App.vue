@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <f-header></f-header>
-    <div id="container">
+    <f-header v-if="!fullScreen"></f-header>
+    <div :class="{'container': !fullScreen}">
       <transition name="fade" mode="out-in">
         <keep-alive>
           <router-view></router-view>
@@ -18,6 +18,11 @@ export default {
   name: 'cocomusic',
   components: {
     fHeader
+  },
+  computed: {
+    fullScreen () {
+      return !!this.$route.meta.fullScreen
+    }
   },
   created () {
     this.$store.dispatch('initFavorite')
@@ -37,7 +42,7 @@ a:hover,a:active,a:visited,a:focus {
 #app {
   user-select: none;
 }
-#container {
+.container {
   margin: 70px 10px 0px 10px;
 }
 .fade-enter-active {

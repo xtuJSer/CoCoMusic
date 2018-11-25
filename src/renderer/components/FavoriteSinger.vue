@@ -12,7 +12,7 @@
 </template>
 <script>
 import singerAvatar from './SingerAvatar'
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   components: {
     singerAvatar

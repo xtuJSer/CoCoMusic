@@ -1,20 +1,22 @@
 <template>
-<div>
-      <div class="over-bg"></div>
-    <div class="lyric-contain">
-      <img class="bg" :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${currentPlay.album.albumMid}.jpg?max_age=2592000`"/>
-      <div :id="`lyric-${index}`" class="lyric-list" :class="{'play-lyric': lyricIndex === index}" v-for="(lyric, index) in lyricList" :key="lyric.time">
-        <p :class="{'has-trans': hasTrans}" class="lyric">{{lyric.lyric}}</p>
-        <p v-if="hasTrans" class="trans">{{lyric.trans}}</p>
-      </div>
-
-      <p class="text-center" v-show="!lyricList.length">加载中。。。</p>
-  </div>
+<div class="lyric">
+  <button class="goback btn btn-link btn-sm" @click="$router.go(-1)">
+    <img src="../assets/img/Back.svg" alt="">
+  </button>
+  <div class="over-bg"></div>
+  <div class="lyric-contain">
+    <img class="bg" :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${currentPlay.album.albumMid}.jpg?max_age=2592000`"/>
+    <div :id="`lyric-${index}`" class="lyric-list" :class="{'play-lyric': lyricIndex === index}" v-for="(lyric, index) in lyricList" :key="lyric.time">
+      <p :class="{'has-trans': hasTrans}" class="lyric">{{lyric.lyric}}</p>
+      <p v-if="hasTrans" class="trans">{{lyric.trans}}</p>
+    </div>
+    <p class="text-center" v-show="!lyricList.length">加载中。。。</p>
+</div>
 </div>
 
 </template>
 <script>
-import {mapState, mapGetters} from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'lyric',
@@ -33,7 +35,7 @@ export default {
   methods: {
     scrollLyric (index) {
       let lyric = document.getElementById(`lyric-${index}`)
-      lyric && lyric.scrollIntoView({block: 'center'})
+      lyric && lyric.scrollIntoView({ block: 'center' })
     }
   },
   watch: {
@@ -47,6 +49,10 @@ export default {
 }
 </script>
 <style scoped>
+.goback {
+  position: fixed;
+  top: 12px;
+}
 .bg {
   display: inline-block;
   background-repeat: no-repeat;
@@ -73,7 +79,7 @@ export default {
 .lyric-contain {
   z-index: 10;
   overflow-y: scroll;
-  height: 550px;
+  height: 100vh;
 }
 .trans {
   margin-top: 0px;
@@ -88,5 +94,11 @@ export default {
 .play-lyric{
   color: #5764c6;
   text-shadow: 1px 1px 20px;
+}
+img{
+  width: 15px;
+  height: 15px;
+  margin-left: 8px;
+	margin-right: 8px;
 }
 </style>

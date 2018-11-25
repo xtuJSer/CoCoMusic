@@ -1,5 +1,5 @@
 const assert = require('assert')
-const {getKey} = require('../../../src/spider/index')
+const { getKey } = require('../../../src/spider/index')
 
 describe('专辑', function () {
   it('getKey', async function () {
