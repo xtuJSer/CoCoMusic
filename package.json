@@ -1,6 +1,6 @@
 {
   "name": "cocomusic",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "author": "fengT-T <2995207228@qq.com>",
   "description": "a simple music player.",
   "license": "LGPL-3.0",
@@ -110,7 +110,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.10",
+    "electron": "^3.0.10",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
