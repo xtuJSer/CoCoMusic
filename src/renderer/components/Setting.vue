@@ -17,7 +17,7 @@
       <div class="toast toast-primary" v-if="showVersion">
         <button class="btn btn-clear float-right" @click="showVersion = false"></button>
         当前版本：{{CURRENT_VERSION}} &nbsp; 最新版本：{{version}} &nbsp; 
-        <a v-if="version > CURRENT_VERSION" @click="go('https://github.com/xtuJSer/CoCoMusic')" class="c-hand">下载更新</a>
+        <a v-if="version !== CURRENT_VERSION" @click="go('https://github.com/xtuJSer/CoCoMusic')" class="c-hand">下载更新</a>
         <span v-else>已经是最新版本</span>
       </div>
     </div>
@@ -45,7 +45,7 @@
 import http from 'axios'
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
-const CURRENT_VERSION = '2.0.2'
+const CURRENT_VERSION = '2.0.3'
 
 export default {
   data () {
