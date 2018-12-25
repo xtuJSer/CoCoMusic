@@ -1,16 +1,16 @@
 <template>
   <div class="player" v-show="currentPlay.songName">
-    <img src="../assets/img/previousmusic.svg" class="play" @click="previous" alt="">
+    <img src="../assets/img/previousmusic.svg" class="play" @click="previous" title="上一首" alt="上一首">
 
     <div class="play-control">
       <img class="album-cover" :src="`https://y.gtimg.cn/music/photo_new/T002R300x300M000${currentPlay.album.albumMid}.jpg?max_age=2592000`" alt="">
       <div class="play-pause" style="display: none">
-        <img v-show="!isPlay" @click="play" class="play" src="../assets/img/play.svg">
-        <img v-show="isPlay" @click="pause" class="play" src="../assets/img/pause.svg">
+        <img v-show="!isPlay" @click="play" alt="播放" title="播放" class="play" src="../assets/img/play.svg">
+        <img v-show="isPlay" @click="pause" alt="暂停" title="暂停" class="play" src="../assets/img/pause.svg">
       </div>
     </div>
 
-    <img src="../assets/img/nextmusic.svg" @click="next" class="play" alt="">
+    <img src="../assets/img/nextmusic.svg" @click="next" class="play" title="下一首" alt="下一首">
 
     <div class="music-info">
       <router-link to="/lyric">
@@ -22,10 +22,10 @@
       <div class="loading" v-show="loading"></div>
       <div class="loading-instead" v-show="!loading"></div>
       <router-link :to="playUrl" class="indicate">
-        <img src="../assets/img/source.svg" alt="">
+        <img src="../assets/img/source.svg" alt="列表" title="列表">
       </router-link>
       <router-link :to="`/album/${currentPlay.album.albumMid}`" class="indicate">
-        <img src="../assets/img/album.svg" alt="">
+        <img src="../assets/img/album.svg" alt="专辑" title="专辑">
       </router-link>
 
       <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee ${range}%, #eee)`}">
@@ -42,9 +42,9 @@
           {{playTimeString}} / {{playDurationString}}
           <img src="../assets/img/volume.svg">
           <input v-model="volume" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${volume}%, #5755d9 ${volume}%,#eee ${volume}%, #eee)`}">
-          <img v-show="mode === 'cycle'" @click="changeMode" class="play-mode" src="../assets/img/cycle.svg" alt="">
-          <img v-show="mode === 'single'" @click="changeMode" class="play-mode" src="../assets/img/single.svg" alt="">
-          <img v-show="mode === 'random'" @click="changeMode" class="play-mode" src="../assets/img/random.svg" alt="">
+          <img v-show="mode === 'cycle'" @click="changeMode" class="play-mode" src="../assets/img/cycle.svg" title="循环播放" alt="循环播放">
+          <img v-show="mode === 'single'" @click="changeMode" class="play-mode" src="../assets/img/single.svg" title="单曲循环" alt="单曲循环">
+          <img v-show="mode === 'random'" @click="changeMode" class="play-mode" src="../assets/img/random.svg" title="随机播放" alt="随机播放">
         </p>
       </div>
     </div>

@@ -2,21 +2,21 @@
   <div class="header">
     <div class="left">
       <f-tab :list="navList">
-        <img v-for="route in navList" :slot="route.name" :key="route.name" :src="`static/img/${route.name}.svg`" />
+        <img v-for="route in navList" :alt="route.title" :title="route.title" :slot="route.name" :key="route.name" :src="`static/img/${route.name}.svg`" />
       </f-tab>
     </div>
 
     <f-player></f-player>
 
     <div class="right">
-      <button class="btn btn-link btn-sm" @click="$router.go(-1)">
-        <img src="../assets/img/Back.svg" alt="">
+      <button class="btn btn-link btn-sm" @click="$router.go(-1)" title="后退">
+        <img src="../assets/img/Back.svg" alt="后退">
       </button>
-      <button class="btn btn-link btn-sm" @click="$router.go(1)">
-        <img src="../assets/img/Forward.svg" alt="">
+      <button class="btn btn-link btn-sm" @click="$router.go(1)" title="前进">
+        <img src="../assets/img/Forward.svg" alt="前进">
       </button>
-      <button class="btn btn-link btn-sm" @click="goTop">
-        <img src="../assets/img/Up.svg" alt="">
+      <button class="btn btn-link btn-sm" @click="goTop" title="返回顶部">
+        <img src="../assets/img/Up.svg" alt="返回顶部">
       </button>
     </div>
   </div>
@@ -31,7 +31,7 @@ const { getCurrentWindow } = require('electron').remote
 export default {
   data () {
     return {
-      navList: [{ name: 'Setting' }, { name: 'Favorite' }, { name: 'Search' }, { name: 'SingerList' }, { name: 'PlayList' }]
+      navList: [{ name: 'Setting', title: '设置' }, { name: 'Favorite', title: '收藏' }, { name: 'Search', title: '搜索' }, { name: 'SingerList', title: '歌手列表' }, { name: 'PlayList', title: '歌单推荐' }]
     }
   },
   components: {
