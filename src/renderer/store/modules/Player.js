@@ -211,9 +211,9 @@ const actions = {
     const { guid } = state
 
     state.player.pause()
-    commit('setPlayerSrc', ['', '', ''])
-    state.player.load()
+    state.player.currentTime = 0
 
+    // 垃圾猪头前端不会梦到高并发异步
     commit('setPlayerState', {
       currentPlayIndex: index,
       lyricList: [],
@@ -223,6 +223,7 @@ const actions = {
     const { vkey } = await getSongVkey({
       guid, ...song
     })
+    // 谁说写个播放器就体现不出水平的,放他娘的臭屁
 
     commit('setPlayerSrc', [
       `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`,

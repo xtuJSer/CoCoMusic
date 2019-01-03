@@ -172,8 +172,9 @@ export async function getKey (guid) {
 }
 export async function getSongVkey({fileName, guid, songMid}) {
   // cid 是啥？ 我也不造啊 qq 那群人写死了
+  let source = cancelRequest('getLyric')
   let url =  `https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=${fileName}&guid=${guid}`
-  let {vkey} = (await baseRequest(url)).data.data.items[0]
+  let {vkey} = (await baseRequest(url, {cancelToken: source.token})).data.data.items[0]
   return {vkey}
 }
 // 从 1 开始
