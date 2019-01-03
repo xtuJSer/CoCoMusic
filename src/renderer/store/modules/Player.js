@@ -231,7 +231,7 @@ const actions = {
     ])
 
     state.player.load()
-    state.player.play()
+    await state.player.play()
     const { lyricList } = (await getLyric(getters.currentPlay.songMid))
     commit('setPlayerState', {
       lyricList,
