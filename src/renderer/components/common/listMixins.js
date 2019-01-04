@@ -38,7 +38,7 @@ export default {
         })
         this.page = newPage
         this.total = data.total
-        this.list.push(...data.list)
+        this.list = this.list.concat(data.list)
       } catch (error) {
         if (error.message === 'cancel') {
           throw error

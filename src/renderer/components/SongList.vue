@@ -111,9 +111,12 @@ export default {
     }
   },
   watch: {
-    'this.musicList' (value) {
+    /**
+     * 如果是播放当前路由的列表的的话,那就监视变化,变化了就给他替换为最新的列表
+     */
+    musicList (value) {
       return this.isPlayList && this.$store.commit('setPlayerState', {
-        playList: [...this.musicList]
+        playList: JSON.parse(JSON.stringify(this.musicList))
       })
     }
   },
@@ -124,7 +127,7 @@ export default {
     },
     play (index) {
       this.$store.commit('setPlayerState', {
-        playList: [...this.musicList],
+        playList: JSON.parse(JSON.stringify(this.musicList)),
         playUrl: this.$route.fullPath
       })
       this.$store.dispatch('setPlay', index)
