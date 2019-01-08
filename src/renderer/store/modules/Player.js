@@ -6,6 +6,7 @@ const fs = require('fs')
 const http = require('http')
 const path = require('path')
 const isLinux = process.platform === 'linux'
+const preLoadImg = new Image()
 
 function generateGuid () {
   const t = new Date().getUTCMilliseconds()
@@ -145,13 +146,7 @@ const actions = {
     player.addEventListener('seeking', () => { commit('setPlayerState', { loading: true }) })
     player.addEventListener('canplaythrough', () => { commit('setPlayerState', { loading: false }) })
     player.addEventListener('durationchange', () => commit('setPlayerState', { playDuration: player.duration }))
-    player.addEventListener('ended', _ => {
-      let { mode, playList, currentPlayIndex } = state
-      let next = mode === 'random'
-        ? random(playList.length)
-        : (playList.length - 1) === currentPlayIndex ? 0 : currentPlayIndex + 1
-      dispatch('setPlay', next)
-    })
+    player.addEventListener('ended', _ => dispatch('next'))
     // 错误处理
     state.sourceBac2.addEventListener('error', ({ path: [{ src }, { currentSrc }] }) => {
       commit('setPlayerState', { loading: false })
@@ -209,31 +204,36 @@ const actions = {
    */
   async setPlay ({ state, commit, getters }, index) {
     const { guid } = state
+    const current = state.playList[index] // 保存当前播放的引用
+
+    commit('setPlayerState', { loading: true })
+    preLoadImg.src = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${current.album.albumMid}.jpg?max_age=2592000` // 预加载图片,不然显得很突兀的说
 
     state.player.pause()
-    state.player.currentTime = 0
+    state.player.currentTime = 0 // 暂停,据说这个是有效的停止缓冲数据,不过好像也没提供方法我也就不知道了
 
-    // 垃圾猪头前端不会梦到高并发异步
+    // 开始获取token播放歌曲
+    const song = state.playList[index]
+    const { vkey } = await getSongVkey({
+      guid, ...song
+    })
+
+    commit('setPlayerSrc', [
+      `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`,
+      `http://dl.stream.qqmusic.qq.com/M500${current.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`,
+      `http://dl.stream.qqmusic.qq.com/M800${current.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`
+    ])
+
+    state.player.load()
+    await state.player.play() // 实际上 Google chrome 在 50 左右就吧这个方法改成异步的了,await将后面的逻辑放到微任务队列,不然play同时load会让play出问题就凉了
+
     commit('setPlayerState', {
       currentPlayIndex: index,
       lyricList: [],
       lyricIndex: 0
     })
-    const song = state.playList[index]
-    const { vkey } = await getSongVkey({
-      guid, ...song
-    })
-    // 谁说写个播放器就体现不出水平的,放他娘的臭屁
 
-    commit('setPlayerSrc', [
-      `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`,
-      `http://dl.stream.qqmusic.qq.com/M500${getters.currentPlay.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`,
-      `http://dl.stream.qqmusic.qq.com/M800${getters.currentPlay.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`
-    ])
-
-    state.player.load()
-    await state.player.play()
-    const { lyricList } = (await getLyric(getters.currentPlay.songMid))
+    const { lyricList } = (await getLyric(current.songMid))
     commit('setPlayerState', {
       lyricList,
       lyricIndex: 0
