@@ -31,7 +31,8 @@ function createWindow () {
     autoHideMenuBar: false,
     show: false,
     resizable: false,
-    icon: '../../build/icons/256x256.png'
+    icon: '../../build/icons/256x256.png',
+    darkTheme: true
   })
 
   mainWindow.loadURL(winURL)
@@ -61,16 +62,18 @@ function creatLoading () {
   // loadingWindow.webContents.on('did-finish-load', () => loadingWindow.show())
 }
 
-const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
-  // Someone tried to run a second instance, we should focus our window.
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) mainWindow.restore()
-    mainWindow.focus()
-  }
-})
+const gotTheLock = app.requestSingleInstanceLock()
 
-if (isSecondInstance) {
+if (!gotTheLock) {
   app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
 }
 
 app.on('ready', flow([createWindow, creatLoading]))

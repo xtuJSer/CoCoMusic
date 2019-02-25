@@ -56,7 +56,7 @@ request.defaults.adapter = global.require('axios/lib/adapters/http')
 const baseRequest = request.create({
   headers: {
     'Referer': 'http://y.qq.com/portal/player.html',
-    'User-Agent': 'user-agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
   }
   // timeout: 2000 // 这个时间不好把握，我只能说小霸王服务器该换了
 })

@@ -77,6 +77,7 @@ export default {
   async created () {
     this.loading = true
     this.categoryGroupList = (await getCategory())
+    // this.currentCategory = 10000000
     this.currentCategory = this.categoryGroupList[0].categoryList[0].categoryId
     // 在上一个请求完成之后放到事件循环后面 则只需要 400ms 就能完成属于正常速度, 我怀疑 electron 那群人做了什么蠢事把事件循环搞坏了
     setTimeout(() => this.getThePlayList(1), 0)

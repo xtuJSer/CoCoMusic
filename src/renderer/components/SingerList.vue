@@ -102,7 +102,9 @@ export default {
     }
   },
   created () {
-    this.getTheSingeList(1)
+    setTimeout(async () => {
+      this.getTheSingeList(1)
+    }, 50)
   }
 }
 </script>
