@@ -56,4 +56,14 @@ a:hover,a:active,a:visited,a:focus {
 .fade-leave-active {
   transform: all .3s ease;
 }
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0); 
+}
+::-webkit-scrollbar-thumb {
+  background-color: #5764c6;
+  border-radius: 2px;
+}
 </style>
