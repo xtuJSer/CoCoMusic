@@ -39,10 +39,26 @@
         <button class="btn" @click="go('https://github.com/xtuJSer/CoCoMusic')">Github</button>
       </div>
     </div>
+    <div class="divider text-center" data-content="View"></div>
+    <div class="form-group">
+      <div class="col-6 col-sm-12">
+        <h6 class="form-label">关闭按钮隐藏窗口</h6>
+      </div>
+      <div class="col-6 col-sm-12 text-right">
+        <button class="btn" @click="hideSetting">{{hide}}</button>
+      </div>
+            <div class="col-6 col-sm-12">
+        <h6 class="form-label">默认 / 无边框窗口</h6>
+      </div>
+      <div class="col-6 col-sm-12 text-right">
+        <button class="btn" @click="noSideWindow">{{winSide}}</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import http from 'axios'
+const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
 const CURRENT_VERSION = '2.0.4'
@@ -53,7 +69,9 @@ export default {
       loadingUpdate: false,
       version: '',
       CURRENT_VERSION,
-      showVersion: false
+      showVersion: false,
+      hide: localStorage.getItem('hideSetting') === 'true',
+      winSide: true
     }
   },
   methods: {
@@ -75,6 +93,18 @@ export default {
     },
     openDev () {
       getCurrentWebContents().toggleDevTools()
+    },
+    hideSetting () {
+      if (this.hide) {
+        localStorage.setItem('hideSetting', 'false')
+        this.hide = false
+      } else {
+        localStorage.setItem('hideSetting', 'true')
+        this.hide = true
+      }
+    },
+    noSideWindow () {
+      console.log('wating...')
     }
   }
 }

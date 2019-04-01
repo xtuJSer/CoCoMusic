@@ -11,8 +11,8 @@
 <br/>
 <img src="http://orblzfbb0.bkt.clouddn.com/Ful4txdNVi1_457r9K8vpbLgZKVn?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim">
 </p>
-
 # Contributor
+
   welcome pull request!
  - [fengT-T](https://github.com/fengT-T)
  - [Noah Gao](https://github.com/noahziheng)
@@ -23,7 +23,7 @@
 ``` bash
 chmod +x cocomusic-2.0.2-x86_64.AppImage
 ./cocomusic-2.0.2-x86_64.AppImage
-``` 
+```
 ### deb
 ```bash
 sudo dpkg -i cocomusic_2.0.2_amd64.deb

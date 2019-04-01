@@ -2,6 +2,8 @@
 
 import { app, BrowserWindow } from 'electron'
 import flow from 'lodash/fp/flow'
+import appIcon from './tray'
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -37,8 +39,12 @@ function createWindow () {
 
   mainWindow.loadURL(winURL)
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
+  mainWindow.on('close', (e) => {
+    const localStorage = require('./localStorage').default
+    if (localStorage.getItem('hideSetting') === 'true') {
+      e.preventDefault()
+      mainWindow.hide()
+    }
   })
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show()
@@ -79,6 +85,9 @@ if (!gotTheLock) {
 app.on('ready', flow([createWindow, creatLoading]))
 
 app.on('window-all-closed', () => {
+  if (appIcon) {
+    appIcon.destroy()
+  }
   if (process.platform !== 'darwin') {
     app.quit()
   }
