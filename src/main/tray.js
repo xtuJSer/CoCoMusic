@@ -35,6 +35,15 @@ app.addListener('ready', () => {
   }
   ])
   appIcon.setContextMenu(contextMenu)
+  appIcon.on('click', (event) => {
+    BrowserWindow.getAllWindows().forEach(i => {
+      if (i.isVisible()) {
+        i.hide()
+      } else {
+        i.show()
+      }
+    })
+  })
 })
 
 export default appIcon
