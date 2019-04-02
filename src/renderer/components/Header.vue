@@ -92,5 +92,4 @@ img{
   height: 15px;
   cursor: pointer;
 }
-
 </style>

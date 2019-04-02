@@ -66,25 +66,10 @@ a:hover,a:active,a:visited,a:focus {
   background-color: #5764c6;
   border-radius: 2px;
 }
-
 .header {
   -webkit-app-region: drag
 }
-a {
+.header a,button,img,input {
   -webkit-app-region: no-drag;
 }
-button {
-  -webkit-app-region: no-drag;
-}
-img {
-  -webkit-app-region: no-drag;
-}
-p {
-  -webkit-app-region: no-drag;
-}
-input {
-  -webkit-app-region: no-drag;
-}
-
-
 </style>
