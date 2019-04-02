@@ -8,6 +8,7 @@
  */
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 
 /**
  * 初始化config
@@ -54,7 +55,7 @@ function writeConfig (value) {
 
 const localConfig = {
   config: null,
-  configUrl: path.join(__dirname, './localConfig.json'),
+  configUrl: path.join(os.homedir(), './.cocomusic.json'),
   setStoragePath: (path) => {
     localConfig.configUrl = path//
   },

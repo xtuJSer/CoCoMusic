@@ -19,13 +19,13 @@ export default {
 </script>
 <style scoped>
 .playList-item {
-  width: 150px;
+  width: 11.333333%;
   display: inline-block;
   margin: 10px 7px 7px 7px;
 }
 .playList-item img {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: auto;
   box-shadow: 4px 4px 16px 4px rgba(112,128,151,0.35);
   border-radius: 7%;
 }
@@ -38,5 +38,10 @@ export default {
   -webkit-box-orient: vertical;
   margin-bottom: 15px;
   text-align: center;
+}
+@media only screen and (max-width: 1500px){
+  .playList-item {
+    width: 14.866667%
+  }
 }
 </style>

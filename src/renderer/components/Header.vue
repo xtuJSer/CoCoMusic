@@ -18,6 +18,13 @@
       <button class="btn btn-link btn-sm" @click="goTop" title="返回顶部">
         <img src="../assets/img/Up.svg" alt="返回顶部">
       </button>
+      <button class="btn btn-link btn-sm" @click="minimize" v-if="!isSide">
+        <img src="../assets/img/minimize.svg">
+      </button>
+      <button class="btn btn-link btn-sm" @click="close" v-if="!isSide">
+        <img src="../assets/img/close.svg">
+      </button>
+
     </div>
   </div>
 </template>
@@ -25,13 +32,14 @@
 <script>
 import fTab from '@/components/Tab'
 import fPlayer from './Player'
-
+import local from '../../main/localStorage'
 const { getCurrentWindow } = require('electron').remote
 
 export default {
   data () {
     return {
-      navList: [{ name: 'Setting', title: '设置' }, { name: 'Favorite', title: '收藏' }, { name: 'Search', title: '搜索' }, { name: 'SingerList', title: '歌手列表' }, { name: 'PlayList', title: '歌单推荐' }]
+      navList: [{ name: 'Setting', title: '设置' }, { name: 'Favorite', title: '收藏' }, { name: 'Search', title: '搜索' }, { name: 'SingerList', title: '歌手列表' }, { name: 'PlayList', title: '歌单推荐' }],
+      isSide: local.getItem('winSideSetting') === 'true'
     }
   },
   components: {
@@ -43,6 +51,9 @@ export default {
     },
     minimize () {
       getCurrentWindow().minimize()
+    },
+    close () {
+      getCurrentWindow().close()
     }
   }
 }
@@ -81,4 +92,5 @@ img{
   height: 15px;
   cursor: pointer;
 }
+
 </style>

@@ -42,22 +42,26 @@
     <div class="divider text-center" data-content="View"></div>
     <div class="form-group">
       <div class="col-6 col-sm-12">
-        <h6 class="form-label">关闭按钮隐藏窗口</h6>
+        <h6 class="form-label">关闭按钮的行为</h6>
       </div>
       <div class="col-6 col-sm-12 text-right">
-        <button class="btn" @click="hideSetting">{{hide}}</button>
+        <button class="btn" @click="hideSetting">{{hide ? '隐藏窗口' : '退出 CoCoMusic'}}</button>
       </div>
             <div class="col-6 col-sm-12">
         <h6 class="form-label">默认 / 无边框窗口</h6>
       </div>
-      <div class="col-6 col-sm-12 text-right">
-        <button class="btn" @click="noSideWindow">{{winSide}}</button>
+      <div class="col-3 col-sm-12 text-right">
+        <button class="btn" v-if="reloadbtn" @click="reload">重载窗口</button>
+      </div>
+      <div class="col-3 col-sm-12 text-right">
+        <button class="btn" @click="noSideWindow">{{winSide ? '默认窗口边框' : '无窗口边框'}}</button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import http from 'axios'
+import { ipcRenderer } from 'electron'
 const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
@@ -71,7 +75,8 @@ export default {
       CURRENT_VERSION,
       showVersion: false,
       hide: localStorage.getItem('hideSetting') === 'true',
-      winSide: true
+      winSide: localStorage.getItem('winSideSetting') === 'true',
+      reloadbtn: false
     }
   },
   methods: {
@@ -95,16 +100,16 @@ export default {
       getCurrentWebContents().toggleDevTools()
     },
     hideSetting () {
-      if (this.hide) {
-        localStorage.setItem('hideSetting', 'false')
-        this.hide = false
-      } else {
-        localStorage.setItem('hideSetting', 'true')
-        this.hide = true
-      }
+      localStorage.setItem('hideSetting', this.hide ? 'false' : 'true')
+      this.hide = !this.hide
     },
     noSideWindow () {
-      console.log('wating...')
+      localStorage.setItem('winSideSetting', this.winSide ? 'false' : 'true')
+      this.winSide = !this.winSide
+      this.reloadbtn = true
+    },
+    reload () {
+      ipcRenderer.send('reload')
     }
   }
 }

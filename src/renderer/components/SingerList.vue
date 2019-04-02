@@ -48,14 +48,13 @@
     </div>
 
     <router-link :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}"
-      v-for="(singer, index) in singerList"
-      :key="singer.singerMid">
+    v-for="(singer, index) in singerList"
+    :key="singer.singerMid">
       <singer-avatar
         :singer="singer"
         :showImage="page === 1 && index < 10">
       </singer-avatar>
     </router-link>
-
 
     <f-pagination
       :current="page"

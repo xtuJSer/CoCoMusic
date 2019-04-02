@@ -57,7 +57,7 @@ a:hover,a:active,a:visited,a:focus {
   transform: all .3s ease;
 }
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0); 
@@ -66,4 +66,25 @@ a:hover,a:active,a:visited,a:focus {
   background-color: #5764c6;
   border-radius: 2px;
 }
+
+html {
+  -webkit-app-region: drag
+}
+a {
+  -webkit-app-region: no-drag;
+}
+button {
+  -webkit-app-region: no-drag;
+}
+img {
+  -webkit-app-region: no-drag;
+}
+p {
+  -webkit-app-region: no-drag;
+}
+input {
+  -webkit-app-region: no-drag;
+}
+
+
 </style>

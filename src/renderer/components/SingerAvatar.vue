@@ -28,15 +28,9 @@ export default {
 }
 </script>
 <style>
-.singer-avatar{
-  display: inline-block;
-  margin: 12px 23px;
-  text-align: center;
-  width: 150px;
-}
 .singer-avatar img{
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: auto;
   border-radius: 52%;
   box-shadow: 4px 4px 16px 4px rgba(112,128,151,0.35);
 }
@@ -45,4 +39,43 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.singer-avatar{
+  float: left;
+  margin: 12px 23px;
+  text-align: center;
+  width: 7.49999%
+}
+
+/**媒体查询大法！**/
+@media only screen and (max-width: 1860px) {
+  .singer-avatar {
+    width: 8.33333%;
+  }
+}
+@media only screen and (max-width: 1672px) {
+  .singer-avatar {
+    width: 11.333333%;
+  }
+}
+@media only screen and (max-width: 1572px) {
+  .singer-avatar {
+    width: 8.99999%;
+  }
+}
+@media only screen and (max-width: 1333px) {
+  .singer-avatar {
+    width: 15.666%;
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .singer-avatar {
+    width: 43.2222%;
+  }
+}
+@media only screen and (max-width: 720px) {
+  .singer-avatar {
+    width: 85.6666%;
+  }
+}
+
 </style>

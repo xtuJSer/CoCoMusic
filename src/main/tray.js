@@ -1,13 +1,13 @@
 'use strict'
 import { app, BrowserWindow, Menu, Tray } from 'electron'
 
-let iconPath
-if (process.platform === 'win32') {
-  iconPath = `${__static}\\img\\32x32.png`
-} else {
-  iconPath = `${__static}/img/32x32.png`
+if (process.env.NODE_ENV !== 'development') {
+  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
+let iconPath = process.env.NODE_ENV === 'development'
+  ? `build/icons/32x32.png`
+  : `${__static}/img/32x32.png`
 let appIcon
 
 app.addListener('ready', () => {
