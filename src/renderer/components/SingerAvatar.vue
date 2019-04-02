@@ -40,10 +40,10 @@ export default {
   white-space: nowrap;
 }
 .singer-avatar{
-  float: left;
   margin: 12px 23px;
   text-align: center;
-  width: 7.49999%
+  width: 7.49999%;
+  display: inline-block;
 }
 
 /**媒体查询大法！**/

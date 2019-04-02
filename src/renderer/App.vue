@@ -67,7 +67,7 @@ a:hover,a:active,a:visited,a:focus {
   border-radius: 2px;
 }
 
-html {
+.header {
   -webkit-app-region: drag
 }
 a {
