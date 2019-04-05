@@ -47,7 +47,7 @@
       <div class="col-6 col-sm-12 text-right">
         <button class="btn" @click="hideSetting">{{hide ? '隐藏窗口' : '退出 CoCoMusic'}}</button>
       </div>
-            <div class="col-6 col-sm-12">
+      <div class="col-6 col-sm-12">
         <h6 class="form-label">默认 / 无边框窗口</h6>
       </div>
       <div class="col-3 col-sm-12 text-right">
@@ -56,6 +56,7 @@
       <div class="col-3 col-sm-12 text-right">
         <button class="btn" @click="noSideWindow">{{winSide ? '默认窗口边框' : '无窗口边框'}}</button>
       </div>
+    </div>
     <div class="divider text-center" data-content="LOGIN"></div>
     <div>
       <login></login>

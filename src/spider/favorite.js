@@ -90,3 +90,15 @@ export async function RemoteToLocal () {
     playList: playLists
   })
 }
+
+// 获取头像以及昵称
+export async function Info () {
+  try {
+    var user = (await _cookie()) ? (await _cookie())['luin'].slice(1) : ''
+    var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${await _gtk()}&loginUin=${user}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0&reqfrom=1&reqtype=0`
+    let {headpic, nick} = (await axios(url, (await _config()))).data.data.creator
+    return {pic: headpic, nickname: nick}
+  } catch (e) {
+    return undefined
+  }
+}

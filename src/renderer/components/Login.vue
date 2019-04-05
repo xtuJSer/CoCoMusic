@@ -1,15 +1,16 @@
 <template>
   <div class="login-content">
     <button class="btn btn-link btn-sm" @click="login">
-      <img src="../assets/img/qq_login.svg" alt="TO_LOGIN">
+      <img class="login-icon" v-bind:src="icon" alt="TO_LOGIN">
     </button>
+    <div class="login-status">STATUS : {{status}}</div>
   </div>
 </template>
 
 <script>
 import { setuser } from '../db/index'
 import { UserInfo } from '../../spider/commonObject'
-import { test } from '../../spider/favorite'
+import { Info } from '../../spider/favorite'
 const { BrowserWindow } = require('electron').remote
 
 export default {
@@ -18,8 +19,18 @@ export default {
       Login()
     }
   },
-  mounted () {
-    test().then(result => console.log(result))
+  data () {
+    return {
+      logined: false,
+      status: 'NOT LOGIN',
+      icon: '../assets/img/qq_login.svg'
+    }
+  },
+  async activated () {
+    let info = await Info()
+    this.icon = info ? info.pic : '../assets/img/qq_login.svg'
+    this.status = info ? 'LOGINED : ' + info.nickname : 'NOT LOGIN'
+    this.logined = info === undefined
   }
 }
 
@@ -30,7 +41,7 @@ function Login () {
     height: 600,
     resizable: true,
     alwaysOnTop: true,
-    // 禁用node.jpgz
+    // 禁用node.jpg
     webPreferences: { nodeIntegration: false }
   })
   win.on('close', () => { win = null })
@@ -54,7 +65,20 @@ function Login () {
 <style>
 .login-content {
   width: 300px;
-  margin: auto;
+  margin: 0px auto;
   text-align: center;
+}
+
+.login-status {
+  padding-top: 15px;
+  letter-spacing: 6px;
+  color: #4b48d6;
+  font-size: x-small;
+}
+
+.login-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
 }
 </style>
