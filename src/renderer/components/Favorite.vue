@@ -3,7 +3,7 @@
     <f-tab :list="tabList">
       <div :slot="route.name"
         :key="route.name"
-        v-for="route in tabList">
+        v-for="route in tabList" @click="RemoteToLocal">
         {{route.ZHName}}
       </div>
     </f-tab>
@@ -16,7 +16,7 @@
 </template>
 <script>
 import fTab from '@/components/Tab'
-
+import { RemoteToLocal } from '../../spider/favorite'
 export default {
   name: 'favorite',
   data () {
@@ -28,6 +28,9 @@ export default {
         { name: 'FavoritePlayList', ZHName: '歌单' }
       ]
     }
+  },
+  methods: {
+    RemoteToLocal: RemoteToLocal
   },
   components: {
     fTab

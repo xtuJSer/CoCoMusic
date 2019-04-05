@@ -56,12 +56,16 @@
       <div class="col-3 col-sm-12 text-right">
         <button class="btn" @click="noSideWindow">{{winSide ? '默认窗口边框' : '无窗口边框'}}</button>
       </div>
+    <div class="divider text-center" data-content="LOGIN"></div>
+    <div>
+      <login></login>
     </div>
   </div>
 </template>
 <script>
 import http from 'axios'
 import { ipcRenderer } from 'electron'
+import Login from './Login'
 const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
@@ -111,7 +115,8 @@ export default {
     reload () {
       ipcRenderer.send('reload')
     }
-  }
+  },
+  components: {Login}
 }
 </script>
 <style scoped>
