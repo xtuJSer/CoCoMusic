@@ -1,7 +1,8 @@
 <template>
   <div class="login-content">
     <button class="btn btn-link btn-sm" @click="login">
-      <img class="login-icon" v-bind:src="icon" alt="TO_LOGIN">
+      <img v-if="!logined" class="login-icon" id="icon" src="../assets/img/qq_login.svg" alt="TO_LOGIN">
+      <img v-if="logined" class="login-icon" id="icon" :src="icon" alt="TO_LOGIN">
     </button>
     <div class="login-status">STATUS : {{status}}</div>
   </div>
@@ -23,14 +24,19 @@ export default {
     return {
       logined: false,
       status: 'NOT LOGIN',
-      icon: '../assets/img/qq_login.svg'
+      icon: ''
     }
   },
   async activated () {
-    let info = await Info()
-    this.icon = info ? info.pic : '../assets/img/qq_login.svg'
+    var info = await Info()
+    console.log(info)
+    this.icon = info ? info.pic : ''
     this.status = info ? 'LOGINED : ' + info.nickname : 'NOT LOGIN'
-    this.logined = info === undefined
+    if (info) {
+      this.logined = true
+    } else {
+      this.logined = false
+    }
   }
 }
 

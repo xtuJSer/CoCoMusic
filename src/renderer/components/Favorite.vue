@@ -3,7 +3,7 @@
     <f-tab :list="tabList">
       <div :slot="route.name"
         :key="route.name"
-        v-for="route in tabList" @click="RemoteToLocal">
+        v-for="route in tabList">
         {{route.ZHName}}
       </div>
     </f-tab>
@@ -36,6 +36,10 @@ export default {
     fTab
   },
   computed: {
+  },
+  activated () {
+    console.log('test')
+    RemoteToLocal()
   }
 }
 </script>
