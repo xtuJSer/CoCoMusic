@@ -39,10 +39,15 @@
         <button class="btn" @click="go('https://github.com/xtuJSer/CoCoMusic')">Github</button>
       </div>
     </div>
+    <div class="divider text-center" data-content="LOGIN"></div>
+    <div>
+      <login></login>
+    </div>
   </div>
 </template>
 <script>
 import http from 'axios'
+import Login from './Login'
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
 const CURRENT_VERSION = '2.0.4'
@@ -76,7 +81,8 @@ export default {
     openDev () {
       getCurrentWebContents().toggleDevTools()
     }
-  }
+  },
+  components: {Login}
 }
 </script>
 <style scoped>

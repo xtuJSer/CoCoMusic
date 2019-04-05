@@ -13,7 +13,6 @@
 
 <script>
 import fHeader from '@/components/Header'
-
 export default {
   name: 'cocomusic',
   components: {
