@@ -10,19 +10,19 @@
 
     <div class="right">
       <button class="btn btn-link btn-sm" @click="$router.go(-1)" title="后退">
-        <img src="../assets/img/Back.svg" alt="后退">
+        <img :class="isSide ? 'frame-img' : 'no-frame-img'" src="../assets/img/Back.svg" alt="后退">
       </button>
       <button class="btn btn-link btn-sm" @click="$router.go(1)" title="前进">
-        <img src="../assets/img/Forward.svg" alt="前进">
+        <img :class="isSide ? 'frame-img' : 'no-frame-img'" src="../assets/img/Forward.svg" alt="前进">
       </button>
       <button class="btn btn-link btn-sm" @click="goTop" title="返回顶部">
-        <img src="../assets/img/Up.svg" alt="返回顶部">
+        <img :class="isSide ? 'frame-img' : 'no-frame-img'" src="../assets/img/Up.svg" alt="返回顶部">
       </button>
       <button class="btn btn-link btn-sm" @click="minimize" v-if="!isSide">
-        <img src="../assets/img/minimize.svg">
+        <img :class="isSide ? 'frame-img' : 'no-frame-img'" src="../assets/img/minimize.svg">
       </button>
       <button class="btn btn-link btn-sm" @click="close" v-if="!isSide">
-        <img src="../assets/img/close.svg">
+        <img :class="isSide ? 'frame-img' : 'no-frame-img'" src="../assets/img/close.svg">
       </button>
 
     </div>
@@ -87,9 +87,16 @@ img{
 	margin-right: 8px;
 }
 
-.right img{
+.frame-img{
   width: 15px;
   height: 15px;
   cursor: pointer;
+}
+
+.no-frame-img {
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+
 }
 </style>

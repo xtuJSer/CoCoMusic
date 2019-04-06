@@ -5,12 +5,6 @@ const querystring = require('querystring')
 const store = require('../renderer/store/index').default
 
 axios.defaults.withCredentials = true
-const config = {
-  headers: {
-    'Referer': 'http://y.qq.com/portal/player.html',
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
-  }
-}
 
 // 用来删除歌曲的数据索引
 const songids = {}
@@ -19,22 +13,28 @@ let dirid = ''
 // 我特么真的不会js异步= =
 // async 和await是什么鬼…… 简直是在挫败小萌新的信心
 async function _config () {
-  var cookie = await getuser()
-  if (cookie) {
-    config['headers']['Cookie'] = cookie.cookieString
+  return {
+    headers: {
+      'Referer': 'http://y.qq.com/portal/player.html',
+      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
+      'Cookie': `${(await getuser()).cookieString}`
+    }
   }
-  return config
 }
 
 async function _postconfig (data) {
-  var cookie = await getuser()
-  if (cookie) {
-    config['headers']['Cookie'] = cookie.cookieString
+  return {
+    headers: {
+      'Content-type': `application/x-www-form-urlencoded`,
+      'Cookie': `${(await getuser()).cookieString} ;yq_index=0; yqq_stat=0; ts_last=y.qq.com/portal/profile.html`,
+      'Referer': 'https://imgcache.qq.com/music/miniportal_v4/tool/html/fp_gbk.html',
+      'Upgrade-insecure-requests': '1',
+      'User-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36',
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    },
+    data: data,
+    method: 'POST'
   }
-  config['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
-  config['data'] = data
-  config['method'] = 'post'
-  return config
 }
 
 async function _cookie () {
@@ -83,21 +83,21 @@ export async function SongFromRemote () {
 
 // 喜欢的歌单
 // 啊……草泥马草泥马草泥马……Aaaaaaa
-export async function PlayListToRemote () {
+export async function PlayListFromRemote () {
   var url = `https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${await _user()}&reqtype=3&sin=0&ein=`
   let num = (await axios(url, (await _config()))).data.data.totaldiss
   url += num
   let list = (await axios(url, (await _config()))).data.data.cdlist
-  return list.map(({dissname, dissid, logo}) => new PlayList(dissid, dissname, logo))
+  return list.map(({dissname, dissid, logo}) => new PlayList(`${dissid}`, `${dissname}`, `${logo}`))
 }
 
 // 获取头像以及昵称
 export async function Info () {
   try {
     var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${await _gtk()}&loginUin=${await _user()}& hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0& reqfrom=1&reqtype=0`
-    let data = (await axios(url, (await _config()))).data.data
-    let {headpic, nick} = data.creator
+    let data = (await axios(url, (await _config()))).data
     console.log(data)
+    let {headpic, nick} = data.data.creator
     return {pic: headpic, nickname: nick}
   } catch (e) {
     console.log(e)
@@ -185,9 +185,9 @@ export async function AddFavorateSong (songmid) {
   axios(url, await _postconfig(querystring.stringify(data)))
 }
 
-// flag = 2, 取消收藏 flag = 1, 收藏
+// flag = 2, 取消收藏 |flag = 1, 收藏
 export async function FavoriteAlbum (albummid, flag) {
-  let albumid = (await axios(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, await _config())).data.data.id
+  let id = (await axios(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, await _config())).data
   let url = `https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${await _gtk()}`
   let data = {
     loginUin: `${await _user()}`,
@@ -201,7 +201,7 @@ export async function FavoriteAlbum (albummid, flag) {
     g_tk: `${await _gtk()}`,
     uin: `1165316728`,
     ordertype: `1`,
-    albumid: `${albumid}`,
+    albumid: `${id}`,
     albummid: `${albummid}`,
     from: `1`,
     optype: `${flag}`,
@@ -225,7 +225,7 @@ export async function StoreRemote () {
   let songs = await SongFromRemote()
   let singers = await SingerFromRemote()
   let albums = await AlbumFromRemote()
-  let playLists = await PlayListToRemote()
+  let playLists = await PlayListFromRemote()
   songs.forEach(item => db.song.put(item))
   singers.forEach(item => db.singer.put(item))
   albums.forEach(item => db.album.put(item))
@@ -235,4 +235,20 @@ export async function StoreRemote () {
 export async function RemoteToLocal () {
   await StoreRemote()
   store.commit('setFavorite', await getFavorite())
+}
+
+export async function LocalToRemote () {
+  let data = await getFavorite()
+  for (var i = 0; i < data['song'].length; i++) {
+    await AddFavorateSong(data['song'][i].songMid)
+  }
+  for (i = 0; i < data['album'].length; i++) {
+    await FavoriteAlbum(data['album'][i].albumMid, 1)
+  }
+  for (i = 0; i < data['playList'].length; i++) {
+    await FavoritePlayList(data['playList'][i].playListMid)
+  }
+  for (i = 0; i < data['singer'].length; i++) {
+    await AddSinger(data['singer'][i].singerMid)
+  }
 }
