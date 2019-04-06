@@ -123,6 +123,6 @@ export default {
 <style scoped>
 .setting {
   width: 500px;
-  margin: 100px auto;
+  margin: 100px auto 0px;
 }
 </style>
