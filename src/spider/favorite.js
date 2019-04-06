@@ -137,8 +137,32 @@ export async function FavoritePlayList (playListMid, flag) {
 /**
  * 取消收藏歌曲
  * @param {*} songmid
+ *
+ * 如果把post请求的data改成这样子的话，你的账号就会咕掉。
+ * 可能是服务器的问题（甩锅），我也不知道为什么……
+ * await Info()
+ * var data = {
+ *   loginUin: `${await _user()}`,
+ *   hostUin: `0`,
+ *   format: `fs`,
+ *   inCharset: `GB2312`,
+ *   outCharset: `gb2312`,
+ *   notice: `0`,
+ *   platform: `yqq`,
+ *   needNewCode: `0`,
+ *   g_tk: `${await _gtk()}`,
+ *   uin: `${await _user()}`,
+ *   formsender: `1`,
+ *   flag: `2`,
+ *   from: `3`,
+ *   source: `103`,
+ *   ids: `${songids[songmid]}`,
+ *   types: `3`,
+ *   dirid: `201`
+ * }
  */
 export async function DeleteFavoriteSong (songmid) {
+  // 我也不造为什么删除之前还要查询数据，不然删除是不会成功的（即使相应里说删除成功）
   await SongFromRemote()
   let data = {
     oginUin: `${await _user()}`,
