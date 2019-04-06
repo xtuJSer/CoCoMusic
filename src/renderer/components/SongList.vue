@@ -62,7 +62,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import generateFavorite from './common/Favorite.js'
-import { DeleteFavoriteSong, AddFavorateSong } from '../../spider/favorite'
+import { DeleteFavoriteSong, AddFavoriteSong } from '../../spider/favorite'
 
 const favoriteMinix = generateFavorite('song')
 

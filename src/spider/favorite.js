@@ -139,6 +139,7 @@ export async function FavoritePlayList (playListMid, flag) {
  * @param {*} songmid
  */
 export async function DeleteFavoriteSong (songmid) {
+  await SongFromRemote()
   let data = {
     oginUin: `${await _user()}`,
     hostUin: '0',
@@ -162,7 +163,7 @@ export async function DeleteFavoriteSong (songmid) {
   let url = `https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=${await _gtk()}`
   axios(url, await _postconfig(querystring.stringify(data)))
 }
-export async function AddFavorateSong (songmid) {
+export async function AddFavoriteSong (songmid) {
   let data = {
     loginUin: `${await _user()}`,
     hostUin: '0',
@@ -244,7 +245,7 @@ export async function RemoteToLocal () {
 export async function LocalToRemote () {
   let data = await getFavorite()
   for (var i = 0; i < data['song'].length; i++) {
-    await AddFavorateSong(data['song'][i].songMid)
+    await AddFavoriteSong(data['song'][i].songMid)
   }
   for (i = 0; i < data['album'].length; i++) {
     await FavoriteAlbum(data['album'][i].albumMid, 1)

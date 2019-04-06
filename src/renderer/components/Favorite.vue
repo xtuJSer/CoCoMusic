@@ -38,7 +38,7 @@ export default {
   computed: {
   },
   activated () {
-    RemoteToLocal()
+    setTimeout(() => RemoteToLocal(), 2000)
   }
 }
 </script>
