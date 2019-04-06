@@ -24,7 +24,7 @@ export default {
       status: 'NOT LOGIN',
       icon: '',
       updating: false,
-      message: '上传本地歌单'
+      message: '上传本地收藏数据'
     }
   },
   async activated () {
@@ -36,11 +36,11 @@ export default {
       LocalToRemote().then((res) => {
         this.updating = false
         this.message = 'SUCCESS'
-        setTimeout(() => (this.message = '上传本地歌单'), 5000)
+        setTimeout(() => (this.message = '上传本地收藏数据'), 3000)
       }).catch(e => {
         this.updating = false
         this.message = 'FAIL'
-        setTimeout(() => (this.message = '上传本地歌单'), 5000)
+        setTimeout(() => (this.message = '上传本地收藏数据'), 3000)
       })
     },
     login () {

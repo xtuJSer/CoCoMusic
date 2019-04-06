@@ -216,8 +216,8 @@ export async function DeleteSinger (singermid) {
   axios(url, await _config())
 }
 export async function AddSinger (singermid) {
-  let url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}`
-  axios(url, await _config())
+  let url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}&rnd=${+new Date()}`
+  console.log((await axios(url, await _config())).data)
 }
 
 // 从Coco音乐的服务器同步收藏信息

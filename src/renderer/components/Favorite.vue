@@ -38,7 +38,6 @@ export default {
   computed: {
   },
   activated () {
-    console.log('test')
     RemoteToLocal()
   }
 }
