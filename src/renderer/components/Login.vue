@@ -15,7 +15,8 @@
 import { setuser } from '../db/index'
 import { UserInfo } from '../../spider/commonObject'
 import { Info, LocalToRemote } from '../../spider/favorite'
-const { BrowserWindow } = require('electron').remote
+const { BrowserWindow, Menu } = require('electron').remote
+const DefaultMenu = require('electron-default-menu')
 
 export default {
   data () {
@@ -47,11 +48,13 @@ export default {
       let win = new BrowserWindow({
         width: 400,
         height: 600,
-        resizable: true,
+        resizable: false,
         alwaysOnTop: true,
-        // 禁用node.jpg
+        // 禁用node.jpg 不然就进不了CocoMusic官网了
         webPreferences: { nodeIntegration: false }
       })
+      const menu = Menu.buildFromTemplate(DefaultMenu())
+      Menu.setApplicationMenu(menu)
       win.on('close', () => { win = null })
       win.loadURL('https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=11&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dsinger%26tab%3Dfocus%26stat%3Dy_new.top.user_pic%26stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=')
       win.show()

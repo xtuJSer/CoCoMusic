@@ -7,8 +7,10 @@ const store = require('../renderer/store/index').default
 axios.defaults.withCredentials = true
 
 // 用来删除歌曲的数据索引
-const songids = {}
+let songids = {}
 let dirid = ''
+
+// 用户的喜欢的歌曲
 
 // 我特么真的不会js异步= =
 // async 和await是什么鬼…… 简直是在挫败小萌新的信心
@@ -70,7 +72,7 @@ export async function SingerFromRemote () {
 // 现在的网页版已经不能显示所有喜欢的歌曲了（最多显示10条）
 // linux用户表示我草泥马呢。
 export async function SongFromRemote () {
-  var url = `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=3149743307&_=1554447405264&g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
+  var url = `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=${(await Info()).dissid}&_=${+new Date()}&g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
   let data = (await axios.get(url, await _config())).data
   dirid = data[dirid]
   return data['songlist'].map(({albummid, albumname, songmid, songname, singer, songid}) => {
@@ -91,14 +93,15 @@ export async function PlayListFromRemote () {
   return list.map(({dissname, dissid, logo}) => new PlayList(`${dissid}`, `${dissname}`, `${logo}`))
 }
 
-// 获取头像以及昵称
+// 获取头像以及昵称,以及喜欢的歌曲dissid
 export async function Info () {
   try {
-    var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${await _gtk()}&loginUin=${await _user()}& hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0& reqfrom=1&reqtype=0`
+    var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${await _gtk()}&loginUin=${await _user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0&reqfrom=1&reqtype=0`
     let data = (await axios(url, (await _config()))).data
     console.log(data)
+    let dissid = data.data.mymusic[0].id
     let {headpic, nick} = data.data.creator
-    return {pic: headpic, nickname: nick}
+    return {pic: headpic, nickname: nick, dissid: dissid}
   } catch (e) {
     console.log(e)
     return undefined
@@ -225,6 +228,7 @@ export async function StoreRemote () {
   let songs = await SongFromRemote()
   let singers = await SingerFromRemote()
   let albums = await AlbumFromRemote()
+  console.log(songs)
   let playLists = await PlayListFromRemote()
   songs.forEach(item => db.song.put(item))
   singers.forEach(item => db.singer.put(item))

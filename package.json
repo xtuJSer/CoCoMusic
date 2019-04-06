@@ -81,6 +81,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "dexie": "^2.0.4",
+    "electron-default-menu": "^1.0.1",
     "spectre.css": "^0.5.8",
     "vue": "^2.6.7",
     "vue-electron": "^1.0.6",
