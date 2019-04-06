@@ -158,7 +158,7 @@ export default {
       if (flag === 2) {
         DeleteFavoriteSong(id)
       } else {
-        AddFavorateSong(id)
+        AddFavoriteSong(id)
       }
     }
   }

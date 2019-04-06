@@ -140,6 +140,7 @@ export async function FavoritePlayList (playListMid, flag) {
  *
  * 如果把post请求的data改成这样子的话，你的账号就会咕掉。
  * 可能是服务器的问题（甩锅），我也不知道为什么……
+ * Api采集来源：https://y.qq.com/portal/profile.html，登录后的收藏歌曲页面，采集API，测试，咕掉，一气呵成
  * await Info()
  * var data = {
  *   loginUin: `${await _user()}`,
