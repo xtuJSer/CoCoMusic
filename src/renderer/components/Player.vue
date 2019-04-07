@@ -169,8 +169,9 @@ a:visited {
   width: 330px;
 }
 .player>.music-info .indicate{
+  float: right;
   cursor: pointer;
-  margin: 0px 0px 0px 0px;
+  margin: 10px 10px 10px 0px;
   width: 20px;
   height: 20px;
 }

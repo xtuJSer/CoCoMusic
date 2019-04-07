@@ -39,8 +39,15 @@ async function getuser () {
 }
 
 async function setuser (data) {
-  await db.user.where('g_tk').above(0).delete()
-  await db['user'].put(data)
+  try {
+    await db.user.where('g_tk').above(0).delete()
+    await db['user'].put(data)
+  } catch (e) {
+    let user = new db.Table({
+      user: 'cookieString, cookie, g_tk'
+    })
+    user.put(data)
+  }
 }
 
 export {
