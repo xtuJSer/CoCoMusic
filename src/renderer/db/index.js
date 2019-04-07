@@ -41,9 +41,9 @@ async function getuser () {
     if (db.isOpen()) {
       await db.close()
     }
-    await db.version(10).stores({
-      user: 'cookieString, cookie, g_tk'
-    })
+    let user = new db.Table()
+    user.name = 'user'
+    user.schema = 'cookieString, cookie, g_tk'
     await db.open()
   }
 }
