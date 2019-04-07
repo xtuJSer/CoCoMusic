@@ -34,20 +34,23 @@ async function deleteFavorite ({ table, id }) {
 }
 
 async function getuser () {
-  var users = await db.user.toArray()
-  return users ? users[0] : null
+  try {
+    var users = await db.user.toArray()
+    return users ? users[0] : null
+  } catch (e) {
+    if (db.isOpen()) {
+      await db.close()
+    }
+    await db.version(10).stores({
+      user: 'cookieString, cookie, g_tk'
+    })
+    await db.open()
+  }
 }
 
 async function setuser (data) {
-  try {
-    await db.user.where('g_tk').above(0).delete()
-    await db['user'].put(data)
-  } catch (e) {
-    let user = new db.Table({
-      user: 'cookieString, cookie, g_tk'
-    })
-    user.put(data)
-  }
+  await db.user.where('g_tk').above(0).delete()
+  await db['user'].put(data)
 }
 
 export {
