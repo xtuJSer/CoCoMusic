@@ -6,7 +6,9 @@ db.version(1).stores({
   singer: 'singerMid, singerName',
   song: 'songMid, songMediaMid, songName, album, type, singerList, fileName',
   album: 'albumMid, albumName',
-  playList: 'playListMid, playListName, imgUrl',
+  playList: 'playListMid, playListName, imgUrl'
+})
+db.version(2).stores({
   user: 'cookieString, cookie, g_tk'
 })
 
@@ -40,25 +42,25 @@ async function getuser () {
 
 async function setuser (data) {
   await db.user.where('g_tk').above(0).delete()
-  await db['user'].put(data)
+  await db.user.put(data)
 }
 
 async function addUserTable () {
-  try {
-    await db['user'].toArray()
-  } catch (e) {
-    if (!db.isOpen()) {
-      db.open()
-    }
-    let requet = indexedDB.open('Music')
-    requet.onsuccess = async function (e) {
-      let version = e.target.result.version
-      console.log(version)
-      db.close()
-      db.version(version).stores({user: 'cookieString, cookie, g_tk'})
-      db.open()
-    }
-  }
+  // try {
+  //   console.log(await db.user.toArray())
+  // } catch (e) {
+  //   if (db.isOpen()) {
+  //     db.close()
+  //   }
+  //   let requet = indexedDB.open('Music')
+  //   requet.onsuccess = async function (e) {
+  //     let version = e.target.result.version
+  //     console.log(version)
+  //     db.close()
+  //     db.version(version).stores({user: 'cookieString, cookie, g_tk'})
+  //     db.open()
+  //   }
+  // }
 }
 
 export {
