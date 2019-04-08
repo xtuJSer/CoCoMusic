@@ -34,20 +34,8 @@ async function deleteFavorite ({ table, id }) {
 }
 
 async function getuser () {
-  try {
-    var users = await db.user.toArray()
-    return users.length > 0 ? users[0] : null
-  } catch (e) {
-    let d = indexedDB.open('Music')
-    d.onsuccess = async (event) => {
-      console.log(event.target.result.version)
-      await db.close()
-      db.version(event.target.result.version).stores({
-        user: 'cookieString, cookie, g_tk'
-      })
-      await db.open()
-    }
-  }
+  var users = await db.user.toArray()
+  return users.length > 0 ? users[0] : null
 }
 
 async function setuser (data) {
