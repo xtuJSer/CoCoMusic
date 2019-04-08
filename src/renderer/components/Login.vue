@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { setuser } from '../db/index'
+import { setuser, addUserTable } from '../db/index'
 import { UserInfo } from '../../spider/commonObject'
 import { Info, LocalToRemote } from '../../spider/favorite'
 const { BrowserWindow } = require('electron').remote
@@ -70,6 +70,7 @@ export default {
       })
     },
     async update () {
+      addUserTable()
       var info = await Info()
       console.log(info)
       this.icon = info ? info.pic : ''

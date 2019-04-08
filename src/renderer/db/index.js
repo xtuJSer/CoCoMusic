@@ -43,6 +43,24 @@ async function setuser (data) {
   await db['user'].put(data)
 }
 
+async function addUserTable () {
+  try {
+    await db['user'].toArray()
+  } catch (e) {
+    if (!db.isOpen()) {
+      db.open()
+    }
+    let requet = indexedDB.open('Music')
+    requet.onsuccess = async function (e) {
+      let version = e.target.result.version
+      console.log(version)
+      db.close()
+      db.version(version).stores({user: 'cookieString, cookie, g_tk'})
+      db.open()
+    }
+  }
+}
+
 export {
-  db, getFavorite, addFavorite, deleteFavorite, getuser, setuser
+  db, getFavorite, addFavorite, deleteFavorite, getuser, setuser, addUserTable
 }
