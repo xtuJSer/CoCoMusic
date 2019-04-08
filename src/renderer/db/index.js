@@ -1,5 +1,5 @@
 import Dexie from 'dexie'
-import { Singer, Album, PlayList } from '../../spider/commonObject'
+import { Singer, Album, PlayList, UserInfo } from '../../spider/commonObject'
 const db = new Dexie('Music')
 
 db.version(1).stores({
@@ -7,9 +7,6 @@ db.version(1).stores({
   song: 'songMid, songMediaMid, songName, album, type, singerList, fileName',
   album: 'albumMid, albumName',
   playList: 'playListMid, playListName, imgUrl'
-})
-db.version(2).stores({
-  user: 'cookieString, cookie, g_tk'
 })
 
 async function getFavorite () {
@@ -35,34 +32,15 @@ async function deleteFavorite ({ table, id }) {
   await db[table].where(`${table}Mid`).equals(id).delete()
 }
 
-async function getuser () {
-  var users = await db.user.toArray()
-  return users.length > 0 ? users[0] : null
+function getuser () {
+  return new UserInfo(localStorage.getItem('cookieString'))
 }
 
-async function setuser (data) {
-  await db.user.where('g_tk').above(0).delete()
-  await db.user.put(data)
-}
-
-async function addUserTable () {
-  // try {
-  //   console.log(await db.user.toArray())
-  // } catch (e) {
-  //   if (db.isOpen()) {
-  //     db.close()
-  //   }
-  //   let requet = indexedDB.open('Music')
-  //   requet.onsuccess = async function (e) {
-  //     let version = e.target.result.version
-  //     console.log(version)
-  //     db.close()
-  //     db.version(version).stores({user: 'cookieString, cookie, g_tk'})
-  //     db.open()
-  //   }
-  // }
+function setuser (data) {
+  let { cookieString } = data
+  localStorage.setItem('cookieString', cookieString)
 }
 
 export {
-  db, getFavorite, addFavorite, deleteFavorite, getuser, setuser, addUserTable
+  db, getFavorite, addFavorite, deleteFavorite, getuser, setuser
 }
