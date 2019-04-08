@@ -1,10 +1,11 @@
-import axios from 'axios'
+import request from 'axios'
 import { Album, Singer, PlayList, Music } from './commonObject'
 import { getuser, db, getFavorite } from '../renderer/db/index'
 const querystring = require('querystring')
 const store = require('../renderer/store/index').default
 
-axios.defaults.withCredentials = true
+// axios.defaults.withCredentials = true
+request.defaults.adapter = global.require('axios/lib/adapters/http')
 
 // 用来删除歌曲的数据索引
 let songids = {}
@@ -55,16 +56,16 @@ function _user () {
 // 请求收藏的所有专辑
 export async function AlbumFromRemote () {
   var url = `https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}.&reqtype=2&ein=`
-  let num = (await axios.get(url, await _config())).data.data.totalalbum
+  let num = (await request(url, _config())).data.data.totalalbum
   url += `${num}`
-  let albumlist = (await axios.get(url, await _config())).data.data.albumlist
+  let albumlist = (await request(url, _config())).data.data.albumlist
   return (albumlist.map(({albumname, albummid}) => new Album(albumname, albummid)).slice(0, num))
 }
 
 // 获取关注的歌手
 export async function SingerFromRemote () {
   var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_getlist.fcg?utf8=1&uin=${_user()}&rnd=0.08377282764938476&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
-  let list = (await axios.get(url, await _config())).data.list
+  let list = (await request(url, _config())).data.list
   return list.map(({name, mid}) => new Singer(name, mid))
 }
 
@@ -73,7 +74,7 @@ export async function SingerFromRemote () {
 // linux用户表示我草泥马呢。
 export async function SongFromRemote () {
   var url = `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=${(await Info()).dissid}&_=${+new Date()}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
-  let data = (await axios.get(url, await _config())).data
+  let data = (await request(url, _config())).data
   dirid = data[dirid]
   return data['songlist'].map(({albummid, albumname, songmid, songname, singer, songid}) => {
     songids[songmid] = songid
@@ -87,9 +88,9 @@ export async function SongFromRemote () {
 // 啊……草泥马草泥马草泥马……Aaaaaaa
 export async function PlayListFromRemote () {
   var url = `https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}&reqtype=3&sin=0&ein=`
-  let num = (await axios(url, (await _config()))).data.data.totaldiss
+  let num = (await request(url, (_config()))).data.data.totaldiss
   url += num
-  let list = (await axios(url, (await _config()))).data.data.cdlist
+  let list = (await request(url, (_config()))).data.data.cdlist
   return list.map(({dissname, dissid, logo}) => new PlayList(`${dissid}`, `${dissname}`, `${logo}`))
 }
 
@@ -97,7 +98,7 @@ export async function PlayListFromRemote () {
 export async function Info () {
   try {
     var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0&reqfrom=1&reqtype=0`
-    let data = (await axios(url, (await _config()))).data
+    let data = (await request(url, (_config()))).data
     console.log(data)
     let dissid = data.data.mymusic[0].id
     let {headpic, nick} = data.data.creator
@@ -131,7 +132,7 @@ export async function FavoritePlayList (playListMid, flag) {
     optype: `${flag}`,
     utf8: '1'
   }
-  axios(url, (await _postconfig(querystring.stringify(data))))
+  request(url, (_postconfig(querystring.stringify(data))))
 }
 
 /**
@@ -186,7 +187,7 @@ export async function DeleteFavoriteSong (songmid) {
     g_tk: `${_gtk()}`
   }
   let url = `https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=${_gtk()}`
-  axios(url, await _postconfig(querystring.stringify(data)))
+  request(url, _postconfig(querystring.stringify(data)))
 }
 export async function AddFavoriteSong (songmid) {
   let data = {
@@ -211,12 +212,12 @@ export async function AddFavoriteSong (songmid) {
     g_tk: `${_gtk()}`
   }
   let url = `https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=${_gtk()}`
-  axios(url, await _postconfig(querystring.stringify(data)))
+  request(url, _postconfig(querystring.stringify(data)))
 }
 
 // flag = 2, 取消收藏 |flag = 1, 收藏
 export async function FavoriteAlbum (albummid, flag) {
-  let id = (await axios(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, await _config())).data
+  let id = (await request(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, _config())).data
   let url = `https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
   let data = {
     loginUin: `${_user()}`,
@@ -236,17 +237,17 @@ export async function FavoriteAlbum (albummid, flag) {
     optype: `${flag}`,
     utf8: `1`
   }
-  axios(url, await _postconfig(querystring.stringify(data)))
+  request(url, _postconfig(querystring.stringify(data)))
 }
 
 // 关注/取消关注
 export async function DeleteSinger (singermid) {
   let url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_del.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}`
-  axios(url, await _config())
+  request(url, _config())
 }
 export async function AddSinger (singermid) {
   let url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}&rnd=${+new Date()}`
-  console.log((await axios(url, await _config())).data)
+  console.log((await request(url, _config())).data)
 }
 
 // 从Coco音乐的服务器同步收藏信息
