@@ -114,8 +114,9 @@ div.loading{
   display: none;
 }
 .playList-list {
-  width: 850px;
+  padding-left: 130px;
   float: right;
+  margin: 0px 10px;
   /* height: 530px;
   scroll-behavior: smooth;
   overflow: scroll; */

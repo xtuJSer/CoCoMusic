@@ -16,7 +16,7 @@
 </template>
 <script>
 import fTab from '@/components/Tab'
-
+import { RemoteToLocal } from '../../spider/favorite'
 export default {
   name: 'favorite',
   data () {
@@ -29,10 +29,16 @@ export default {
       ]
     }
   },
+  methods: {
+    RemoteToLocal: RemoteToLocal
+  },
   components: {
     fTab
   },
   computed: {
+  },
+  activated () {
+    setTimeout(() => RemoteToLocal(), 2000)
   }
 }
 </script>

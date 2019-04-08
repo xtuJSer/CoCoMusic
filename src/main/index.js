@@ -1,7 +1,9 @@
 'use strict'
-
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import flow from 'lodash/fp/flow'
+import appIcon from './tray'
+import localStorage from './localStorage'
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -24,21 +26,27 @@ function createWindow () {
   /**
    * Initial window options
    */
+  var isSide = localStorage.getItem('winSideSetting') === 'true'
   mainWindow = new BrowserWindow({
-    height: 630, // 尤其是 有着1T 显存的 gt630 战术核显卡，只要一发就能摧毁一个航母战斗群。
+    minHeight: 715, // 尤其是 有着1T 显存的 gt630 战术核显卡，只要一发就能摧毁一个航母战斗群。
+    height: 715,
     useContentSize: true,
-    width: 1030,
+    minWidth: 1195,
+    width: 1195,
     autoHideMenuBar: false,
     show: false,
-    resizable: false,
+    resizable: true,
     icon: '../../build/icons/256x256.png',
-    darkTheme: true
+    darkTheme: true,
+    frame: isSide
   })
-
   mainWindow.loadURL(winURL)
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
+  mainWindow.on('close', (e) => {
+    if (localStorage.getItem('hideSetting') === 'true') {
+      e.preventDefault()
+      mainWindow.hide()
+    }
   })
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show()
@@ -79,6 +87,9 @@ if (!gotTheLock) {
 app.on('ready', flow([createWindow, creatLoading]))
 
 app.on('window-all-closed', () => {
+  if (appIcon) {
+    appIcon.destroy()
+  }
   if (process.platform !== 'darwin') {
     app.quit()
   }
@@ -90,6 +101,11 @@ app.on('activate', () => {
   }
 })
 
+ipcMain.on('reload', (e) => {
+  app.relaunch()
+  app.exit(0)
+})
+
 /**
  * Auto Updater
  *
@@ -98,7 +114,7 @@ app.on('activate', () => {
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
 
-/*
+/**
 import { autoUpdater } from 'electron-updater'
 
 autoUpdater.on('update-downloaded', () => {
@@ -108,4 +124,4 @@ autoUpdater.on('update-downloaded', () => {
 app.on('ready', () => {
   if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
 })
- */
+*/

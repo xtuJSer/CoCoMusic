@@ -39,10 +39,35 @@
         <button class="btn" @click="go('https://github.com/xtuJSer/CoCoMusic')">Github</button>
       </div>
     </div>
+    <div class="divider text-center" data-content="View"></div>
+    <div class="form-group">
+      <div class="col-6 col-sm-12">
+        <h6 class="form-label">关闭按钮的行为</h6>
+      </div>
+      <div class="col-6 col-sm-12 text-right">
+        <button class="btn" @click="hideSetting">{{hide ? '隐藏窗口' : '退出 CoCoMusic'}}</button>
+      </div>
+      <div class="col-6 col-sm-12">
+        <h6 class="form-label">默认 / 无边框窗口</h6>
+      </div>
+      <div class="col-3 col-sm-12 text-right">
+        <button class="btn" v-if="reloadbtn" @click="reload">重载窗口</button>
+      </div>
+      <div class="col-3 col-sm-12 text-right">
+        <button class="btn" @click="noSideWindow">{{winSide ? '默认窗口边框' : '无窗口边框'}}</button>
+      </div>
+    </div>
+    <div class="divider text-center" data-content="LOGIN"></div>
+    <div>
+      <login></login>
+    </div>
   </div>
 </template>
 <script>
 import http from 'axios'
+import { ipcRenderer } from 'electron'
+import Login from './Login'
+const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
 const CURRENT_VERSION = '2.0.4'
@@ -53,7 +78,10 @@ export default {
       loadingUpdate: false,
       version: '',
       CURRENT_VERSION,
-      showVersion: false
+      showVersion: false,
+      hide: localStorage.getItem('hideSetting') === 'true',
+      winSide: localStorage.getItem('winSideSetting') === 'true',
+      reloadbtn: false
     }
   },
   methods: {
@@ -75,13 +103,26 @@ export default {
     },
     openDev () {
       getCurrentWebContents().toggleDevTools()
+    },
+    hideSetting () {
+      localStorage.setItem('hideSetting', this.hide ? 'false' : 'true')
+      this.hide = !this.hide
+    },
+    noSideWindow () {
+      localStorage.setItem('winSideSetting', this.winSide ? 'false' : 'true')
+      this.winSide = !this.winSide
+      this.reloadbtn = true
+    },
+    reload () {
+      ipcRenderer.send('reload')
     }
-  }
+  },
+  components: {Login}
 }
 </script>
 <style scoped>
 .setting {
   width: 500px;
-  margin: 100px auto;
+  margin: 100px auto 0px;
 }
 </style>

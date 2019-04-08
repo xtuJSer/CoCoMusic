@@ -89,3 +89,31 @@ export class Lyric {
     })
   }
 }
+
+export class UserInfo {
+  constructor (cookieString) {
+    this.cookieString = cookieString
+    this.cookie = (function () {
+      var cookie = {}
+      cookieString.split('; ').forEach(item => {
+        item = item.split('=')
+        cookie[item[0]] = item[1]
+      })
+      return cookie
+    })()
+    this.g_tk = this._gtk()
+  }
+  _gtk () {
+    function e (e) {
+      for (var n = 5381, o = 0, t = e.length; t > o; ++o) {
+        n += (n << 5) + e.charCodeAt(o)
+      }
+      return 2147483647 & n
+    }
+    if (this.cookie) {
+      return e(this.cookie['p_skey'] || this.cookie['skey'])
+    } else {
+      return 0
+    }
+  }
+}

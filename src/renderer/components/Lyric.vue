@@ -11,7 +11,8 @@
       <p v-if="hasTrans" class="trans">{{lyric.trans}}</p>
     </div>
     <p class="text-center" v-show="!lyricList.length">加载中。。。</p>
-</div>
+  </div>
+  <div class="drag"></div>
 </div>
 
 </template>
@@ -94,6 +95,14 @@ export default {
 .play-lyric{
   color: #5764c6;
   text-shadow: 1px 1px 20px;
+}
+.drag {
+  position: fixed;
+  top: 30px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  -webkit-app-region: drag;
 }
 img{
   width: 15px;

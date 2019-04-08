@@ -1,5 +1,5 @@
 import Dexie from 'dexie'
-import { Singer, Album, PlayList } from '../../spider/commonObject'
+import { Singer, Album, PlayList, UserInfo } from '../../spider/commonObject'
 const db = new Dexie('Music')
 
 db.version(1).stores({
@@ -32,6 +32,15 @@ async function deleteFavorite ({ table, id }) {
   await db[table].where(`${table}Mid`).equals(id).delete()
 }
 
+function getuser () {
+  return new UserInfo(localStorage.getItem('cookieString'))
+}
+
+function setuser (data) {
+  let { cookieString } = data
+  localStorage.setItem('cookieString', cookieString)
+}
+
 export {
-  db, getFavorite, addFavorite, deleteFavorite
+  db, getFavorite, addFavorite, deleteFavorite, getuser, setuser
 }

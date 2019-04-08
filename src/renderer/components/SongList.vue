@@ -10,13 +10,13 @@
         <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
 
           <div class="music-favorite" :class="{'hide-music-favorite': !isfocus(music.songMid)}">
-            <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music)">
+            <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music), toRemote(music.songMid, 1)">
               <img class="favorite" src="../assets/img/Favorite.svg" alt="">
             </button>
             <button class="btn btn-link"
               v-show="isfocus(music.songMid)"
               :disabled="currentPlay && music.songMid === currentPlay.songMid" 
-              @click="deleteFavorite(music.songMid)">
+              @click="deleteFavorite(music.songMid), toRemote(music.songMid, 2)">
               <img class="favorite" src="../assets/img/hasFavorite.svg" alt="">
             </button>          
           </div>
@@ -62,6 +62,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import generateFavorite from './common/Favorite.js'
+import { DeleteFavoriteSong, AddFavoriteSong } from '../../spider/favorite'
 
 const favoriteMinix = generateFavorite('song')
 
@@ -152,6 +153,13 @@ export default {
         }
       })[command]
       opera && opera()
+    },
+    async toRemote (id, flag) {
+      if (flag === 2) {
+        DeleteFavoriteSong(id)
+      } else {
+        AddFavoriteSong(id)
+      }
     }
   }
 }

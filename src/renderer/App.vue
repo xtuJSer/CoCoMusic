@@ -13,7 +13,6 @@
 
 <script>
 import fHeader from '@/components/Header'
-
 export default {
   name: 'cocomusic',
   components: {
@@ -55,5 +54,21 @@ a:hover,a:active,a:visited,a:focus {
 }
 .fade-leave-active {
   transform: all .3s ease;
+}
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0); 
+}
+::-webkit-scrollbar-thumb {
+  background-color: #5764c6;
+  border-radius: 2px;
+}
+.header {
+  -webkit-app-region: drag
+}
+.header a,button,img,input {
+  -webkit-app-region: no-drag;
 }
 </style>
