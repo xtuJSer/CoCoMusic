@@ -92,9 +92,9 @@ app.on('window-all-closed', () => {
   if (appIcon) {
     appIcon.destroy()
   }
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  // if (process.platform !== 'darwin') {
+  app.quit()
+  // }
 })
 
 app.on('activate', () => {
