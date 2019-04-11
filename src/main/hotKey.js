@@ -123,7 +123,7 @@ export function getkeyMap () {
 
 export function setGlobalKey (type, keys) {
   var status
-  if (keys.length <= 1 || keys[0].length <= 1 || keys[0] === 'Shift') {
+  if (keys.length < 1 || keys[0].length <= 1) {
     status = 'FAIL'
   } else {
     globalShortcut.register(keys.join(' + '), () => {})
