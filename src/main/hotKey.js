@@ -161,15 +161,18 @@ export function DefaultKeySetting () {
 export function getMap () {
   let map = {
     17: 'CmdOrCtrl',
+    32: 'Space',
     37: 'Left',
     38: 'Up',
     39: 'Right',
-    40: 'Down'
-  }
-  if (process.platform !== 'darwin') {
-    map[91] = 'Windows'
-  } else {
-    map[91] = 'Cmd'
+    40: 'Down',
+    get 91 () {
+      if (process.platform !== 'darwin') {
+        return 'Super'
+      } else {
+        return 'Cmd'
+      }
+    }
   }
   return map
 }
