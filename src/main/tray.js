@@ -18,7 +18,9 @@ app.addListener('ready', () => {
       BrowserWindow.getAllWindows().forEach(i => {
         i.close()
         i.destroy()
+        i = null
       })
+      app.quit()
     }
   },
   {

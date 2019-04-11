@@ -45,7 +45,7 @@ function readConfig () {
  */
 function writeConfig (value) {
   try {
-    const content = JSON.stringify(value)//
+    const content = JSON.stringify(value, null, 2)//
     fs.writeFileSync(localConfig.configUrl, content)//
     return true//
   } catch (e) {
@@ -97,26 +97,26 @@ const localConfig = {
   removeItem: (key) => {
     const value = localConfig.getItem(key)//
     if (value) {
-      const config = Object.assign({}, localConfig.config)//
-      delete config[key]//
-      const suc = writeConfig(config)//
+      const config = Object.assign({}, localConfig.config)
+      delete config[key]
+      const suc = writeConfig(config)
       if (suc) {
-        localConfig.config = config//
-        return true//
+        localConfig.config = config
+        return true
       }
     }
-    return false//
+    return false
   },
   clear: () => {
-    let success = initConfig()//
+    let success = initConfig()
     if (success) {
-      const suc = writeConfig({})//
+      const suc = writeConfig({})
       if (suc) {
-        localConfig.config = {}//
-        return true//
+        localConfig.config = {}
+        return true
       }
     }
-    return false//
+    return false
   }
 }
 
