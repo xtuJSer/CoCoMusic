@@ -32,6 +32,7 @@ export default {
       if (this.settingNow === true) {
         this.resetKey()
         this.settingNow = false
+        ipcRenderer.send('try add global key', this.type, this.keys)
       } else {
         // 删除快捷键先（避免误触发之前的快捷键）
         ipcRenderer.send('clearAllKey')
