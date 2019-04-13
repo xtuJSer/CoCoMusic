@@ -3,6 +3,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import flow from 'lodash/fp/flow'
 import appIcon from './tray'
 import localStorage from './localStorage'
+const hotKey = require('./hotKey')
 
 /**
  * Set `__static` path to static files in production
@@ -85,14 +86,15 @@ if (!gotTheLock) {
 }
 
 app.on('ready', flow([createWindow, creatLoading]))
+hotKey.default()
 
 app.on('window-all-closed', () => {
   if (appIcon) {
     appIcon.destroy()
   }
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  // if (process.platform !== 'darwin') {
+  app.quit()
+  // }
 })
 
 app.on('activate', () => {
@@ -104,6 +106,19 @@ app.on('activate', () => {
 ipcMain.on('reload', (e) => {
   app.relaunch()
   app.exit(0)
+})
+
+ipcMain.on('clearAllKey', (e) => {
+  hotKey.clearGlobalKey()
+})
+
+ipcMain.on('try add global key', (e, type, keys) => {
+  let status = hotKey.setGlobalKey(type, keys)
+  mainWindow.webContents.send('add key status', status, type)
+})
+
+ipcMain.on('default key setting', (e) => {
+  hotKey.DefaultKeySetting()
 })
 
 /**

@@ -61,12 +61,21 @@
     <div>
       <login></login>
     </div>
+    <div class="divider text-center" data-content="HotKey" @click="hotkeysbtn = !hotkeysbtn"></div>
+    <div v-if="hotkeysbtn" class="form-group">
+      <div class="col-12 col-sm-12 text-center">
+        <button class="btn" @click="defaultKeySet">重置快捷键</button>
+      </div>
+      <hot-key-setting v-for="(value, key) in hotkeys" :key="value.name" :type="key" :name="value.name" :hotkey="value.key"></hot-key-setting>
+    </div>
   </div>
 </template>
 <script>
 import http from 'axios'
 import { ipcRenderer } from 'electron'
+import HotKeySetting from './HotKeySetting'
 import Login from './Login'
+import { getkeyMap } from '../../main/hotKey.js'
 const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
@@ -81,7 +90,9 @@ export default {
       showVersion: false,
       hide: localStorage.getItem('hideSetting') === 'true',
       winSide: localStorage.getItem('winSideSetting') === 'true',
-      reloadbtn: false
+      reloadbtn: false,
+      hotkeysbtn: false,
+      hotkeys: {}
     }
   },
   methods: {
@@ -115,9 +126,22 @@ export default {
     },
     reload () {
       ipcRenderer.send('reload')
+    },
+    defaultKeySet () {
+      ipcRenderer.send('default key setting')
+      setTimeout(() => {
+        this.loadKey()
+        this.hotkeysbtn = false
+      }, 500)
+    },
+    loadKey () {
+      this.hotkeys = getkeyMap()
     }
   },
-  components: {Login}
+  components: {Login, HotKeySetting},
+  activated () {
+    this.loadKey()
+  }
 }
 </script>
 <style scoped>
