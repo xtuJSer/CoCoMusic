@@ -9,7 +9,6 @@ request.defaults.adapter = global.require('axios/lib/adapters/http')
 
 // 用来删除歌曲的数据索引
 let songids = {}
-let dirid = ''
 
 // 用户的喜欢的歌曲
 
@@ -30,7 +29,7 @@ function _postconfig (data) {
     headers: {
       'Content-type': `application/x-www-form-urlencoded`,
       'Cookie': `${(getuser()).cookieString} ;yq_index=0; yqq_stat=0; ts_last=y.qq.com/portal/profile.html`,
-      'Referer': 'https://imgcache.qq.com/music/miniportal_v4/tool/html/fp_gbk.html',
+      'Referer': 'http://imgcache.qq.com/music/miniportal_v4/tool/html/fp_gbk.html',
       'Upgrade-insecure-requests': '1',
       'User-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36',
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -55,7 +54,7 @@ function _user () {
 // 都返回数组，数组的内容既是可以存储在数据库的对象
 // 请求收藏的所有专辑
 export async function AlbumFromRemote () {
-  var url = `https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}.&reqtype=2&ein=`
+  var url = `http://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}.&reqtype=2&ein=`
   let num = (await request(url, _config())).data.data.totalalbum
   url += `${num}`
   let albumlist = (await request(url, _config())).data.data.albumlist
@@ -64,7 +63,7 @@ export async function AlbumFromRemote () {
 
 // 获取关注的歌手
 export async function SingerFromRemote () {
-  var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_getlist.fcg?utf8=1&uin=${_user()}&rnd=0.08377282764938476&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
+  var url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_getlist.fcg?utf8=1&uin=${_user()}&rnd=0.08377282764938476&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
   let list = (await request(url, _config())).data.list
   return list.map(({name, mid}) => new Singer(name, mid))
 }
@@ -73,9 +72,8 @@ export async function SingerFromRemote () {
 // 现在的网页版已经不能显示所有喜欢的歌曲了（最多显示10条）
 // linux用户表示我草泥马呢。
 export async function SongFromRemote () {
-  var url = `https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=${(await Info()).dissid}&_=${+new Date()}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
+  var url = `http://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=${(await Info()).dissid}&_=${+new Date()}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
   let data = (await request(url, _config())).data
-  dirid = data[dirid]
   return data['songlist'].map(({albummid, albumname, songmid, songname, singer, songid}) => {
     songids[songmid] = songid
     var ablum = new Album(albumname, albummid)
@@ -87,7 +85,7 @@ export async function SongFromRemote () {
 // 喜欢的歌单
 // 啊……草泥马草泥马草泥马……Aaaaaaa
 export async function PlayListFromRemote () {
-  var url = `https://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}&reqtype=3&sin=0&ein=`
+  var url = `http://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}&reqtype=3&sin=0&ein=`
   let num = (await request(url, (_config()))).data.data.totaldiss
   url += num
   let list = (await request(url, (_config()))).data.data.cdlist
@@ -97,7 +95,7 @@ export async function PlayListFromRemote () {
 // 获取头像以及昵称,以及喜欢的歌曲dissid
 export async function Info () {
   try {
-    var url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0&reqfrom=1&reqtype=0`
+    var url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0&reqfrom=1&reqtype=0`
     let data = (await request(url, (_config()))).data
     console.log(data)
     let dissid = data.data.mymusic[0].id
@@ -115,7 +113,7 @@ export async function Info () {
  * @param {Number} flag flag为1, 收藏; flag为2, 取消收藏
  */
 export async function FavoritePlayList (playListMid, flag) {
-  var url = `https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
+  var url = `http://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
   var data = {
     loginUin: `${_user()}`,
     hostUin: '0',
@@ -141,7 +139,7 @@ export async function FavoritePlayList (playListMid, flag) {
  *
  * 如果把post请求的data改成这样子的话，你的账号就会咕掉。
  * 可能是服务器的问题（甩锅），我也不知道为什么……
- * Api采集来源：https://y.qq.com/portal/profile.html，登录后的收藏歌曲页面，采集API，测试，咕掉，一气呵成
+ * Api采集来源：http://y.qq.com/portal/profile.html，登录后的收藏歌曲页面，采集API，测试，咕掉，一气呵成
  * await Info()
  * var data = {
  *   loginUin: `${_user()}`,
@@ -186,7 +184,7 @@ export async function DeleteFavoriteSong (songmid) {
     utf8: '1',
     g_tk: `${_gtk()}`
   }
-  let url = `https://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=${_gtk()}`
+  let url = `http://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=${_gtk()}`
   request(url, _postconfig(querystring.stringify(data)))
 }
 export async function AddFavoriteSong (songmid) {
@@ -211,14 +209,14 @@ export async function AddFavoriteSong (songmid) {
     utf8: '1',
     g_tk: `${_gtk()}`
   }
-  let url = `https://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=${_gtk()}`
+  let url = `http://c.y.qq.com/splcloud/fcgi-bin/fcg_music_add2songdir.fcg?g_tk=${_gtk()}`
   request(url, _postconfig(querystring.stringify(data)))
 }
 
 // flag = 2, 取消收藏 |flag = 1, 收藏
 export async function FavoriteAlbum (albummid, flag) {
-  let id = (await request(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, _config())).data
-  let url = `https://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
+  let id = (await request(`http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, _config())).data
+  let url = `http://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
   let data = {
     loginUin: `${_user()}`,
     hostUin: `0`,
@@ -242,11 +240,11 @@ export async function FavoriteAlbum (albummid, flag) {
 
 // 关注/取消关注
 export async function DeleteSinger (singermid) {
-  let url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_del.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}`
+  let url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_del.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}`
   request(url, _config())
 }
 export async function AddSinger (singermid) {
-  let url = `https://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}&rnd=${+new Date()}`
+  let url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}&rnd=${+new Date()}`
   console.log((await request(url, _config())).data)
 }
 
