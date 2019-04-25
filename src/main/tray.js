@@ -24,7 +24,7 @@ app.addListener('ready', () => {
     }
   },
   {
-    label: 'HIDE/SHOW',
+    label: '显示 / 隐藏',
     click: () => {
       BrowserWindow.getAllWindows().forEach(i => {
         if (i.isVisible()) {

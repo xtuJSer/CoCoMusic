@@ -56,6 +56,9 @@ export default {
       if (this.settingNow === true) {
         this.chekingNow = true
         this.settingNow = false
+        if (this.keys.length === 0) {
+          this.resetKey()
+        }
         ipcRenderer.send('try add global key', this.type, this.keys)
         ipcRenderer.on('add key status', (e, status, type) => {
           this.chekingNow = false
