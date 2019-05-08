@@ -71,4 +71,7 @@ a:hover,a:active,a:visited,a:focus {
 .header a,button,img,input {
   -webkit-app-region: no-drag;
 }
+.control {
+  -webkit-app-region: no-drag;
+}
 </style>

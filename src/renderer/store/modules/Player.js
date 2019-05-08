@@ -156,11 +156,12 @@ const actions = {
       let { songName, album: { albumMid } } = getters.currentPlay
       /* eslint-disable no-new */
       new window.Notification(`${songName} 播放错误`, {
+        silent: true,
         body: '资源请求错误, 可能是没有版权的歌曲，无法播放！',
         icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
       })
       console.log('资源请求错误：' + src)
-      dispatch('next')
+      // dispatch('next')
     })
 
     player.addEventListener('timeupdate', throttle(() => {
@@ -194,7 +195,7 @@ const actions = {
     let playListLength = state.playList.length
     let next = state.mode === 'random'
       ? random(playListLength)
-      : state.currentPlayIndex >= playListLength - 1 ? 0 : state.currentPlayIndex + 1
+      : state.currentPlayIndex < playListLength - 1 ? state.currentPlayIndex + 1 : 0
     dispatch('setPlay', next)
   },
   /**
