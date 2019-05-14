@@ -3,16 +3,22 @@ html,
   background: #1e2125;
 }
 
-.header[data-v-215a9f13] {
-  background-color: #1e2125d6;
+.header {
+  background-color: #1e2125d6 !important;
 }
+
 
 body {
   color: #98a5bb;
+  background: #1e212544 !important;
 }
 
-.singer-type-list button[data-v-9d0e7d80] {
-  color: #8f9bb5;
+.singer-type-list button {
+  color: #8f9bb5 !important;
+}
+
+.singer-type-list button.active{
+  color: #fff !important;
 }
 
 .container a {
@@ -48,11 +54,8 @@ body {
   color: #6c69d8;
 }
 
-.playList-item img[data-v-3baa8b94] {
-  width: 100%;
-  height: auto;
-  box-shadow: 4px 4px 20px 4px rgba(112, 128, 151, 0.13);
-  border-radius: 7%;
+.playList-item img {
+  box-shadow: 4px 4px 20px 4px rgba(112, 128, 151, 0.13) !important;
 }
 
 code.keys {
@@ -71,4 +74,8 @@ code.keys {
 
 ::-webkit-scrollbar-track {
   background-color: #1e2125;
+}
+
+.over-bg {
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }

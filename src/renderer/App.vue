@@ -88,9 +88,9 @@ a:hover,a:active,a:visited,a:focus {
   -webkit-app-region: no-drag;
 }
 
-htmhtml,
+html,
 .container,
-.header[data-v-215a9f13] {
-  transition: background 0.5s;
+.header {
+  transition: background 0.5s !important;
 }
 </style>
