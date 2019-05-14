@@ -1,0 +1,74 @@
+html,
+.container {
+  background: #1e2125;
+}
+
+.header[data-v-215a9f13] {
+  background-color: #1e2125d6;
+}
+
+body {
+  color: #98a5bb;
+}
+
+.singer-type-list button[data-v-9d0e7d80] {
+  color: #8f9bb5;
+}
+
+.container a {
+  color: #6c69d8;
+}
+
+.singer-avatar img {
+  box-shadow: none;
+}
+
+.singer-item img {
+  box-shadow: 4px 4px 16px 4px rgba(112, 128, 151, 0.11);
+}
+
+.divider {
+  border-top: 0.05rem solid #353638;
+}
+
+.divider[data-content]::after,
+.divider-vert[data-content]::after {
+  background: #ffffff00;
+}
+
+.btn {
+  background: #fff0;
+  border: 0.05rem solid #6c69d8;
+  color: #6c69d8;
+}
+
+.btn:hover {
+  background: #f1f1fc1f;
+  border-color: #6c69d8;
+  color: #6c69d8;
+}
+
+.playList-item img[data-v-3baa8b94] {
+  width: 100%;
+  height: auto;
+  box-shadow: 4px 4px 20px 4px rgba(112, 128, 151, 0.13);
+  border-radius: 7%;
+}
+
+code.keys {
+  background-color: #293663;
+  color: #ffffff;
+}
+
+.login-status {
+  color: #a2a0ff;
+}
+
+.form-input {
+  background: #fff0;
+  color: #bcc5d4;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #1e2125;
+}

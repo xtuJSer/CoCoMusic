@@ -8,11 +8,14 @@
         </keep-alive>
       </transition>
     </div>
+    <link v-if="darkTheme" rel="stylesheet" href="static/css/darktheme.css">
   </div>
 </template>
 
 <script>
 import fHeader from '@/components/Header'
+import config from '../main/localStorage.js'
+import { ipcRenderer } from 'electron'
 export default {
   name: 'cocomusic',
   components: {
@@ -25,6 +28,16 @@ export default {
   },
   created () {
     this.$store.dispatch('initFavorite')
+  },
+  data () {
+    return {
+      darkTheme: config.getItem('darkTheme') === 'true'
+    }
+  },
+  mounted () {
+    ipcRenderer.on('set theme', (e, status) => {
+      this.darkTheme = status
+    })
   }
 }
 </script>
@@ -73,5 +86,11 @@ a:hover,a:active,a:visited,a:focus {
 }
 .control {
   -webkit-app-region: no-drag;
+}
+
+htmhtml,
+.container,
+.header[data-v-215a9f13] {
+  transition: background 0.5s;
 }
 </style>

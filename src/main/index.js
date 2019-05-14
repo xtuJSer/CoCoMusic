@@ -121,6 +121,10 @@ ipcMain.on('default key setting', (e) => {
   hotKey.DefaultKeySetting()
 })
 
+ipcMain.on('change theme', (e) => {
+  mainWindow.webContents.send('set theme', localStorage.getItem('darkTheme') === 'true')
+})
+
 /**
  * Auto Updater
  *
