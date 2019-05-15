@@ -37,7 +37,6 @@ export default {
     scrollLyric (index) {
       let lyric = document.getElementById(`lyric-${index}`)
       lyric && lyric.scrollIntoView({ block: 'center' })
-      console.log(this.$store.state.Player.lyricList)
     }
   },
   watch: {
