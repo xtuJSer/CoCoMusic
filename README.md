@@ -9,11 +9,15 @@
 <img src="https://img.shields.io/badge/release-v2.0.2-brightgreen.svg">
 <img src="https://img.shields.io/badge/license-LGPL-red.svg">
 <br/>
-<img src="http://orblzfbb0.bkt.clouddn.com/Ful4txdNVi1_457r9K8vpbLgZKVn?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim">
-</p>
-# Contributor
 
-  welcome pull request!
+</p>
+
+# Contributor
+  
+  特别感谢[caigoul](https://github.com/caigoul)对项目的支持
+
+  Contributor:
+ - [caigoul](https://github.com/caigoul)
  - [fengT-T](https://github.com/fengT-T)
  - [Noah Gao](https://github.com/noahziheng)
 
@@ -21,16 +25,16 @@
 ## Linux
 ### AppImage
 ``` bash
-chmod +x cocomusic-2.0.2-x86_64.AppImage
-./cocomusic-2.0.2-x86_64.AppImage
+chmod +x cocomusic-2.0.4-x86_64.AppImage
+./cocomusic-2.0.4-x86_64.AppImage
 ```
 ### deb
 ```bash
-sudo dpkg -i cocomusic_2.0.2_amd64.deb
+sudo dpkg -i cocomusic_2.0.4_amd64.deb
 ```
 ### pacman
 ```bash
-sudo pacman -U cocomusic-2.0.2.pacman
+sudo pacman -U cocomusic-2.0.4.pacman
 ```
 
 # Build Setup
