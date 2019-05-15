@@ -235,11 +235,12 @@ const actions = {
 
     await state.player.play() // 实际上 Google chrome 在 50 左右就吧这个方法改成异步的了,await将后面的逻辑放到微任务队列,不然play同时load会让play出问题就凉了
 
-    commit('setPlayerState', {
-      currentPlayIndex: index,
-      lyricList: [],
-      lyricIndex: 0
-    })
+    state.currentPlayIndex !== index &&
+      commit('setPlayerState', {
+        currentPlayIndex: index,
+        lyricList: [],
+        lyricIndex: 0
+      })
 
     const { lyricList } = (await getLyric(current.songMid))
     commit('setPlayerState', {

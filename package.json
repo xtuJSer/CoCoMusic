@@ -10,6 +10,8 @@
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:linux32": "node .electron-vue/build.js && electron-builder -l deb --ia32",
     "build:linux": "node .electron-vue/build.js && electron-builder -l tar.xz deb AppImage pacman",
+    "build:linux-pacman": "node .electron-vue/build.js && electron-builder -l pacman",
+    "build:linux-deb": "node .electron-vue/build.js && electron-builder -l deb",
     "build:mac": "node .electron-vue/build.js && electron-builder -m zip",
     "build:win": "node .electron-vue/build.js && electron-builder -w",
     "build:linux-armv7l": "node .electron-vue/build.js && electron-builder -l deb --armv7l",
