@@ -14,7 +14,7 @@
 
     <div class="music-info">
       <router-link to="/lyric">
-        <p class="song-name">
+        <p class="song-name" style="width: fit-content">
           {{currentPlay.songName}}
         </p>
       </router-link>
@@ -28,24 +28,26 @@
         <img src="../assets/img/album.svg" alt="专辑" title="专辑">
       </router-link>
 
-      <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee ${range}%, #eee)`}">
-      <div class="singer-name">
-        <p>
-          <span v-for="singer in currentPlay.singerList" :key="singer.singerMid">
-            <router-link :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}">
-              {{singer.singerName}}
-            </router-link>
-            &nbsp;
-          </span>
-        </p>
-        <p class="music-volume">
-          {{playTimeString}} / {{playDurationString}}
-          <img src="../assets/img/volume.svg">
-          <input v-model="volume" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${volume}%, #5755d9 ${volume}%,#eee ${volume}%, #eee)`}">
-          <img v-show="mode === 'cycle'" @click="changeMode" class="play-mode" src="../assets/img/cycle.svg" title="循环播放" alt="循环播放">
-          <img v-show="mode === 'single'" @click="changeMode" class="play-mode" src="../assets/img/single.svg" title="单曲循环" alt="单曲循环">
-          <img v-show="mode === 'random'" @click="changeMode" class="play-mode" src="../assets/img/random.svg" title="随机播放" alt="随机播放">
-        </p>
+      <div class="control">
+        <input v-model="range" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${range}%, #5755d9 ${range}%,#eee8 ${range}%, #eee8)`}">
+          <div class="singer-name">
+            <p>
+              <span v-for="singer in currentPlay.singerList" :key="singer.singerMid">
+                <router-link :to="{path: `/singer/${singer.singerMid}/music`, query: {name: singer.singerName}}">
+                  {{singer.singerName}}
+                </router-link>
+                &nbsp;
+              </span>
+            </p>
+            <p class="music-volume">
+              {{playTimeString}} / {{playDurationString}}
+              <img src="../assets/img/volume.svg">
+              <input v-model="volume" class="slider" type="range" min="0" max="100" value="50" :style="{ background: `linear-gradient(to right, #5755d9 ${volume}%, #5755d9 ${volume}%,#eee8 ${volume}%, #eee8)`}">
+              <img v-show="mode === 'cycle'" @click="changeMode" class="play-mode" src="../assets/img/cycle.svg" title="循环播放" alt="循环播放">
+              <img v-show="mode === 'single'" @click="changeMode" class="play-mode" src="../assets/img/single.svg" title="单曲循环" alt="单曲循环">
+              <img v-show="mode === 'random'" @click="changeMode" class="play-mode" src="../assets/img/random.svg" title="随机播放" alt="随机播放">
+            </p>
+          </div>
       </div>
     </div>
   </div>

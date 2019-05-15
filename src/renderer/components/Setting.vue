@@ -56,6 +56,12 @@
       <div class="col-3 col-sm-12 text-right">
         <button class="btn" @click="noSideWindow">{{winSide ? '默认窗口边框' : '无窗口边框'}}</button>
       </div>
+      <div class="col-6 col-sm-12">
+        <h6 class="form-label">暗色主题</h6>
+      </div>
+      <div class="col-6 col-sm-12 text-right">
+        <button class="btn" @click="toggleTheme">{{darkTheme ? 'D♂ark' : 'Light'}}</button>
+      </div>
     </div>
     <div class="divider text-center" data-content="LOGIN"></div>
     <div>
@@ -90,6 +96,7 @@ export default {
       showVersion: false,
       hide: localStorage.getItem('hideSetting') === 'true',
       winSide: localStorage.getItem('winSideSetting') === 'true',
+      darkTheme: localStorage.getItem('darkTheme') === 'true',
       reloadbtn: false,
       hotkeysbtn: false,
       hotkeys: {}
@@ -123,6 +130,11 @@ export default {
       localStorage.setItem('winSideSetting', this.winSide ? 'false' : 'true')
       this.winSide = !this.winSide
       this.reloadbtn = true
+    },
+    toggleTheme () {
+      localStorage.setItem('darkTheme', this.darkTheme ? 'false' : 'true')
+      this.darkTheme = !this.darkTheme
+      ipcRenderer.send('change theme')
     },
     reload () {
       ipcRenderer.send('reload')

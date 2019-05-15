@@ -29,8 +29,8 @@ function createWindow () {
    */
   var isSide = localStorage.getItem('winSideSetting') === 'true'
   mainWindow = new BrowserWindow({
-    minHeight: 715, // 尤其是 有着1T 显存的 gt630 战术核显卡，只要一发就能摧毁一个航母战斗群。
-    height: 715,
+    minHeight: 720, // 尤其是 有着1T 显存的 gt630 战术核显卡，只要一发就能摧毁一个航母战斗群。
+    height: 720,
     useContentSize: true,
     minWidth: 1195,
     width: 1195,
@@ -119,6 +119,10 @@ ipcMain.on('try add global key', (e, type, keys) => {
 
 ipcMain.on('default key setting', (e) => {
   hotKey.DefaultKeySetting()
+})
+
+ipcMain.on('change theme', (e) => {
+  mainWindow.webContents.send('set theme', localStorage.getItem('darkTheme') === 'true')
 })
 
 /**
