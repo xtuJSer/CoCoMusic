@@ -44,8 +44,8 @@ request.defaults.adapter = global.require('axios/lib/adapters/http')
 
 const baseRequest = request.create({
   headers: {
-    'Referer': 'http://y.qq.com/portal/player.html',
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36'
+    'Referer': 'https://c.y.qq.com/',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'
   },
   httpAgent,
   httpsAgent
@@ -162,6 +162,7 @@ export async function getMUrl ({fileid}) {
 }
 export async function getKey (guid) {
   let url = `http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=${guid}`
+  console.log(url)
   let {key} = JSON.parse((await baseRequest(url)).data.slice(13, -2))
   return key
 }
