@@ -91,8 +91,8 @@
     "xml2js": "^0.4.19"
   },
   "optionalDependencies": {
-    "mpris-service": "^1.1.3",
-    "dbus": "^0.2.11"
+    "mpris-service": "^2.1.0",
+    "dbus": "^1.0.5"
   },
   "devDependencies": {
     "ajv": "^6.10.2",

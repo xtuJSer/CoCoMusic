@@ -94,6 +94,18 @@ let webConfig = {
         removeAttributeQuotes: true,
         removeComments: true
       },
+      templateParameters(compilation, assets, options) {
+        return {
+          compilation: compilation,
+          webpack: compilation.getStats().toJson(),
+          webpackConfig: compilation.options,
+          htmlWebpackPlugin: {
+            files: assets,
+            options: options
+          },
+          process,
+        };
+      },
       nodeModules: false
     }),
     new webpack.DefinePlugin({
