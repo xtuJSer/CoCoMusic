@@ -53,6 +53,7 @@ function createWindow () {
     mainWindow.show()
     loadingWindow && loadingWindow.close()
   })
+  mainWindow.webContents.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36') // I`m chrome 75
 }
 
 function creatLoading () {
