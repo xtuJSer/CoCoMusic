@@ -79,8 +79,6 @@ const mutations = {
   },
   setPlayerSrc (state, payload) {
     state.source.src = payload[0]
-    state.sourceBac1.src = payload[1]
-    state.sourceBac2.src = payload[2]
   },
   setPlayMode (state, payload) {
     window.localStorage.mode = payload
@@ -148,9 +146,9 @@ const actions = {
     player.addEventListener('durationchange', () => commit('setPlayerState', { playDuration: player.duration }))
     player.addEventListener('ended', _ => dispatch('next'))
     // 错误处理
-    state.sourceBac2.addEventListener('error', ({ path: [{ src }, { currentSrc }] }) => {
+    state.source.addEventListener('error', ({ path: [{ src }, { currentSrc }] }) => {
       commit('setPlayerState', { loading: false })
-      if (currentSrc === '' || !/dl.stream.qqmusic.qq.com/.test(src)) {
+      if (currentSrc === '') {
         return
       }
       let { songName, album: { albumMid } } = getters.currentPlay
@@ -160,7 +158,7 @@ const actions = {
         body: '资源请求错误, 可能是没有版权的歌曲，无法播放！',
         icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
       })
-      console.log('资源请求错误：' + src)
+      console.error('资源请求错误：' + src)
       // dispatch('next')
     })
 
@@ -220,10 +218,9 @@ const actions = {
     })
 
     commit('setPlayerSrc', [
-      `http://dl.stream.qqmusic.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`,
-      `http://dl.stream.qqmusic.qq.com/M500${current.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`,
-      `http://dl.stream.qqmusic.qq.com/M800${current.songMid}.mp3?vkey=${state.vkey}&guid=${guid}&fromtag=30`
+      `http://113.105.155.25/amobile.music.tc.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
     ])
+    // TODO 添加 cdn 选择，不过我觉得没有必要，毕竟要搞新坑了
 
     state.player.load()
 
