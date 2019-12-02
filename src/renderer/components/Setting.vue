@@ -67,8 +67,8 @@
     <div>
       <login></login>
     </div>
-    <div class="divider text-center" data-content="HotKey" @click="hotkeysbtn = !hotkeysbtn"></div>
-    <div v-if="hotkeysbtn" class="form-group">
+    <div class="divider text-center" data-content="HotKey" ></div>
+    <div class="form-group">
       <div class="col-12 col-sm-12 text-center">
         <button class="btn" @click="defaultKeySet">重置快捷键</button>
       </div>
@@ -85,7 +85,7 @@ import { getkeyMap } from '../../main/hotKey.js'
 const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
-const CURRENT_VERSION = '2.0.5'
+const CURRENT_VERSION = '2.0.6'
 
 export default {
   data () {

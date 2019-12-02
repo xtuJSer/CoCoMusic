@@ -1,4 +1,4 @@
-import { getSongVkey, getLyric, getKey } from '../../../spider/index'
+import { getSongVkey, getLyric, getKey, getCdn } from '../../../spider/index'
 import { throttle, random } from 'lodash'
 import { setMprisProp, setPosition, mpris } from '../../mpris'
 const { dialog, app } = require('electron').remote
@@ -58,7 +58,8 @@ const state = {
   loop: window.localStorage.loop !== undefined
     ? !!window.localStorage.loop
     : true,
-  vkey: ''
+  vkey: '',
+  cdn: ''
 }
 
 const mutations = {
@@ -132,6 +133,10 @@ const actions = {
    * @param {Object} state
    */
   async initPlayer ({ state, commit, dispatch, getters }) {
+    commit('setPlayerState', {
+      cdn: await getCdn(state.guid)
+    })
+
     state.player.append(state.source, state.sourceBac1, state.sourceBac2)
 
     let { player, playVolume, mode } = state
@@ -202,7 +207,7 @@ const actions = {
    * @param {Number} index 歌曲索引
    */
   async setPlay ({ state, commit, getters }, index) {
-    const { guid } = state
+    const { guid, cdn } = state
     const current = state.playList[index] // 保存当前播放的引用
 
     commit('setPlayerState', { loading: true })
@@ -218,7 +223,7 @@ const actions = {
     })
 
     commit('setPlayerSrc', [
-      `http://113.105.155.25/amobile.music.tc.qq.com/${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
+      `${cdn}${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
     ])
     // TODO 添加 cdn 选择，不过我觉得没有必要，毕竟要搞新坑了
 

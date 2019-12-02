@@ -82,11 +82,11 @@ export async function getSingerMusicList ({page, singerMid}) {
   return {
     total: Math.floor(total / 30),
     list: list.map(
-      ({musicData: {songmid, strMediaMid, songname, albumname, albummid, singer, type}}) =>
+      ({musicData: {
+        songmid, strMediaMid, songname, albumname, albummid, singer, type}}) =>
         new Music(songname, songmid, strMediaMid,
           new Album(albumname, albummid),
-          singer.map(
-            ({mid, name}) => new Singer(name,mid))
+          singer.map(({mid, name}) => new Singer(name, mid))
           , type))
   }
 }
@@ -188,10 +188,10 @@ export async function getSearch ({keyword, page}) {
   return {direct, totalPage: Math.ceil(totalnum / 20),
     songList: list.map(
       ({name, mid, file: {media_mid}, singer, album, type}) =>
-        new Music(name, mid, media_mid,
+        new Music(
+          name, mid, media_mid,
           new Album(album.name, album.mid),
-          singer.map(
-            singerItem =>
+          singer.map(singerItem =>
               new Singer(singerItem.name, singerItem.mid)),
           type))
   }
@@ -209,10 +209,10 @@ export async function getAlbum ({albumMid}) {
   return {
     musicList: list.map(
       ({songname, songmid, strMediaMid, albumname, albummid, singer, type}) =>
-        new Music(songname, songmid, strMediaMid,
+        new Music(
+          songname, songmid, strMediaMid,
           new Album(albumname, albummid),
-          singer.map(
-            ({mid, name}) => new Singer(name, mid)),
+          singer.map(({mid, name}) => new Singer(name, mid)),
           type)),
     album: new Album(name, albumMid)
   }
@@ -247,10 +247,24 @@ export async function getPlayListInfo (playListMid) {
     playListName: dissname,
     list: songlist.map(
       ({songname, songmid, strMediaMid, albumname, albummid, singer, type}) =>
-        new Music(songname, songmid, strMediaMid,
+        new Music(
+          songname, songmid, strMediaMid,
           new Album(albumname, albummid),
           singer.map(
             ({mid, name}) => new Singer(name, mid))
           , type))
   }
+}
+
+export async function getCdn (guid) {
+  const url = `https://u.y.qq.com/cgi-bin/musicu.fcg?data=${encodeURIComponent(`{"req":{"module":"CDN.SrfCdnDispatchServer","method":"GetCdnDispatch","param":{"guid":${guid},"calltype":0,"userip":""}},"req_0":{"module":"vkey.GetVkeyServer","method":"CgiGetVkey","param":{"guid":"${guid}","songmid":["000KDHyB23K7Eq"],"songtype":[0],"uin":"0","loginflag":1,"platform":"20"}},"comm":{"uin":0,"format":"json","ct":24,"cv":0}}`)}`
+  const { data: { req: { data: { sip: cdnList, testfilewifi: testUrl } } }} = await baseRequest(url)
+  return new Promise((resolve, reject) => {
+    cdnList.map(cdn => {
+      baseRequest(cdn + testUrl).then(() => {
+        console.log(cdn)
+        resolve(cdn)
+      })
+    })
+  })
 }
