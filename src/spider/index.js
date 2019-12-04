@@ -262,7 +262,6 @@ export async function getCdn (guid) {
   return new Promise((resolve, reject) => {
     cdnList.map(cdn => {
       baseRequest(cdn + testUrl).then(() => {
-        console.log(cdn)
         resolve(cdn)
       })
     })

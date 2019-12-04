@@ -1,3 +1,5 @@
+import store from '../../store'
+
 export default function (table) {
   return {
     methods: {
@@ -18,9 +20,7 @@ export default function (table) {
        * @param {String} mid
        */
       isfocus (mid) {
-        return this.$store.state.Favorite[table].some(obj => {
-          return obj[`${table}Mid`] === (mid || this[table][`${table}Mid`])
-        })
+        return store.getters.favoriteMap[table][mid]
       }
     }
   }

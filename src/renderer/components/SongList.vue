@@ -9,12 +9,12 @@
 
         <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
 
-          <div class="music-favorite" :class="{'hide-music-favorite': !focusMap[music.songMid]}">
-            <button class="btn btn-link" v-show="!focusMap[music.songMid]" @click="favorite(music), toRemote(music.songMid, 1)">
+          <div class="music-favorite" :class="{'hide-music-favorite': !isfocus(music.songMid)}">
+            <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music), toRemote(music.songMid, 1)">
               <img class="favorite" src="../assets/img/Favorite.svg" alt="">
             </button>
             <button class="btn btn-link"
-              v-show="focusMap[music.songMid]"
+              v-show="isfocus(music.songMid)"
               :disabled="currentPlay && music.songMid === currentPlay.songMid" 
               @click="deleteFavorite(music.songMid), toRemote(music.songMid, 2)">
               <img class="favorite" src="../assets/img/hasFavorite.svg" alt="">
@@ -95,12 +95,6 @@ export default {
     }),
     isPlayList () {
       return this.$route.fullPath === this.playUrl
-    },
-    focusMap () {
-      return this.musicList.reduce((pre, cur, index) => {
-        pre[cur.songMid] = this.isfocus(cur.songMid)
-        return pre
-      }, {})
     },
     musicListFilter () {
       return this.musicFilter.startsWith('call:')

@@ -1,4 +1,4 @@
-import { getSongVkey, getLyric, getKey, getCdn } from '../../../spider/index'
+import { getSongVkey, getLyric, getCdn } from '../../../spider/index'
 import { throttle, random } from 'lodash'
 import { setMprisProp, setPosition, mpris } from '../../mpris'
 const { dialog, app } = require('electron').remote
@@ -6,7 +6,7 @@ const fs = require('fs')
 const http = require('http')
 const path = require('path')
 const isLinux = process.platform === 'linux'
-const preLoadImg = new Image()
+const preLoadImg = new window.Image()
 
 function generateGuid () {
   const t = new Date().getUTCMilliseconds()
@@ -176,8 +176,6 @@ const actions = {
       let next = nextLyric(player.currentTime, lyricIndex, lyricList)
       next !== undefined && commit('updateLyricIndex', next)
     }, 800)) // 性能优化肯定要做啊，不做怎么好意思说自己轻量，基本优化到 1% 以下，不然和某易云音乐一样卡么。
-
-    commit('setVkey', await getKey(state.guid))
   },
   /**
    * 上一首

@@ -17,6 +17,10 @@
 <script>
 import fTab from '@/components/Tab'
 import { RemoteToLocal } from '../../spider/favorite'
+import throttle from 'lodash/throttle'
+
+const remoteWithThrottle = throttle(RemoteToLocal, 3600 * 1000)
+
 export default {
   name: 'favorite',
   data () {
@@ -29,16 +33,13 @@ export default {
       ]
     }
   },
-  methods: {
-    RemoteToLocal: RemoteToLocal
-  },
   components: {
     fTab
   },
   computed: {
   },
   activated () {
-    setTimeout(() => RemoteToLocal(), 2000)
+    window.localStorage.logined && remoteWithThrottle()
   }
 }
 </script>

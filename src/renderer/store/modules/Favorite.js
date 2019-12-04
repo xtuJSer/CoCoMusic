@@ -1,11 +1,27 @@
 import { getFavorite, addFavorite, deleteFavorite } from '../../db'
+
+const reduceMap = (data, tableName) =>
+  data.reduce((acc, item) => {
+    acc[item[tableName + 'Mid']] = true
+    return acc
+  }, {})
+
 const state = {
   song: [],
   singer: [],
   album: [],
   playList: []
 }
+
 const getters = {
+  favoriteMap (state) {
+    return {
+      song: reduceMap(state.song, 'song'),
+      singer: reduceMap(state.singer, 'singer'),
+      album: reduceMap(state.album, 'album'),
+      playList: reduceMap(state.playList, 'playList')
+    }
+  }
 }
 const actions = {
   async initFavorite ({ commit }) {

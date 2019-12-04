@@ -15,20 +15,21 @@
 import { setuser } from '../db/index'
 import { UserInfo } from '../../spider/commonObject'
 import { Info, LocalToRemote } from '../../spider/favorite'
+
 const { BrowserWindow } = require('electron').remote
 
 export default {
   data () {
     return {
-      logined: false,
+      logined: !!window.localStorage.logined,
       status: 'NOT LOGIN',
       icon: '',
       updating: false,
       message: '上传本地收藏数据'
     }
   },
-  async activated () {
-    this.update()
+  async mounted () {
+    this.logined && this.update()
   },
   methods: {
     async updateFavorite () {
@@ -76,7 +77,9 @@ export default {
       this.status = info ? 'LOGINED : ' + info.nickname : 'NOT LOGIN'
       if (info) {
         this.logined = true
+        window.localStorage.logined = true
       } else {
+        window.localStorage.logined = false
         this.logined = false
       }
     }
