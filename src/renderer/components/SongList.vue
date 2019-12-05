@@ -1,5 +1,6 @@
 <template>
   <div class="song-list">
+    {{log('render')}}
     <transition-group name="list">
       <div class="song-item"
         v-for="(music,index) in musicList"
@@ -71,7 +72,8 @@ export default {
   data () {
     return {
       showSearch: false,
-      musicFilter: ''
+      musicFilter: '',
+      isPlayList: false
     }
   },
   props: {
@@ -93,9 +95,6 @@ export default {
       playUrl: state => state.Player.playUrl,
       mode: state => state.Player.mode
     }),
-    isPlayList () {
-      return this.$route.fullPath === this.playUrl
-    },
     musicListFilter () {
       return this.musicFilter.startsWith('call:')
         ? this.musicList
@@ -108,7 +107,8 @@ export default {
   },
   filters: {
     deleteOtherName (fullName) {
-      return fullName.split(' (')[0]
+      return fullName
+      // return fullName.split(' (')[0]
     }
   },
   watch: {
@@ -119,9 +119,14 @@ export default {
       return this.isPlayList && this.$store.commit('setPlayerState', {
         playList: JSON.parse(JSON.stringify(this.musicList))
       })
+    },
+    '$route.fullPath' () {
+      console.log('2233')
+      this.isPlayList = this.$route.fullPath === this.playUrl
     }
   },
   methods: {
+    log: console.log,
     focusPlay () {
       const id = `#music${this.currentPlay.songMid}`
       document.querySelector(id).scrollIntoView({ block: 'center', behavior: 'smooth' })
