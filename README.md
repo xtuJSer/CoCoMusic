@@ -14,10 +14,8 @@
 
 # Contributor
   
-  特别感谢[caigoul](https://github.com/caigoul)对项目的支持
-
   Contributor:
- - [caigoul](https://github.com/caigoul)
+ - [pid000](https://github.com/pid000)
  - [fengT-T](https://github.com/fengT-T)
  - [Noah Gao](https://github.com/noahziheng)
 

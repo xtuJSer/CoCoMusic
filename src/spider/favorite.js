@@ -13,7 +13,6 @@ let songids = {}
 // 用户的喜欢的歌曲
 
 // 我特么真的不会js异步= =
-// async 和await是什么鬼…… 简直是在挫败小萌新的信心
 function _config () {
   return {
     headers: {
@@ -48,7 +47,16 @@ function _gtk () {
 }
 
 function _user () {
-  return (_cookie()) ? (_cookie())['luin'].slice(1) : ''
+  console.log('_USER::')
+  console.log(getuser())
+  if (_cookie()) {
+    if ((getuser())['source'] === 'wx') {
+      return (_cookie())['wxuin'].slice(1)
+    } else {
+      return (_cookie())['luin'].slice(1)
+    }
+  }
+  return ''
 }
 
 // 都返回数组，数组的内容既是可以存储在数据库的对象

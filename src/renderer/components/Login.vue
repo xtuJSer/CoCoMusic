@@ -1,12 +1,14 @@
 <template>
   <div class="login-content">
-    <button class="btn btn-link btn-sm" @click="login">
-      <img v-if="!logined" class="login-icon" id="icon" src="../assets/img/qq_login.svg" alt="TO_LOGIN">
+    <button class="btn btn-link btn-sm">
+      <img v-if="!logined" class="login-icon" id="icon" src="../assets/img/qq_login.svg" alt="TO_LOGIN" @click="login('https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=11&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dsinger%26tab%3Dfocus%26stat%3Dy_new.top.user_pic%26stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=', 'qq')">
+      <img v-if="!logined" class="login-icon" id="icon" src="../assets/img/weixin_login.svg" alt="TO_LOGIN" @click="login('https://open.weixin.qq.com/connect/qrconnect?appid=wx48db31d50e334801&redirect_uri=https%3A%2F%2Fy.qq.com%2Fportal%2Fwx_redirect.html%3Flogin_type%3D2%26surl%3Dhttps%3A%2F%2Fy.qq.com%2F&response_type=code&scope=snsapi_login&state=STATE&href=https%3A%2F%2Fy.gtimg.cn%2Fmediastyle%2Fyqq%2Fpopup_wechat.css#wechat_redirect', 'wx')">
       <img v-if="logined" class="login-icon" id="icon" :src="icon" alt="TO_LOGIN">
     </button>
     <div class="login-status">STATUS : {{status}}</div>
     <div v-if="logined" class="col-12 col-sm-12 text-center">
         <button class="btn" @click="updateFavorite" :class="{loading: updating}" style="border: none">{{message}}</button>
+        <button class="btn" @click="logout" style="border: none">注销</button>
     </div>
   </div>
 </template>
@@ -44,7 +46,7 @@ export default {
         setTimeout(() => (this.message = '上传本地收藏数据'), 3000)
       })
     },
-    login () {
+    login (url, flag) {
       let win = new BrowserWindow({
         width: 400,
         height: 600,
@@ -54,14 +56,15 @@ export default {
         webPreferences: { nodeIntegration: false }
       })
       win.on('close', () => { win = null })
-      win.loadURL('https://xui.ptlogin2.qq.com/cgi-bin/xlogin?daid=384&pt_no_auth=1&style=11&appid=1006102&s_url=https%3A%2F%2Fy.qq.com%2Fportal%2Fprofile.html%23sub%3Dsinger%26tab%3Dfocus%26stat%3Dy_new.top.user_pic%26stat%3Dy_new.top.pop.logout&low_login=1&hln_css=&hln_title=&hln_acc=&hln_pwd=&hln_u_tips=&hln_p_tips=&hln_autologin=&hln_login=&hln_otheracc=&hide_close_icon=1&hln_qloginacc=&hln_reg=&hln_vctitle=&hln_verifycode=&hln_vclogin=&hln_feedback=')
+      win.loadURL(url)
       win.show()
       win.webContents.on('did-finish-load', async (e) => {
-        if (win.webContents.getURL().indexOf('y.qq.com/portal/profile.html') !== -1) {
+        let jumpUrl = ((flag === 'qq') ? 'y.qq.com/portal/profile.html' : 'y.qq.com/')
+        if (win.webContents.getURL().indexOf(jumpUrl) !== -1) {
           win.hide()
           window.setTimeout(() => {
             win.webContents.executeJavaScript('document.cookie').then(result => {
-              var user = new UserInfo(result)
+              var user = new UserInfo(result, flag)
               setuser(user)
               win.destroy()
               this.update()
@@ -69,6 +72,11 @@ export default {
           })
         }
       })
+    },
+    logout () {
+      window.localStorage.removeItem('cookieString')
+      window.localStorage.removeItem('cookieString')
+      this.update()
     },
     async update () {
       var info = await Info()
