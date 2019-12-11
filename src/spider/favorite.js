@@ -11,8 +11,6 @@ request.defaults.adapter = global.require('axios/lib/adapters/http')
 let songids = {}
 
 // 用户的喜欢的歌曲
-
-// 我特么真的不会js异步= =
 function _config () {
   return {
     headers: {
@@ -75,8 +73,6 @@ export async function SingerFromRemote () {
 }
 
 // 喜欢的歌曲
-// 现在的网页版已经不能显示所有喜欢的歌曲了（最多显示10条）
-// linux用户表示我草泥马呢。
 export async function SongFromRemote () {
   var url = `http://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=${(await Info()).dissid}&_=${+new Date()}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
   let data = (await request(url, _config())).data
@@ -89,7 +85,6 @@ export async function SongFromRemote () {
 }
 
 // 喜欢的歌单
-// 啊……草泥马草泥马草泥马……Aaaaaaa
 export async function PlayListFromRemote () {
   var url = `http://c.y.qq.com/fav/fcgi-bin/fcg_get_profile_order_asset.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&ct=20&cid=205360956&userid=${_user()}&reqtype=3&sin=0&ein=`
   let num = (await request(url, (_config()))).data.data.totaldiss
@@ -119,6 +114,9 @@ export async function Info () {
  * @param {Number} flag flag为1, 收藏; flag为2, 取消收藏
  */
 export async function FavoritePlayList (playListMid, flag) {
+  if (!getuser()) {
+    return
+  }
   var url = `http://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
   var data = {
     loginUin: `${_user()}`,
@@ -168,6 +166,9 @@ export async function FavoritePlayList (playListMid, flag) {
  * }
  */
 export async function DeleteFavoriteSong (songmid) {
+  if (!getuser()) {
+    return
+  }
   // 我也不造为什么删除之前还要查询数据，不然删除是不会成功的（即使相应里说删除成功）
   await SongFromRemote()
   let data = {
@@ -193,7 +194,11 @@ export async function DeleteFavoriteSong (songmid) {
   let url = `http://c.y.qq.com/qzone/fcg-bin/fcg_music_delbatchsong.fcg?g_tk=${_gtk()}`
   request(url, _postconfig(querystring.stringify(data)))
 }
+
 export async function AddFavoriteSong (songmid) {
+  if (!getuser()) {
+    return
+  }
   let data = {
     loginUin: `${_user()}`,
     hostUin: '0',
@@ -221,6 +226,9 @@ export async function AddFavoriteSong (songmid) {
 
 // flag = 2, 取消收藏 |flag = 1, 收藏
 export async function FavoriteAlbum (albummid, flag) {
+  if (!getuser()) {
+    return
+  }
   let id = (await request(`http://c.y.qq.com/v8/fcg-bin/fcg_v8_album_info_cp.fcg?ct=24&albummid=${albummid}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`, _config())).data
   let url = `http://c.y.qq.com/folder/fcgi-bin/fcg_qm_order_diss.fcg?g_tk=${_gtk()}`
   let data = {
@@ -246,10 +254,17 @@ export async function FavoriteAlbum (albummid, flag) {
 
 // 关注/取消关注
 export async function DeleteSinger (singermid) {
+  if (!getuser()) {
+    return
+  }
   let url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_del.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}`
   request(url, _config())
 }
+
 export async function AddSinger (singermid) {
+  if (!getuser()) {
+    return
+  }
   let url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_add.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=gb2312&notice=0&platform=yqq.json&needNewCode=0&singermid=${singermid}&rnd=${+new Date()}`
   console.log((await request(url, _config())).data)
 }
