@@ -47,10 +47,8 @@ function _gtk () {
 }
 
 function _user () {
-  console.log('_USER::')
-  console.log(getuser())
   if (_cookie()) {
-    if ((getuser())['source'] === 'wx') {
+    if ((getuser())['source'] && (getuser())['source'] === 'wx') {
       return (_cookie())['wxuin'].slice(1)
     } else {
       return (_cookie())['luin'].slice(1)
