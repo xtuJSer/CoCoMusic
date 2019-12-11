@@ -4,8 +4,8 @@
       <singer-avatar :singer="singer" :showName='false'></singer-avatar>
       <div class="singer-name">
         <h4>{{singer.singerName}}</h4>
-        <button class="btn btn-sm" v-show="!isfocus()" @click="favorite(), toRemote(1)">关注</button>
-        <button class="btn btn-sm" v-show="isfocus()" @click="deleteFavorite(), toRemote(0)">取消关注</button>
+        <button class="btn btn-sm" v-show="!isfocus(singer.singerMid)" @click="favorite(), toRemote(1)">关注</button>
+        <button class="btn btn-sm" v-show="isfocus(singer.singerMid)" @click="deleteFavorite(), toRemote(0)">取消关注</button>
       </div>
     </div>
     <div class="music-album-mv">
