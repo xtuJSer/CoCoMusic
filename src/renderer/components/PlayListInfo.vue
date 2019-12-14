@@ -4,8 +4,8 @@
       <img :src="playList.imgUrl" alt="">
       <div class="playList-info-name">
         <h4>{{playList.playListName}}</h4>
-          <button class="btn btn-sm" v-show="!isfocus()" @click="favorite(), toRemote(1)">关注</button>
-          <button class="btn btn-sm" v-show="isfocus()" @click="deleteFavorite(), toRemote(2)">取消关注</button>
+          <button class="btn btn-sm" v-show="!isfocus(playList.playListMid)" @click="favorite(), toRemote(1)">关注</button>
+          <button class="btn btn-sm" v-show="isfocus(playList.playListMid)" @click="deleteFavorite(), toRemote(2)">取消关注</button>
       </div>
     </div>
     <div class="divider text-center"></div>

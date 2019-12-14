@@ -91,7 +91,8 @@ export class Lyric {
 }
 
 export class UserInfo {
-  constructor (cookieString) {
+  constructor (cookieString, flag) {
+    this.source = flag
     this.cookieString = cookieString
     this.cookie = (function () {
       var cookie = {}
@@ -105,8 +106,11 @@ export class UserInfo {
   }
   _gtk () {
     function e (e) {
-      for (var n = 5381, o = 0, t = e.length; t > o; ++o) {
-        n += (n << 5) + e.charCodeAt(o)
+      var n = 5381
+      if (e) {
+        for (var o = 0, t = e.length; t > o; ++o) {
+          n += (n << 5) + e.charCodeAt(o)
+        }
       }
       return 2147483647 & n
     }

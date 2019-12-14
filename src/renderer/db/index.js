@@ -33,12 +33,19 @@ async function deleteFavorite ({ table, id }) {
 }
 
 function getuser () {
-  return new UserInfo(window.localStorage.getItem('cookieString'))
+  var cookie = window.localStorage.getItem('cookieString')
+  var source = window.localStorage.getItem('source')
+  if (cookie && source) {
+    return new UserInfo(cookie, source)
+  } else {
+    return null
+  }
 }
 
 function setuser (data) {
-  let { cookieString } = data
+  let { cookieString, source } = data
   window.localStorage.setItem('cookieString', cookieString)
+  window.localStorage.setItem('source', source)
 }
 
 export {
