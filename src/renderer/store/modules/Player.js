@@ -1,6 +1,7 @@
 import { getSongVkey, getLyric, getCdn } from '../../../spider/index'
 import { throttle, random } from 'lodash'
 import { setMprisProp, setPosition, mpris } from '../../mpris'
+import { formatPlayerTime } from '../../util'
 const { dialog, app } = require('electron').remote
 const fs = require('fs')
 const http = require('http')
@@ -109,14 +110,14 @@ const getters = {
     isLinux &&
       playTime !== undefined &&
         setPosition(playTime)
-    return `${Math.floor(playTime / 60)}:${Math.floor(playTime % 60)}`
+    return formatPlayerTime(playTime)
   },
   playDurationString: ({ playDuration, playVolume }, { currentPlay }) => {
     isLinux &&
       currentPlay.songName &&
         playDuration &&
           setMprisProp(currentPlay, playDuration, playVolume)
-    return `${Math.floor(playDuration / 60)}:${Math.floor(playDuration % 60)}`
+    return formatPlayerTime(playDuration)
   },
   currentLyric: state => {
     let { lyricIndex, lyricList } = state
