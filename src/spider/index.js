@@ -162,7 +162,6 @@ export async function getMUrl ({fileid}) {
 }
 export async function getKey (guid) {
   let url = `http://c.y.qq.com/base/fcgi-bin/fcg_musicexpress.fcg?json=3&guid=${guid}`
-  console.log(url)
   let {key} = JSON.parse((await baseRequest(url)).data.slice(13, -2))
   return key
 }

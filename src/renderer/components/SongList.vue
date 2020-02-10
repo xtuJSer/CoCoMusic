@@ -1,6 +1,5 @@
 <template>
   <div class="song-list">
-    {{log('render')}}
     <transition-group name="list">
       <div class="song-item"
         v-for="(music,index) in musicList"
@@ -121,12 +120,10 @@ export default {
       })
     },
     '$route.fullPath' () {
-      console.log('2233')
       this.isPlayList = this.$route.fullPath === this.playUrl
     }
   },
   methods: {
-    log: console.log,
     focusPlay () {
       const id = `#music${this.currentPlay.songMid}`
       document.querySelector(id).scrollIntoView({ block: 'center', behavior: 'smooth' })
