@@ -1,4 +1,4 @@
-# cocomusic
+# cocomusic V3.0
 
 ## Project setup
 ```
