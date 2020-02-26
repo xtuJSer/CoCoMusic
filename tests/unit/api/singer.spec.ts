@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { getSingerList, getSingerMusicList, getSingerAlbumList } from '../../../src/api/singer'
+import { getSingerList, getSingerMusicList, getSingerAlbumList, getSingerMvList } from '../../../src/api/singer'
 
 describe('歌手列表', function () {
   it('singerList', async function () {
@@ -19,5 +19,12 @@ describe('歌手专辑列表', function () {
     const data = await getSingerAlbumList('001fNHEf1SFEFN')
     expect(data.singerMid).to.equal('001fNHEf1SFEFN')
     expect(data.albumList).to.have.length.above(1)
+  })
+})
+describe('歌手mv列表', function () {
+  it('getSingerMvList', async function () {
+    const data = await getSingerMvList('001fNHEf1SFEFN')
+    expect(data.list).to.have.length.least(12)
+    expect(data.total).to.have.least(100)
   })
 })
