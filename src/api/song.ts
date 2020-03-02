@@ -1,5 +1,9 @@
 import { baseRequest, urlDecodeObjectUrl } from './base-request'
 
+// 这一堆鬼畜玩意我也没什么想法，优化个屁
+/**
+ * 生成一堆乱七八糟的参数
+ */
 const getMusicParams = (songmid: string) => urlDecodeObjectUrl({
   req: {
     module: 'CDN.SrfCdnDispatchServer',
@@ -34,9 +38,15 @@ const getMusicParams = (songmid: string) => urlDecodeObjectUrl({
     cv: 0
   }
 })
-// TODO 待优化
+
+// 缓存 cdn 地址
 export let cdn = ''
 
+/**
+ * 最快的 cdn 地址获取
+ * @param cdnList cdn列表
+ * @param testUrl 测试文件路径
+ */
 async function getCdn (cdnList: Array<string>, testUrl: string) {
   if (cdn) {
     return cdn
@@ -49,7 +59,10 @@ async function getCdn (cdnList: Array<string>, testUrl: string) {
     })
   })
 }
-
+/**
+ * 获取歌曲播放 key
+ * @param songmid 歌曲mid
+ */
 export async function getVkey (songmid: string) {
   const params = getMusicParams(songmid)
   const data = (await baseRequest({
@@ -60,7 +73,10 @@ export async function getVkey (songmid: string) {
   await getCdn(data.req.data.sip, data.req.data.testfilewifi)
   return data
 }
-
+/**
+ * 获取歌曲 url
+ * @param songmid 歌曲mid
+ */
 export async function getUrl (songmid: string) {
   const result = await getVkey(songmid)
   return cdn + result.req_0.data.midurlinfo[0].purl

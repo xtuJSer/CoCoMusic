@@ -1,7 +1,7 @@
 import { baseRequest, parseParams } from './base-request'
 
 interface Singer {
-  country: string;
+  country?: string;
   singerId: number;
   singerMid: string;
   singerName: string;
