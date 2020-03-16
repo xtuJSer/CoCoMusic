@@ -116,7 +116,6 @@ export default {
 }
 </script>
 <style scoped>
-
 a:visited {
   color: #302ecd;
 }

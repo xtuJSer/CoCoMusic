@@ -45,7 +45,8 @@ request.defaults.adapter = global.require('axios/lib/adapters/http')
 const baseRequest = request.create({
   headers: {
     'Referer': 'https://c.y.qq.com/',
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36',
+    'Accept-Encoding': 'gzip' // 打开gzip
   },
   httpAgent,
   httpsAgent
@@ -83,11 +84,11 @@ export async function getSingerMusicList ({page, singerMid}) {
     total: Math.floor(total / 30),
     list: list.map(
       ({musicData: {
-        songmid, strMediaMid, songname, albumname, albummid, singer, type}}) =>
+        songmid, strMediaMid, songname, albumname, albummid, singer, type, pay: { payplay }}}) =>
         new Music(songname, songmid, strMediaMid,
           new Album(albumname, albummid),
           singer.map(({mid, name}) => new Singer(name, mid))
-          , type))
+          , type, payplay))
   }
 }
 
@@ -186,13 +187,13 @@ export async function getSearch ({keyword, page}) {
   }
   return {direct, totalPage: Math.ceil(totalnum / 20),
     songList: list.map(
-      ({name, mid, file: {media_mid}, singer, album, type}) =>
+      ({name, mid, file: {media_mid}, singer, album, type, pay: {pay_play}}) =>
         new Music(
           name, mid, media_mid,
           new Album(album.name, album.mid),
           singer.map(singerItem =>
               new Singer(singerItem.name, singerItem.mid)),
-          type))
+          type, pay_play))
   }
 }
 
@@ -207,12 +208,12 @@ export async function getAlbum ({albumMid}) {
   let {list, name} = (await baseRequest(url)).data.data
   return {
     musicList: list.map(
-      ({songname, songmid, strMediaMid, albumname, albummid, singer, type}) =>
+      ({songname, songmid, strMediaMid, albumname, albummid, singer, type, pay: {payplay}}) =>
         new Music(
           songname, songmid, strMediaMid,
           new Album(albumname, albummid),
           singer.map(({mid, name}) => new Singer(name, mid)),
-          type)),
+          type, payplay)),
     album: new Album(name, albumMid)
   }
 }
@@ -245,13 +246,13 @@ export async function getPlayListInfo (playListMid) {
   return {
     playListName: dissname,
     list: songlist.map(
-      ({songname, songmid, strMediaMid, albumname, albummid, singer, type}) =>
+      ({songname, songmid, strMediaMid, albumname, albummid, singer, type, pay: {payplay}}) =>
         new Music(
           songname, songmid, strMediaMid,
           new Album(albumname, albummid),
           singer.map(
             ({mid, name}) => new Singer(name, mid))
-          , type))
+          , type, payplay))
   }
 }
 

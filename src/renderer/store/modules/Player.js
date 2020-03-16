@@ -2,6 +2,7 @@ import { getSongVkey, getLyric, getCdn } from '../../../spider/index'
 import { throttle, random } from 'lodash'
 import { setMprisProp, setPosition, mpris } from '../../mpris'
 import { formatPlayerTime } from '../../util'
+
 const { dialog, app } = require('electron').remote
 const fs = require('fs')
 const http = require('http')
@@ -157,15 +158,8 @@ const actions = {
       if (currentSrc === '') {
         return
       }
-      let { songName, album: { albumMid } } = getters.currentPlay
-      /* eslint-disable no-new */
-      new window.Notification(`${songName} 播放错误`, {
-        silent: true,
-        body: '资源请求错误, 可能是没有版权的歌曲，无法播放！',
-        icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
-      })
       console.error('资源请求错误：' + src)
-      // dispatch('next')
+      state.mode !== 'single' && dispatch('next')
     })
 
     player.addEventListener('timeupdate', throttle(() => {
@@ -224,7 +218,6 @@ const actions = {
     commit('setPlayerSrc', [
       `${cdn}${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
     ])
-    // TODO 添加 cdn 选择，不过我觉得没有必要，毕竟要搞新坑了
 
     state.player.load()
 
@@ -278,6 +271,7 @@ const actions = {
         }))
       })
       request.end()
+      // eslint-disable-next-line no-new
       new window.Notification(`${songName} 下载开始`, {
         icon: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumMid}.jpg?max_age=2592000`
       })

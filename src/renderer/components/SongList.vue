@@ -3,6 +3,7 @@
     <transition-group name="list">
       <div class="song-item"
         v-for="(music,index) in musicList"
+        :class="{ disabled: music.pay }"
         :key="music.songMid"
         :id="`music${music.songMid}`"
         v-show="musicListFilter[index]">
@@ -10,10 +11,14 @@
         <div class="song-item-head" :class="{'is-play': currentPlay && music.songMid === currentPlay.songMid}">
 
           <div class="music-favorite" :class="{'hide-music-favorite': !isfocus(music.songMid)}">
-            <button class="btn btn-link" v-show="!isfocus(music.songMid)" @click="favorite(music), toRemote(music.songMid, 1)">
+            <button
+              class="btn btn-link"
+              v-show="!isfocus(music.songMid)"
+              @click="favorite(music), toRemote(music.songMid, 1)">
               <img class="favorite" src="../assets/img/Favorite.svg" alt="">
             </button>
-            <button class="btn btn-link"
+            <button
+              class="btn btn-link"
               v-show="isfocus(music.songMid)"
               :disabled="currentPlay && music.songMid === currentPlay.songMid" 
               @click="deleteFavorite(music.songMid), toRemote(music.songMid, 2)">
@@ -22,7 +27,9 @@
           </div>
 
 
-          <button class="play-control btn btn-link" v-show="currentPlay && music.songMid !== currentPlay.songMid">
+          <button
+            class="play-control btn btn-link"
+            v-show="currentPlay && music.songMid !== currentPlay.songMid">
             <img src="../assets/img/play2.svg" @click="play(index)" alt="">
           </button>
           
@@ -131,7 +138,8 @@ export default {
     play (index) {
       this.$store.commit('setPlayerState', {
         playList: JSON.parse(JSON.stringify(this.musicList)),
-        playUrl: this.$route.fullPath
+        playUrl: this.$route.fullPath,
+        currentPlayIndex: index
       })
       this.$store.dispatch('setPlay', index)
     },
@@ -167,6 +175,10 @@ export default {
 }
 </script>
 <style scoped>
+.song-item.disabled > .song-item-head{
+  cursor: default;
+  opacity: .5;
+}
 .listenter, .list-leave-to {
   transform: translateY(-30px);
   opacity: 0;
