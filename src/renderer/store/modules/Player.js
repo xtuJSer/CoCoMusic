@@ -9,6 +9,7 @@ const http = require('http')
 const path = require('path')
 const isLinux = process.platform === 'linux'
 const preLoadImg = new window.Image()
+const ERRORMAX = 5
 
 function generateGuid () {
   const t = new Date().getUTCMilliseconds()
@@ -39,9 +40,6 @@ const state = {
   playUrl: '',
   loading: false,
   player: document.createElement('audio'),
-  source: document.createElement('source'), // 主要播放资源
-  sourceBac1: document.createElement('source'), // 备份播放1
-  sourceBac2: document.createElement('source'), // 备份播放2
   isPlay: false,
   playTime: 0,
   playDuration: 0,
@@ -61,7 +59,8 @@ const state = {
     ? !!window.localStorage.loop
     : true,
   vkey: '',
-  cdn: ''
+  cdn: '',
+  errorCount: 0
 }
 
 const mutations = {
@@ -81,7 +80,7 @@ const mutations = {
     state.lyricIndex = payload
   },
   setPlayerSrc (state, payload) {
-    state.source.src = payload[0]
+    state.player.src = payload[0]
   },
   setPlayMode (state, payload) {
     window.localStorage.mode = payload
@@ -139,8 +138,6 @@ const actions = {
       cdn: await getCdn(state.guid)
     })
 
-    state.player.append(state.source, state.sourceBac1, state.sourceBac2)
-
     let { player, playVolume, mode } = state
     player.volume = playVolume
     state.player.loop = (mode === 'single')
@@ -149,17 +146,21 @@ const actions = {
     player.addEventListener('pause', () => { commit('setIsPlay', false) })
     player.addEventListener('loadstart', () => { commit('setPlayerState', { loading: true }) })
     player.addEventListener('seeking', () => { commit('setPlayerState', { loading: true }) })
-    player.addEventListener('canplaythrough', () => { commit('setPlayerState', { loading: false }) })
+    player.addEventListener('canplaythrough', () => { commit('setPlayerState', { loading: false, errorCount: 0 }) })
     player.addEventListener('durationchange', () => commit('setPlayerState', { playDuration: player.duration }))
     player.addEventListener('ended', _ => dispatch('next'))
     // 错误处理
-    state.source.addEventListener('error', ({ path: [{ src }, { currentSrc }] }) => {
+    state.player.addEventListener('error', ({ path: [{ src }] }) => {
       commit('setPlayerState', { loading: false })
-      if (currentSrc === '') {
+      if (src === '') {
         return
       }
       console.error('资源请求错误：' + src)
-      state.mode !== 'single' && dispatch('next')
+      commit('setPlayerState', { errorCount: state.errorCount + 1 })
+      state.mode !== 'single' &&
+        state.errorCount < state.playList.length &&
+          state.errorCount < ERRORMAX &&
+            dispatch('next')
     })
 
     player.addEventListener('timeupdate', throttle(() => {
