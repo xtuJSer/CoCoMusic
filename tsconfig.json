@@ -35,6 +35,7 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "typings/**/*.ts",
+    "src/api/replace/crypto/utils.js"
   ],
   "exclude": [
     "node_modules"
