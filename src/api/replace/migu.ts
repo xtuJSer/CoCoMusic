@@ -6,6 +6,8 @@
 import { baseRequest } from '../base-request'
 import { ReplaceResource, resultfilter } from '../replace'
 
+const source = 'migu'
+
 const headers = {
   Referer: ''
 }
@@ -19,27 +21,27 @@ export async function search (title: string, singers: string[]): Promise<Replace
     const params = {
       keyword: '',
       pgc: 1,
-      rows: 5,
+      rows: 3,
       type: 2
     }
     params.keyword = title + ' ' + singers.join(' ')
     data = (await baseRequest.request({ url, headers, params })).data
 
-    const { musics } = data
-    for (const music of musics) {
+    for (const music of data.musics) {
       const { title: musicTitle, singerName, mp3, copyrightId: cid } = music
       if (resultfilter(title, singers, musicTitle, singerName.split(', '))) {
         return {
           id: cid,
-          songUrl: mp3
+          songUrl: mp3,
+          source
         }
       }
     }
   } catch (e) {
-    return { id: '', songUrl: '' }
+    return { id: '', songUrl: '', source }
   }
 
-  return { id: '', songUrl: '' }
+  return { id: '', songUrl: '', source }
 }
 
 export async function getLyrics (id: string) {

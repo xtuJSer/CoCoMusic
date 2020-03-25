@@ -1,4 +1,5 @@
 import { aesEncrypt, rsaEncrypt } from './crypto'
+import { MD5 } from './md5'
 
 function getRandomHexString(size) {
   const result = [];
@@ -32,5 +33,5 @@ function encryptedRequest(text) {
 }
 
 module.exports = {
-  encryptedRequest: encryptedRequest
+  encryptedRequest: encryptedRequest,
 }

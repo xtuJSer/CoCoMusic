@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-param-reassign */
 import aesjs from './aes';
-import { MD5 } from './md5';
 
 const bigInt = require('./big-integer');
 

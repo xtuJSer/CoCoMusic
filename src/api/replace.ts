@@ -6,6 +6,7 @@ import netease from './replace/netease'
 export interface ReplaceResource {
   id: string;
   songUrl: string;
+  source: string; // 'migu', 'netease', 'kugou'
 }
 
 /**
@@ -23,6 +24,10 @@ export function resultfilter (tSearch: string, sSearch: string[], tReturn: strin
   }
 }
 
+/**
+ * 发送 HEAD 请求来确定资源是否可以访问
+ * @param data
+ */
 async function checkValid (data: ReplaceResource) {
   let status = false
   const url = data.songUrl
@@ -39,26 +44,25 @@ async function checkValid (data: ReplaceResource) {
       }
     } catch (e) { }
   }
-  return { url, status }
+  return { status, data }
 }
 
 /**
- * 音源替换，返回替换到的url数组
+ * 返回替换到、可以播放的 ReplaceResource 数组
  * 如果没有搜索到歌曲， 返回 []
  * @param title 标题
  * @param singers 歌手
  */
-export async function search (title: string, singers: string[]): Promise<string[]> {
+export async function search (title: string, singers: string[]): Promise<ReplaceResource[]> {
   const toSearch = [migu, netease, kugou]
-
   const funcs = toSearch.map((value) => {
     return value.search(title, singers).then(checkValid)
   })
-  const urlObjs: { status: boolean, url: string }[] = (await Promise.all(funcs))  // eslint-disable-line
-  const urls: string[] = []
+  const urlObjs: { status: boolean, data: ReplaceResource }[] = (await Promise.all(funcs))  // eslint-disable-line
+  const urls: ReplaceResource[] = []
   for (const urlobj of urlObjs) {
     if (urlobj.status) {
-      urls.push(urlobj.url)
+      urls.push(urlobj.data)
     }
   }
   return urls

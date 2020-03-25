@@ -5,10 +5,15 @@
 
 import { baseRequest } from '../base-request'
 import { ReplaceResource, resultfilter } from '../replace'
+import { createHash } from 'crypto'
 
 const headers = {
-  Referer: ''
+  Referer: '',
+  Cookie: ''
 }
+
+// eslint-disable
+const source = 'kugou'
 
 async function getID (title: string, singers: string[]): Promise<string> {
   let data
@@ -35,23 +40,26 @@ async function getID (title: string, singers: string[]): Promise<string> {
   return ''
 }
 
-async function getSongDetail (id: string): Promise<any> {
+async function getSongUrl (id: string): Promise<string> {
   let data
   if (id === '') {
-    return { lyrics: '', songUrl: '' }
+    return ''
   }
 
   try {
-    headers.Referer = 'https://www.kugou.com/song/'
-    const url = `https://www.kugou.com/yy/index.php?r=play/getdata&hash=${id}&mid=ef9ef58770f20a21f3a8425b2fde36bd&platid=4&_=1584900344822`
-    data = (await baseRequest({ url, headers })).data
+    headers.Referer = 'http://trackercdn.kugou.com'
+    const url = 'http://trackercdn.kugou.com/i/'
+    const params = {
+      acceptMp3: 1,
+      cmd: 4,
+      pid: 6,
+      hash: id,
+      key: createHash('md5').update(id + 'kgcloud').digest('hex')
+    }
+    data = (await baseRequest({ url, headers, params })).data
+    return !data.url ? '' : data.url
   } catch (e) {
-    return { songUrl: '', lyrics: '' }
-  }
-  const { play_url: songUrl, lyrics } = data.data
-  return {
-    songUrl: songUrl ? `${songUrl}` : '',
-    lyrics: lyrics ? `${lyrics}` : ''
+    return ''
   }
 }
 
@@ -59,11 +67,11 @@ export async function search (title: string, singers: string[]): Promise<Replace
   let result: ReplaceResource
   const id = await getID(title, singers)
   if (id === '') {
-    result = { id: '', songUrl: '' }
+    result = { source, id: '', songUrl: '' }
   }
 
-  const { songUrl } = await getSongDetail(id)
-  result = { id, songUrl }
+  const songUrl = await getSongUrl(id)
+  result = { source, id, songUrl }
   return result
 }
 
@@ -72,8 +80,16 @@ export async function getLyrics (id: string) {
     return ''
   }
 
-  const { lyrics } = await getSongDetail(id)
-  return lyrics
+  try {
+    headers.Referer = 'http://m.kugou.com'
+    const url = 'http://m.kugou.com/app/i/krc.php?cmd=100&timelength=256000'
+    const params = { hash: id }
+    const resp = (await baseRequest.request({ url, params, headers }))
+
+    return resp.data
+  } catch (e) {
+    return ''
+  }
 }
 
 export default {

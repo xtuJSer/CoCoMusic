@@ -206,4 +206,4 @@ function MD5(string) {
 	return temp.toLowerCase();
 }
 
-export default {MD5};
+module.exports = { MD5 }
