@@ -9,6 +9,8 @@ import { baseRequest } from '../base-request'
 import querystring from 'querystring'
 import { resultfilter, ReplaceResource } from '../replace'
 
+const source = 'netease'
+
 const config = {
   headers: {
     Referer: 'http://music.163.com',
@@ -26,7 +28,7 @@ export async function getId (title: string, singers: string[]): Promise<string> 
   const postData = querystring.stringify({
     s: title + ' ' + singers.join(' '),
     offset: 0,
-    limit: 5,
+    limit: 3,
     type: 1
   })
 
@@ -98,7 +100,7 @@ export async function getLyrics (id: string) {
 export async function search (title: string, singers: string[]): Promise<ReplaceResource> {
   const id = await getId(title, singers)
   const songUrl = await getSongUrl(id)
-  return { id, songUrl }
+  return { id, songUrl, source }
 }
 
 export default {

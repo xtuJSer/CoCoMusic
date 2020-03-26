@@ -6,17 +6,13 @@ let songid: string
 describe('migu 音源替换', function () {
   it('searchMusic', function (done) {
     Promise.all([
-      search('Lullaby (Live)', ['Jack Johnson', 'Matt Costa']),
       search('You', ['千坂', 'N2V']),
       search('圣诞结', ['陈奕迅'])
     ]).then((data) => {
-      expect(data[0].id).length.gt(0)
-      expect(data[0].songUrl).length.gt(0)
-      expect(data[1].id).length.lte(0)
-      expect(data[1].songUrl).length.lte(0)
-      expect(data[2].id).length.gt(0)
-      expect(data[2].songUrl).length.gt(0)
-      // console.log(data[2])
+      expect(data[0].id).length.lte(0)
+      expect(data[0].songUrl).length.lte(0)
+      expect(data[1].id).length.gt(0)
+      expect(data[1].songUrl).length.gt(0)
       done()
     }).catch((e) => {
       console.log(e)
