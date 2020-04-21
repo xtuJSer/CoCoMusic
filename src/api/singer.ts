@@ -30,7 +30,7 @@ interface SingerList {
   total: number;
 }
 
-interface SongInfo {
+export interface SongInfo {
   id: number;
   type: number;
   mid: string;
@@ -204,7 +204,7 @@ export async function getSingerAlbumList (singerMid: string, begin = 0, num = 10
  * @param cid 不晓得是啥玩意 '205360581'
  */
 export async function getSingerMvList (singermid: string, begin = 0, num = 12, order = 'listen', cid = '205360581') {
-  const url = 'https://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
+  const url = 'http://c.y.qq.com/mv/fcgi-bin/fcg_singer_mv.fcg?g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
 
   const params = {
     singermid, begin, num, order, cid

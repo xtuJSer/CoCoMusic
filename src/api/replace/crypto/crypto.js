@@ -5,7 +5,7 @@ import aesjs from './aes';
 
 const bigInt = require('./big-integer');
 
-function aesEncrypt(text, secKey, ivString) {
+export function aesEncrypt(text, secKey, ivString) {
   const pad = 16 - (text.length % 16);
   for (let i = 0; i < pad; i += 1) {
     text += String.fromCharCode(pad);
@@ -53,7 +53,7 @@ function expmod(base, exp, mymod) {
   return result;
 }
 
-function rsaEncrypt(text, pubKey, modulus) {
+export function rsaEncrypt(text, pubKey, modulus) {
   const reversedText = text.split('').reverse().join('');
   const base = bigInt(hexify(reversedText), 16);
   const exp = bigInt(pubKey, 16);
@@ -62,5 +62,3 @@ function rsaEncrypt(text, pubKey, modulus) {
   const rs = bigNumber.toString(16);
   return zfill(rs, 256).toLowerCase();
 }
-
-module.exports = { rsaEncrypt, aesEncrypt }

@@ -144,7 +144,7 @@ export async function search (types: keyof SearchMap, keyword = '', page = 1, nu
  * @param num 搜索列表数量 5
  */
 export async function searchPlayList (keyword = '', page = 0, num = 5) {
-  const url = 'https://c.y.qq.com/soso/fcgi-bin/client_music_search_songlist?remoteplace=txt.yqq.playlist&flag_qc=0&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
+  const url = 'http://c.y.qq.com/soso/fcgi-bin/client_music_search_songlist?remoteplace=txt.yqq.playlist&flag_qc=0&g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
   const params = {
     // eslint-disable-next-line @typescript-eslint/camelcase
     query: keyword, page_no: page, num_per_page: num

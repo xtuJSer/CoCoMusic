@@ -12,7 +12,7 @@ function getRandomHexString(size) {
   .join('');
 }
 
-function encryptedRequest(text) {
+export function encryptedRequest(text) {
   const modulus = '00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b72'
     + '5152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbd'
     + 'a92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe48'
@@ -30,8 +30,4 @@ function encryptedRequest(text) {
   };
 
   return data;
-}
-
-module.exports = {
-  encryptedRequest: encryptedRequest,
 }

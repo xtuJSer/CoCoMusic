@@ -5,7 +5,7 @@ describe('搜索歌曲', function () {
   it('searchMusic', async function () {
     const data = await search('song', '初音未来')
     expect(data.song.list).to.have.length.above(1)
-    expect((data.zhida.zhida_singer || {}).singerName).to.be.equal('初音未来 (初音ミク)')
+    expect((data.zhida.zhida_singer || {}).singerName).to.be.equal('初音未来')
   })
 })
 describe('搜索Mv', function () {

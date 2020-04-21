@@ -2,6 +2,8 @@
   "name": "cocomusic",
   "version": "0.1.0",
   "private": true,
+  "author": "fengT-T <2995207228@qq.com>",
+  "description": "a simple music player.",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -11,56 +13,6 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
-  },
-  "build": {
-    "productName": "CocoMusic",
-    "appId": "xyz.xn--zq2aw6m.cocomusic",
-    "directories": {
-      "output": "build"
-    },
-    "files": [
-      "dist/electron/**/*",
-      "build/icons/*"
-    ],
-    "dmg": {
-      "contents": [
-        {
-          "x": 410,
-          "y": 150,
-          "type": "link",
-          "path": "/Applications"
-        },
-        {
-          "x": 130,
-          "y": 150,
-          "type": "file"
-        }
-      ]
-    },
-    "mac": {
-      "icon": "build/icons/icon.icns"
-    },
-    "win": {
-      "icon": "build/icons/icon.ico"
-    },
-    "linux": {
-      "icon": "build/icons",
-      "category": "AudioVideo;Audio;Player;Music;"
-    },
-    "pacman": {
-      "depends": [
-        "gconf",
-        "libnotify",
-        "nss",
-        "libxss",
-        "libappindicator-gtk3",
-        "libxtst"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    }
   },
   "main": "background.js",
   "dependencies": {

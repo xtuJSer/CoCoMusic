@@ -17,6 +17,5 @@ describe('Netease 音源替换', function () {
   it('getLyrics', async function () {
     const lyrics = await getLyrics('506520164')
     expect(lyrics).length.gte(1)
-    // console.log(lyrics)
   })
 })

@@ -90,9 +90,10 @@ export async function getLyrics (id: string) {
 
   try {
     const postData = querystring.stringify(encryptedRequest(d))
-    const data = (await baseRequest({ url, data: postData, method: 'post', ...config })).data
-    return data.lrc.lyric
+    const data = (await baseRequest({ url, data: postData, method: 'post', ...config }))
+    return data.data.lrc.lyric
   } catch (e) {
+    console.error(e)
     return ''
   }
 }
