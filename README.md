@@ -12,6 +12,9 @@
 
 </p>
 
+# CoCoMusic Next
+[v3](https://github.com/xtuJSer/CoCoMusic/commits/v3.0) 正在开发中，感谢 [pid000](https://github.com/pid000) 的贡献。
+
 # Contributor
   
   Contributor:
