@@ -28,6 +28,7 @@ import request from 'axios'
 import http from 'http'
 import https from 'https'
 import { Singer, Album, Music, Mv, Lyric, Category, PlayList } from './commonObject'
+import flow from 'lodash/flow'
 
 const keepAliveConf = {
   keepAlive: true
@@ -51,6 +52,10 @@ const baseRequest = request.create({
   httpAgent,
   httpsAgent
   // timeout: 2000 // 这个时间不好把握，我只能说小霸王服务器该换了
+  // proxy: {
+  //   host: '39.137.69.9',
+  //   port: 80
+  // }
 })
 
 // page 从 1 开始
@@ -166,11 +171,56 @@ export async function getKey (guid) {
   let {key} = JSON.parse((await baseRequest(url)).data.slice(13, -2))
   return key
 }
+/**
+ * 对象 转成 url 字符串
+ */
+const urlDecodeObjectUrl = flow(JSON.stringify, decodeURIComponent)
+
+const getMusicParams = (songmid) => urlDecodeObjectUrl({
+  req: {
+    module: 'CDN.SrfCdnDispatchServer',
+    method: 'GetCdnDispatch',
+    param: {
+      guid: '899052935',
+      calltype: 0,
+      userip: ''
+    }
+  },
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  req_0: {
+    module: 'vkey.GetVkeyServer',
+    method: 'CgiGetVkey',
+    param: {
+      guid: '899052935',
+      songmid: [
+        songmid
+      ],
+      songtype: [
+        0
+      ],
+      uin: '0',
+      loginflag: 1,
+      platform: '20'
+    }
+  },
+  comm: {
+    uin: 0,
+    format: 'json',
+    ct: 24,
+    cv: 0
+  }
+})
 export async function getSongVkey({fileName, guid, songMid}) {
   // cid 是啥？ 我也不造啊 qq 那群人写死了
-  let url =  `http://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?cid=205361747&songmid=${songMid}&filename=${fileName}&guid=${guid}`
-  let {vkey} = (await baseRequest(url)).data.data.items[0]
-  return {vkey}
+  const url = 'http://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0'
+  const params = getMusicParams(songMid)
+  const result = (await baseRequest({
+    url,
+    params: {
+      data: params
+    }
+  })).data
+  return result.req_0.data.midurlinfo[0].purl
 }
 // 从 1 开始
 export async function getSearch ({keyword, page}) {
@@ -257,7 +307,7 @@ export async function getPlayListInfo (playListMid) {
 }
 
 export async function getCdn (guid) {
-  const url = `https://u.y.qq.com/cgi-bin/musicu.fcg?data=${encodeURIComponent(`{"req":{"module":"CDN.SrfCdnDispatchServer","method":"GetCdnDispatch","param":{"guid":${guid},"calltype":0,"userip":""}},"req_0":{"module":"vkey.GetVkeyServer","method":"CgiGetVkey","param":{"guid":"${guid}","songmid":["000KDHyB23K7Eq"],"songtype":[0],"uin":"0","loginflag":1,"platform":"20"}},"comm":{"uin":0,"format":"json","ct":24,"cv":0}}`)}`
+  const url = `http://u.y.qq.com/cgi-bin/musicu.fcg?data=${encodeURIComponent(`{"req":{"module":"CDN.SrfCdnDispatchServer","method":"GetCdnDispatch","param":{"guid":${guid},"calltype":0,"userip":""}},"req_0":{"module":"vkey.GetVkeyServer","method":"CgiGetVkey","param":{"guid":"${guid}","songmid":["000KDHyB23K7Eq"],"songtype":[0],"uin":"0","loginflag":1,"platform":"20"}},"comm":{"uin":0,"format":"json","ct":24,"cv":0}}`)}`
   const { data: { req: { data: { sip: cdnList, testfilewifi: testUrl } } }} = await baseRequest(url)
   return new Promise((resolve, reject) => {
     cdnList.map(cdn => {

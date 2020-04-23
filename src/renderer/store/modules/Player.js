@@ -1,5 +1,5 @@
 import { getSongVkey, getLyric, getCdn } from '../../../spider/index'
-import { throttle, random } from 'lodash'
+import { throttle, random, findIndex, findLastIndex } from 'lodash'
 import { setMprisProp, setPosition, mpris } from '../../mpris'
 import { formatPlayerTime } from '../../util'
 
@@ -178,21 +178,33 @@ const actions = {
    * @param {Object} store
    */
   previous ({ state, dispatch }) {
-    let playListLength = state.playList.length
-    let previous = state.mode === 'random'
-      ? random(playListLength)
-      : state.currentPlayIndex <= 0 ? playListLength - 1 : state.currentPlayIndex - 1
+    let previous = 0
+    if (state.mode === 'random') {
+      let canPlayList = state.playList.filter(song => song.pay !== 1)
+      let canplayListLength = canPlayList.length
+      previous = state.playList.findIndex(song => song.songMid === canPlayList[random(canplayListLength - 1)].songMid)
+    } else {
+      previous = state.currentPlayIndex >= 0
+        ? findLastIndex(state.playList, song => song.pay !== 1, state.currentPlayIndex - 1)
+        : findLastIndex(state.playList, song => song.pay !== 1)
+    }
     dispatch('setPlay', previous)
   },
   /**
    * 下一首
    * @param {Object} state
    */
-  next ({ state, dispatch }) {
-    let playListLength = state.playList.length
-    let next = state.mode === 'random'
-      ? random(playListLength)
-      : state.currentPlayIndex < playListLength - 1 ? state.currentPlayIndex + 1 : 0
+  next ({ state, dispatch, getters }) {
+    let next = 0
+    if (state.mode === 'random') {
+      let canPlayList = state.playList.filter(song => song.pay !== 1)
+      let canplayListLength = canPlayList.length
+      next = state.playList.findIndex(song => song.songMid === canPlayList[random(canplayListLength - 1)].songMid)
+    } else {
+      next = state.currentPlayIndex < state.playList.length - 1
+        ? findIndex(state.playList, song => song.pay !== 1, state.currentPlayIndex + 1)
+        : findIndex(state.playList, song => song.pay !== 1)
+    }
     dispatch('setPlay', next)
   },
   /**
@@ -204,20 +216,27 @@ const actions = {
     const { guid, cdn } = state
     const current = state.playList[index] // 保存当前播放的引用
 
+    const song = state.playList[index]
+    // 开始获取token播放歌曲
+
+    const purl = await getSongVkey({
+      guid, ...song
+    })
+
+    if (!purl) {
+      commit('setPlayerState', { loading: false })
+      return
+    }
+
     commit('setPlayerState', { loading: true })
     preLoadImg.src = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${current.album.albumMid}.jpg?max_age=2592000` // 预加载图片,不然显得很突兀的说
 
     state.player.pause()
     state.player.currentTime = 0 // 暂停,据说这个是有效的停止缓冲数据,不过好像也没提供方法我也就不知道了
 
-    // 开始获取token播放歌曲
-    const song = state.playList[index]
-    const { vkey } = await getSongVkey({
-      guid, ...song
-    })
-
+    // eslint-disable-next-line no-unreachable
     commit('setPlayerSrc', [
-      `${cdn}${song.fileName}?vkey=${vkey}&guid=${guid}&uin=0&fromtag=66`
+      cdn + purl
     ])
 
     state.player.load()
