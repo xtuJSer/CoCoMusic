@@ -85,7 +85,7 @@ import { getkeyMap } from '../../main/hotKey.js'
 const localStorage = require('../../main/localStorage').default
 const { shell, getCurrentWebContents } = require('electron').remote
 const packjsonUrl = 'http://cocomusic-1252075019.file.myqcloud.com/package.json'
-const CURRENT_VERSION = '2.0.6'
+const CURRENT_VERSION = '2.0.7'
 
 export default {
   data () {
