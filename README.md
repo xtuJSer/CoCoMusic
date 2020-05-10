@@ -30,6 +30,12 @@ chmod +x cocomusic-2.0.4-x86_64.AppImage
 ./cocomusic-2.0.4-x86_64.AppImage
 ```
 ### deb
+
+[第三方deb源](https://github.com/coslyk/debianopt-repo)
+Debian用户可以加源后
+```bash
+sudo apt install cocomusic
+```
 ```bash
 sudo dpkg -i cocomusic_2.0.4_amd64.deb
 ```
