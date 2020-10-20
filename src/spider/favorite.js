@@ -1,10 +1,11 @@
 import request from 'axios'
-import { Album, Singer, PlayList, Music } from './commonObject'
+import { Album, Singer, PlayList } from './commonObject'
 import { getuser, db, getFavorite } from '../renderer/db/index'
+import { getPlayListInfo } from './index'
+
 const querystring = require('querystring')
 const store = require('../renderer/store/index').default
 
-// axios.defaults.withCredentials = true
 request.defaults.adapter = global.require('axios/lib/adapters/http')
 
 // 用来删除歌曲的数据索引
@@ -67,21 +68,21 @@ export async function AlbumFromRemote () {
 
 // 获取关注的歌手
 export async function SingerFromRemote () {
-  var url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_order_singer_getlist.fcg?utf8=1&uin=${_user()}&rnd=0.08377282764938476&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0`
-  let list = (await request(url, _config())).data.list
-  return list.map(({name, mid}) => new Singer(name, mid))
+  try {
+    var url = `https://u.y.qq.com/cgi-bin/musics.fcg?g_tk=487974496&sign=zzaud2d8k4f0sn19lgj7d7677d48543c029560401c6b4e39085&loginUin=1165316728&hostUin=0&format=json&inCharset=utf8&outCharset=GB2312&notice=0&platform=yqq.json&needNewCode=0&data=%7B%22comm%22%3A%7B%22ct%22%3A24%2C%22cv%22%3A0%7D%2C%22singerList%22%3A%7B%22module%22%3A%22music.concern.RelationList%22%2C%22method%22%3A%22GetFollowSingerList%22%2C%22param%22%3A%7B%22From%22%3A0%2C%22Size%22%3A30%2C%22HostUin%22%3A%22oK6s7Ko57wSANn**%22%7D%7D%7D`
+    let list = (await request(url, _config())).data.singerList.data.List
+    return list.map(({Name, MID}) => new Singer(Name, MID))
+  } catch (e) {
+    console.log(e)
+    return []
+  }
 }
 
 // 喜欢的歌曲
 export async function SongFromRemote () {
-  var url = `http://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg?type=1&json=1&utf8=1&onlysong=1&nosign=1&song_begin=0&ctx=1&disstid=${(await Info()).dissid}&_=${+new Date()}&g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&song_num=`
-  let data = (await request(url, _config())).data
-  return data['songlist'].map(({albummid, albumname, songmid, songname, singer, songid}) => {
-    songids[songmid] = songid
-    var ablum = new Album(albumname, albummid)
-    var singerList = singer.map(({mid, name}) => new Singer(name, mid))
-    return new Music(songname, songmid, songmid, ablum, singerList, 0)
-  })
+  var info = await Info()
+  var data = await getPlayListInfo(info.dissid)
+  return data.list
 }
 
 // 喜欢的歌单
@@ -98,7 +99,6 @@ export async function Info () {
   try {
     var url = `http://c.y.qq.com/rsc/fcgi-bin/fcg_get_profile_homepage.fcg?g_tk=${_gtk()}&loginUin=${_user()}&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&cid=205360838&ct=20&userid=0&reqfrom=1&reqtype=0`
     let data = (await request(url, (_config()))).data
-    console.log(data)
     let dissid = data.data.mymusic[0].id
     let {headpic, nick} = data.data.creator
     return {pic: headpic, nickname: nick, dissid: dissid}
@@ -274,7 +274,6 @@ export async function StoreRemote () {
   let songs = await SongFromRemote()
   let singers = await SingerFromRemote()
   let albums = await AlbumFromRemote()
-  console.log(songs)
   let playLists = await PlayListFromRemote()
   songs.forEach(item => db.song.put(item))
   singers.forEach(item => db.singer.put(item))
