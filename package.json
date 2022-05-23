@@ -82,7 +82,7 @@
   },
   "dependencies": {
     "axios": "^0.18.1",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "spectre.css": "^0.5.8",
     "vue": "^2.6.10",
     "vue-electron": "^1.0.6",
